@@ -7,7 +7,7 @@
     <title>MED WEB</title>
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="assets/css/main.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/custom.min.css">
+ 
     <!-- Font-Awesome -->
     <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css" >
     <!-- Bootstrap -->
