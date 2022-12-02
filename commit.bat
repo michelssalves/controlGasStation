@@ -15,7 +15,7 @@ for /f "tokens=*delims= " %%i in ('%__APPDIR__%CScript.exe //NoLogo "%~f0?.wsf"'
 echo/!_message!|%__APPDIR__%findstr.exe [a-Z] >nul || goto :loop
 
 cmd.exe /v /c git add -A
-cmd.exe /v /c git commit -am "!_message! Ref: !filedatetime!/%username%"
+cmd.exe /v /c git commit -am "!_message! Ref: !filedatetime! -> %username%"
 cmd.exe /v /c git push -u origin main
 
 %__APPDIR__%timeout.exe -1 & endlocal & goto :EOF
