@@ -6,7 +6,7 @@ title <nul & title Add Send Versionamento
 
 for /f "tokens=2delims==." %%i in (
 '%__APPDIR__%\wbem\wmic.exe OS Get localdatetime /value^|findstr [0-9]'
-) do set "_d=%%i" && call set "filedatetime=!_d:~6,2!!_d:~4,2!!_d:~0,4!- !_d:~8,2!:!_d:~10,2!
+) do set "_d=%%i" && call set "filedatetime=!_d:~6,2!-!_d:~4,2!-!_d:~0,4! - !_d:~8,2!:!_d:~10,2!
 
 echo/ Data Layout : !_d:~6,2!/!_d:~4,2!/!_d:~0,4!- !_d:~8,2!:!_d:~10,2!
 
