@@ -1,6 +1,6 @@
 <?php
 
-$action = $_REQUEST['p1'];
+$action = $_REQUEST['action'];
 
 include 'conn.php';
 
@@ -53,15 +53,13 @@ $qry = odbc_exec($connP, $sql);
 $txtTab .= "<div class='row'>
     <div class='col-md-12'>
         <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-end'>
-            <form id='xa'>
-                <input type='hidden' id='filtrar'>
-                <input type='hidden' name='p' id='value='2'>
-                <input type='hidden' id='action' name='action' value='cheques-devolvidos'>
-                <button class='btn btn-info btn-sm'>Filtrar</button>
-                <button class='btn btn-danger btn-sm'>Limpar</button>
                 <button class='btn btn-warning btn-sm'>Incluir</button>
+        <form id='formulario-cheques'>        
+                <input type='hidden' name='p' id='value='2'>
+                <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
+                <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
+                <button class='btn btn-danger btn-sm' onclick='limparFormulario()'>Limpar</button>
         </div>
-       
         <div class='table-responsive'>
         <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
             <thead>
@@ -193,6 +191,7 @@ $txtTab .= "<div class='row'>
         </tbody>
         </table>
         </div>
+        </form>
 
   
                        
@@ -273,6 +272,6 @@ $txtTab .= "
                         </div>
                     </div>
                     </div>
-                    </form>
+                  
 
         ";
