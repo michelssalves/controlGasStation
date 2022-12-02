@@ -1,22 +1,3 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MED WEB</title>
-    <!-- Main CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/css/main.css">
-    <!-- Font-icon css-->
-    <link href="assets/css/fontawesome.all.min.css" rel="stylesheet">
-    <link href="assets/css/custom.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="assets/css/w3.css">
-    <link rel="stylesheet" href="assets/css/custom.css">
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-</head>
-
 <body class="app sidebar-mini">
     <!-- Navbar-->
     <header class="app-header"><a class="app-header__logo" href="index.php"><i class="fa-solid fa-gas-pump"></i>Controle Postos</a>
@@ -45,9 +26,9 @@
             <!-- User Menu-->
             <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
-                    <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-cog fa-lg"></i> Settings</a></li>
-                    <li><a class="dropdown-item" href="page-user.html"><i class="fa fa-user fa-lg"></i> Profile</a></li>
-                    <li><a class="dropdown-item" href="page-login.html"><i class="fa fa-sign-out fa-lg"></i> Logout</a></li>
+                    <li><a class="dropdown-item" href="page-user.html"><i class="fa-solid fa-user"></i> Settings</a></li>
+                    <li><a class="dropdown-item" href="page-user.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+                    <li><a class="dropdown-item" href="page-login.html"><i class="fa-solid fa-user"></i> Logout</a></li>
                 </ul>
             </li>
         </ul>
