@@ -449,6 +449,7 @@ mark,
 }
 
 .list-unstyled, .app-nav, .app-menu, .treeview-menu {
+
   padding-left: 0;
   list-style: none;
 }
@@ -14947,7 +14948,7 @@ be a descendant of the grid when it is being dragged.
   color: #fff;
   text-align: center;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  padding: 0 15px;
+  padding: 13px 15px;
   font-size: 26px;
   font-weight: 400;
   line-height: 50px;
@@ -14970,14 +14971,14 @@ be a descendant of the grid when it is being dragged.
 }
 
 .app-sidebar__toggle {
-  padding: 0 15px;
-  font-family: "Font Awesome 6 Free";
+  
+  padding: 10px 1px 1px 1px;
   color: #fff;
   line-height: 2.4;
   -webkit-transition: background-color 0.3s ease;
   -o-transition: background-color 0.3s ease;
   transition: background-color 0.3s ease;
-  content: "\f060";
+
 }
 
 @media (max-width: 767px) {
@@ -14989,14 +14990,15 @@ be a descendant of the grid when it is being dragged.
 }
 
 .app-sidebar__toggle:before {
-  content: "\f060";
-  font-size: 21px;
+  content: url('../img/icons/seta.png');
+  
 }
 
 .app-sidebar__toggle:focus, .app-sidebar__toggle:hover {
   color: #fff;
   background-color: #00635a;
   text-decoration: none;
+
 }
 
 .app-nav {
@@ -15020,7 +15022,7 @@ be a descendant of the grid when it is being dragged.
 .app-nav__item {
   display: block;
   padding: 15px;
-  line-height: 20px;
+  line-height: 50px;
   color: #fff;
   -webkit-transition: background-color 0.3s ease;
   -o-transition: background-color 0.3s ease;
@@ -15234,6 +15236,7 @@ be a descendant of the grid when it is being dragged.
 .app-menu {
   margin-bottom: 0;
   padding-bottom: 40px;
+  padding-top: 20px; /*DISTANCIA DO PRIMEIRO ICONE DO TITULO CONTROLE POSTOS*/
 }
 
 .app-menu__item {
@@ -15244,7 +15247,7 @@ be a descendant of the grid when it is being dragged.
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  padding: 12px 15px;
+  padding: 10px 15px; /*DISTANCIA ENTRE OS ICONES*/
   font-size: 1.08em;
   border-left: 3px solid transparent;
   -webkit-transition: border-left-color 0.3s ease,
@@ -15370,7 +15373,7 @@ be a descendant of the grid when it is being dragged.
   .sidebar-mini.sidenav-toggled .app-menu__label {
     display: block;
     position: absolute;
-    top: 0;
+    top: 10px;
     left: 50px;
     min-width: 180px;
     padding: 12px 5px 12px 20px;

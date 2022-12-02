@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 $action = $_REQUEST['p1'];
 
@@ -139,25 +139,26 @@ $action = $_REQUEST['p1'];
                 </td>
                 </tr>
                 <tr>
+                <td>
+                <select id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
+                    <option selected value='0'>Data Inclusão</option>
+                    <option value='1'>Data Cheque</option>
+                    <option value='2'>Data Devolução</option>
+                    <option value='3'>Data Quitação</option>
+                </select>
+            </td>
+            <td><input class='form-control' type='date' name='data1' id='data1' value='$hoje'></td>
+            <td><input class='form-control' type='date' name='data2' id='data2' value='$amanha'></td>
+            <td>
+                <select id='filial' name='filial' required class='form-select' aria-label='Default select example'>
+                    <option selected disabled value=''>Filial</option>
+                    $cbFilialI 
+                </select>
+            </td>
                     <td><input class='form-control' name='id' id='id' placeholder='Id'></td>
                     <td><input class='form-control' name='banco' id='banco' placeholder='Banco'></td>
                     <td><input class='form-control' name='cliente' id='cliente' placeholder='Cliente'></td>
-                    <td>
-                        <select id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
-                            <option selected value='0'>Data InclusÃ£o</option>
-                            <option value='1'>Data Cheque</option>
-                            <option value='2'>Data DevoluÃ§Ã£o</option>
-                            <option value='3'>Data QuitaÃ§Ã£o</option>
-                        </select>
-                    </td>
-                    <td><input class='form-control' type='date' name='data1' id='data1' value='$hoje'></td>
-                    <td><input class='form-control' type='date' name='data2' id='data2' value='$amanha'></td>
-                    <td>
-                        <select id='filial' name='filial' required class='form-select' aria-label='Default select example'>
-                            <option selected disabled value=''>Filial</option>
-                            $cbFilialI 
-                        </select>
-                    </td>
+
 
                 </tr>
             </tbody>
