@@ -1,5 +1,5 @@
 <?php
-//include('./model/chequesDevolvido.model.php');
+include('model/chequesDevolvidos.model.php');
 ?>
 <div class='row'>
     <div class='col-md-12'>
@@ -136,8 +136,8 @@
                                 <input type='text' ame='banco' id='banco' placeholder='Banco' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
                             </div>
                         </td>
-                        <td><input class='form-control' type='date' name='data1' id='data1' value='$hoje'></td>
-                        <td><input class='form-control' type='date' name='data2' id='data2' value='$amanha'></td>
+                        <td><input class='form-control' type='date' name='data1' id='data1' value='<?=$hoje?>'></td>
+                        <td><input class='form-control' type='date' name='data2' id='data2' value='<?=$amanha?>'></td>
                     </tr>
                 </tbody>
             </table>

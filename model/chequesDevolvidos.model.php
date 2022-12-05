@@ -24,16 +24,16 @@ if ($banco <> '') {
 if ($med <> '') {
     $Fmed = "AND ch.id_med = $med";
 }
-if ($tipoData  === 0) {
+if ($tipoData  === '0') {
     $tipoData = 'dthrInclusao';
 }
-if ($tipoData  === 1) {
+if ($tipoData  === '1') {
     $tipoData = 'dtCheque';
 }
-if ($tipoData  === 2) {
+if ($tipoData  === '2') {
     $tipoData = 'dtDevol';
 }
-if ($tipoData  === 3) {
+if ($tipoData  === '3') {
     $tipoData = 'dtQuitacao';
 }
 
@@ -46,8 +46,7 @@ $sql = "SELECT ch.id, bco, nome, nrcheque, valor, motivo, dtCheque, dtDevol, ch.
 		WHERE ch.id > 0  $FtipoData $FBanco $Fid $Fcliente $Fbanco $Fmed ORDER BY ch.id";
 $qry = odbc_exec($connP, $sql);
 
-//var_dump($sql);
-
+var_dump($sql);
 
 while ($row = odbc_fetch_array($qry)) {
 

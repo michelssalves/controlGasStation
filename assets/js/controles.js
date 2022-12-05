@@ -1,5 +1,5 @@
 
-
+/*
 const tabela = document.querySelector(".listar-usuarios")
 
 document.querySelector("#formularioCheques").addEventListener("submit", async (e) => {
@@ -20,7 +20,7 @@ async function consultar(dados){
     console.log(response)
     tabela.innerHTML = response
 }
-
+*/
 function limparFormulario(){
 
     formulario.reset()
