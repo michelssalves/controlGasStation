@@ -2,3 +2,5 @@
 controller
 
 .commit.bat 
+
+.gitignore
