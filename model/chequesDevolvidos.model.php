@@ -83,7 +83,7 @@ if ($data2  == '') {
 
 $FtipoData = " AND $tipoData BETWEEN '".$data1."' AND '".$data2."' ";
 
-$sql = "SELECT ch.id, bco, nome, nrcheque, valor, motivo, dtCheque, dtDevol, ch.dthrInclusao, ch.cpfcnpj, u.loginName, status, ultimaAlteracao, dtQuitacao
+$sql = "SELECT ch.id, bco, nome , nrcheque, valor, motivo, dtCheque, dtDevol, ch.dthrInclusao, ch.cpfcnpj, u.loginName, status, ultimaAlteracao, dtQuitacao
 		,NOW() as hoje,hoje - dtDevol AS dias, valor, valor + (valor * 0.001 * dias) AS valorCorr, valorQuitacao 
         FROM ccp_chequeDev AS ch 
 	    LEFT JOIN ti_clientes AS u ON ch.id_med = u.id AND inativo = 0 
@@ -110,7 +110,7 @@ while ($row = odbc_fetch_array($qry)) {
     }
 
 	$link = "visualizaCheque.php?id_cheque=$id";
-	$link2 = "javascript:abreJanela($id)";
+
     //esses vetores estão no arquivo de conexao
 	$motivoTitle = $vetorMotivo[$motivo];
 	$bancoTitle = $vetorBanco[$bco];

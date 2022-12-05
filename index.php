@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css">
     <!-- Bootstrap -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/w3.min.css" rel="stylesheet">
 </head>
 
 <?php
