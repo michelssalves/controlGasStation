@@ -24,7 +24,7 @@ include('model/chequesDevolvidos.model.php');
                     <tr>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s0" value="checked" <?= $s[0]; ?>>
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Todos
                                 </label>
@@ -32,7 +32,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s1" value="checked" <?= $s[1]; ?>>
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Novo
                                 </label>
@@ -40,7 +40,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s2" value="checked" <?= $s[2]; ?>>
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Negociando
                                 </label>
@@ -48,7 +48,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s3" value="checked" <?= $s[3]; ?>>
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Quitado
                                 </label>
@@ -56,7 +56,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s4" value="checked" <?= $s[4]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     PFIN
                                 </label>
@@ -65,7 +65,7 @@ include('model/chequesDevolvidos.model.php');
 
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s5" value="checked" <?= $s[5]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Juridico
                                 </label>
@@ -73,7 +73,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s6" value="checked" <?= $s[6]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Execução
                                 </label>
@@ -81,7 +81,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s7" value="checked" <?= $s[7]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Caduco
                                 </label>
@@ -89,7 +89,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s8" value="checked" <?= $s[8]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Extraviado
                                 </label>
@@ -97,7 +97,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
                         <td>
                             <div class='form-check'>
-                                <input class='form-check-input' type='checkbox' value='checked' id='status[]' name='status[]' checked>
+                                <input class='form-check-input' type="checkbox" name="s9" value="checked" <?= $s[9]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
                                     Cancelado
                                 </label>
@@ -115,7 +115,7 @@ include('model/chequesDevolvidos.model.php');
                         </td>
 
                         <td colspan='2'>
-                            <select id='filial' name='filial' required class='form-select' aria-label='Default select example'>
+                            <select id='filial' name='filial' class='form-select' aria-label='Default select example'>
                                 <option selected disabled value=''>Filial</option>
                                 <?= $cbFilialI ?>
                             </select>
@@ -136,8 +136,8 @@ include('model/chequesDevolvidos.model.php');
                                 <input type='text' ame='banco' id='banco' placeholder='Banco' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
                             </div>
                         </td>
-                        <td><input class='form-control' type='date' name='data1' id='data1' value='<?=$hoje?>'></td>
-                        <td><input class='form-control' type='date' name='data2' id='data2' value='<?=$amanha?>'></td>
+                        <td><input class='form-control' type='date' name='data1' id='data1' value='<?=$data1?>'></td>
+                        <td><input class='form-control' type='date' name='data2' id='data2' value='<?=$data2?>'></td>
                     </tr>
                 </tbody>
             </table>
