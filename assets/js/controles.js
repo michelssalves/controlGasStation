@@ -1,10 +1,8 @@
 
 
 const tabela = document.querySelector(".listar-usuarios")
-const formulario = document.getElementById("formulario-cheques")
 
-
-document.querySelector("#filtrar").addEventListener("submit", async (e) => {
+document.querySelector("#formularioCheques").addEventListener("submit", async (e) => {
 
     e.preventDefault()
     alert('aas')
@@ -12,8 +10,8 @@ document.querySelector("#filtrar").addEventListener("submit", async (e) => {
 
     //const p1 = document.getElementById("action").value
     //const p2 = document.getElementById("id").value
-    const dados = await fetch(`assets/class/chequesDevolvidos.class.php`)
-    consultar(dados)
+    //const dados = await fetch(`assets/class/chequesDevolvidos.class.php`)
+    //consultar(dados)
 })  
 async function consultar(dados){
 

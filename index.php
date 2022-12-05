@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,16 +9,19 @@
     <!-- Main CSS-->
     <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
     <!-- Font-Awesome -->
-    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css" >
+    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css">
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     <!-- W3 -->
-   </head>
-<?php
-include 'principal.php';
-?>
+</head>
 
-<?= $txtTab ?>
+<?php
+
+include 'controller/conn.php';
+
+include 'controller/gerenciadorDePaginas.php';
+
+?>
 
 </div>
 </main>
@@ -32,4 +36,5 @@ include 'principal.php';
 <script src="assets/js/custom.min.js"></script>
 <script src="assets/js/controles.js"></script>
 </body>
+
 </html>
