@@ -169,7 +169,6 @@ include('model/chequesDevolvidos.model.php');
                     </thead>
                     <tbody>
                         <?= $txtTab ?>
-                    </tbody>
                 </table>
             </div>
         </div>
