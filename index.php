@@ -12,8 +12,27 @@
     <!-- Bootstrap -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/css/w3.min.css" rel="stylesheet">
+    <link href="assets/css/jquery.mobile-1.4.5.min.css" rel="stylesheet">
+    <script src="assets/js/jquery-3.6.1.min.js"></script>
+    <script src="assets/js/jquery.mobile-1.4.5.min.js"></script>
 </head>
-
+<style>
+    @media (min-width: 50em){
+        .meu-breakpoint td,
+        .meu-breakpoint th,
+        .meu-breakpoint tbody th,
+        .meu-breakpoint tbody td,
+        .meu-breakpoint thead th,
+        .meu-breakpoint thead td{
+            display: table-cell;
+            margin: 0;
+        }
+        .meu-breakpoint td .ui-table-cell-label,
+        .meu-breakpoint th .ui-table-cell-label{
+            display: none;
+        }
+    }
+</style>
 <?php
 
 include 'controller/conn.php';
@@ -26,13 +45,17 @@ include 'controller/gerenciadorDePaginas.php';
 </main>
 <!--Awesome-->
 <script src="assets/js/fontawesome.all.min.js"></script>
+
 <!--Jquery-->
-<script src="assets/js/jquery-3.6.1.min.js"></script>
+
+
 <!--Bootstrap-->
-<script src="assets/js/bootstrap.bundle.minv4.3.1"></script>
+<script src="assets/js/bootstrap.bundle.min.4.3.1.js"></script>
 <!--Custom -->
 <script src="assets/js/main.js"></script>
 
 <script src="assets/js/controles.js"></script>
+
+
 </body>
 </html>

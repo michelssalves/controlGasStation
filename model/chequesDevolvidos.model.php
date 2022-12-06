@@ -128,7 +128,8 @@ while ($row = odbc_fetch_array($qry)) {
         $obs = '';
     } 
 
-    $txtTab .= "<tr class='w3-hover-red'>
+    //$txtTab .= "<tr class='w3-hover-red'>
+    $txtTab .= "<tr>
                     <td>$id</td>
                     <td>";
     $txtTab .= dma($dthrInclusao);
@@ -164,7 +165,7 @@ while ($row = odbc_fetch_array($qry)) {
   } 
   
   
-    $txtTab .="
+   /* $txtTab .="
         </tbody>
               <tr>
                     <td colspan='7'><center>Total</td>
