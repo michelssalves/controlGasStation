@@ -29,6 +29,7 @@
 <?php
 
 include 'controller/conn.php';
+include 'controller/vetoresAuxiliares.php';
 
 include 'controller/gerenciadorDePaginas.php';
 
