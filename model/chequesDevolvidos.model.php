@@ -70,7 +70,7 @@ if ($tipoData  === '3') {
 }
 if ($data1 == '') {
 
-    $data1 = date('Y-m-d');
+    $data1 = date('1999-01-01');
 
 }
 if ($data2  == '') {

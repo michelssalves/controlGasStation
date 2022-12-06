@@ -2,16 +2,16 @@
 include('model/chequesDevolvidos.model.php');
 ?>
 <div class='row'>
-    <div class='col-md-12'>   <!--
+    <div class='col-md-12'>   
         <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-end'>
-            <button class='btn btn-warning btn-sm'>Incluir</button>
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
+                <button class='btn btn-warning btn-sm'>Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
                 <button class='btn btn-danger btn-sm' onclick='limparFormulario()'>Limpar</button>
         </div>
-     <div class='table-responsive'> 
+        <div class='table-responsive'> 
             <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
                 <thead>
                     <tr>
@@ -144,35 +144,33 @@ include('model/chequesDevolvidos.model.php');
         </div>
         </form>
         <hr class='border-dark'>
-        <div id='tabela'>
-            <div class='table-responsive'>
-                <table class='table table-sm table-hover table-striped fs-6 fst-italic border-dark'> -->
-                <table id="my-table" data-role="table" data-mode="columntoggle" class="meu-breakpoint table-stroke table-stripe">
-                    <thead>
-                        <!-- <tr style='background-color:#009688'> -->
-                        <tr>
-                            <th>Id</th>
-                            <th>Dt Reg</th>
-                            <th>Banco</th>
-                            <th>Cliente</th>
-                            <th>Nr Cheque</th>
-                            <th>Motivo</th>
-                            <th>Dt Cheque</th>
-                            <th>Valor</th>
-                            <th>Dt Devol</th>
-                            <th>Dias</th>
-                            <th>$ Corr</th>
-                            <th>Dt Quit</th>
-                            <th>Med</th>
-                            <th>Stat</th>
-                            <th>UltAlt</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+        <div class="table-responsive">
+             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 fst-italic mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
+               
+                <thead>
+                    <tr style='background-color:#009688'>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Id</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Reg</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Banco</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">Cliente</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">Nr Cheque</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Motivo</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Cheque</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">Valor</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Devol</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dias</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">$ Corr</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Quit</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">Med</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">Stat</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">UltAlt</th>
+                    </tr>
+                </thead>
+                <tbody>
                         <?= $txtTab ?>
+                </tbody>    
                 </table>
-            <!-- </div>
-            </div>
-        </div>-->  
+            
+        </div>    
     </div>
 </div>
