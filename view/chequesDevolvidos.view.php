@@ -7,9 +7,10 @@ include('model/chequesDevolvidos.model.php');
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
-                <button class='btn btn-warning btn-sm'>Incluir</button>
+                <button class='btn btn-warning btn-sm' >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
                 <button class='btn btn-danger btn-sm' onclick='limparFormulario()'>Limpar</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal</button>
         </div>
         <div class='table-responsive'> 
             <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
@@ -169,8 +170,11 @@ include('model/chequesDevolvidos.model.php');
                 <tbody>
                         <?= $txtTab ?>
                 </tbody>    
-                </table>
-            
+                </table> 
         </div>    
     </div>
 </div>
+<?php
+include('view/modal/chequesDevolvidosVisualizar.view.php');
+
+?>

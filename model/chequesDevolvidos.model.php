@@ -164,7 +164,7 @@ while ($row = odbc_fetch_array($qry)) {
                     $totalValorCorrigido += $valorCorr;
   } 
   
-  
+  include('chequesDevolvidosVisualizar.view.php');
    /* $txtTab .="
         </tbody>
               <tr>

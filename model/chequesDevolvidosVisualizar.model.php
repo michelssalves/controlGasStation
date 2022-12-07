@@ -1,5 +1,5 @@
 <?php
-$id_cheque = 2636;
+$id_cheque = $_REQUEST['id_cheque'];
 
 $sql = "SELECT ch.id, bco, nome, nrcheque, valor, motivo, dtCheque, dtDevol, ch.dthrInclusao, ch.cpfcnpj, u.loginName AS filial, status, nomeCliente, telefone, ultimaAlteracao, 
 		* FROM ccp_chequeDev AS ch 
