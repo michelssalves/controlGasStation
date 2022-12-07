@@ -113,8 +113,6 @@ while ($row = odbc_fetch_array($qry)) {
         $dtQuita = dma($dtQuitacao);
     }
 
-	$link = "visualizaCheque.php?id_cheque=$id";
-
     //esses vetores estão no arquivo de conexao
 	$motivoTitle = $vetorMotivo[$motivo];
 	$bancoTitle = $vetorBanco[$bco];
@@ -136,9 +134,7 @@ while ($row = odbc_fetch_array($qry)) {
     //gatilho para ativação do modal
     $link = "data-bs-toggle='modal' data-bs-target='#$modal' style='cursor:pointer'";
    
-    $txtTab .= "
-    <tbody>
-    <tr $link>
+    $txtTab .= "<tr $link>
                     <td>$id</td>
                     <td>";
     $txtTab .= dma($dthrInclusao);
@@ -168,18 +164,17 @@ while ($row = odbc_fetch_array($qry)) {
     $txtTab .= l5($status);
     $txtTab .= "    </td>
                     <td>$ultimaAlt</td>
-                    </tr>
-                    </tbody>    
-                    ";
+                    </tr>";
+                $totalValor += $valor;
+                $totalValorCorrigido += $valorCorr;
 
-    include 'chequesDevolvidosVisualizar.view.php';   
+    include 'view/modal/chequesDevolvidosVisualizarModal.view.php';   
 
-                  // $totalValor += $valor;
-                    //$totalValorCorrigido += $valorCorr;
+
    
   } 
  
-   /* $txtTab .="
+    $txtTab .="
         </tbody>
               <tr>
                     <td colspan='7'><center>Total</td>

@@ -1,16 +1,14 @@
 <?php include('model/chequesDevolvidosVisualizar.model.php'); ?>
 
-<div class="modal fade id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <div class="modal-header ">
-        <p class="modal-title fs-4 fw-bolder" id="exampleModalLabel">DADOS DO CHEQUE</p>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="fundo-cabecalho">
+        <h1>DADOS DO CHEQUE</h1>
       </div>
       <div class="modal-body">
         <div class="container col-10">
           <div class="tabela-ver-cheque">
-
             <table class="table-sm table-striped fs-6">
               <tr>
                 <th>STATUS</th>
@@ -76,9 +74,14 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <div class="fundo-rodape">
+        <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-center'>
+          <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-sm btn-light">Confirmar Quitação</button>
+          <button type="button" class="btn btn-sm btn-light">Sem Solução</button>
+          <button type="button" class="btn btn-sm btn-light">Incluir Observação</button>
+          <button type="button" class="btn btn-sm btn-light">Incluir Anexo</button>
+        </div>
       </div>
     </div>
   </div>

@@ -3,14 +3,13 @@ include('model/chequesDevolvidos.model.php');
 ?>
 <div class='row'>
     <div class='col-md-12'>   
-        <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-end'>
+        <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-start'>
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button class='btn btn-warning btn-sm' >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
                 <button class='btn btn-danger btn-sm' data-toggle="limpar-formulario" >Limpar</button>
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal</button>
         </div>
         <div class='table-responsive'> 
             <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
@@ -168,8 +167,9 @@ include('model/chequesDevolvidos.model.php');
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">UltAlt</th>
                     </tr>
                 </thead>
-                
+                <tbody>
                      <?= $txtTab ?> 
+                </tbody>  
             </table>
         </div>    
     </div>
