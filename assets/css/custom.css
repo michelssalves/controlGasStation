@@ -16740,3 +16740,13 @@ be a descendant of the grid when it is being dragged.
 .user .user-settings label {
   color: #666;
 }
+
+.tabela-ver-cheques{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 12px;
+  width: 100%;
+}
+
+.tabela-ver-cheques th, .tabela-ver-cheques td{
+  border: 1px solid black;
+}

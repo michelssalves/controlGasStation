@@ -47,6 +47,6 @@ include 'controller/gerenciadorDePaginas.php';
 
 <!--Custom -->
 <script src="assets/js/main.js"></script>
-<script src="assets/js/controles.js"></script>
+
 </body>
 </html>

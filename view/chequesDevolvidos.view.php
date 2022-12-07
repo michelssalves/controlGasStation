@@ -9,7 +9,7 @@ include('model/chequesDevolvidos.model.php');
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button class='btn btn-warning btn-sm' >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
-                <button class='btn btn-danger btn-sm' onclick='limparFormulario()'>Limpar</button>
+                <button class='btn btn-danger btn-sm' data-toggle="limpar-formulario" >Limpar</button>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Launch demo modal</button>
         </div>
         <div class='table-responsive'> 
@@ -167,8 +167,8 @@ include('model/chequesDevolvidos.model.php');
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">UltAlt</th>
                     </tr>
                 </thead>
-                <tbody>
-                        <?= $txtTab ?>
+                <tbody class="listar-filtro">
+                      
                 </tbody>    
                 </table> 
         </div>    

@@ -1,27 +1,31 @@
+const tabela = document.querySelector(".listar-filtro")
+
 (function () {
-	"use strict";
 
-	var treeviewMenu = $('.app-menu');
-
-	// Toggle Sidebar
 	$('[data-toggle="sidebar"]').click(function(event) {
 		event.preventDefault();
 		$('.app').toggleClass('sidenav-toggled');
 	});
 
-	// Activate sidebar treeview toggle
-	$("[data-toggle='treeview']").click(function(event) {
+})();
+
+(function () {
+
+	const formulario = document.getElementById('formulario-cheques')
+	$('[data-toggle="limpar-formulario"]').click(function(event) {
 		event.preventDefault();
-		if(!$(this).parent().hasClass('is-expanded')) {
-			treeviewMenu.find("[data-toggle='treeview']").parent().removeClass('is-expanded');
-		}
-		$(this).parent().toggleClass('is-expanded');
+		formulario.reset()
 	});
 
-	// Set initial active toggle
-	$("[data-toggle='treeview.'].is-expanded").parent().toggleClass('is-expanded');
-
-	//Activate bootstrip tooltips
-	$("[data-toggle='tooltip']").tooltip();
-
 })();
+
+
+
+
+async function consultar(dados){
+
+    console.log(dados)
+    const response = await dados.text()
+    console.log(response)
+    tabela.innerHTML = response
+}

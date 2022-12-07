@@ -21,8 +21,3 @@ async function consultar(dados){
     tabela.innerHTML = response
 }
 */
-function limparFormulario(){
-
-    formulario.reset()
-  
-}
