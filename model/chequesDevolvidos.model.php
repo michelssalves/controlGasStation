@@ -170,6 +170,7 @@ while ($row = odbc_fetch_array($qry)) {
 
     include 'view/modal/chequesDevolvidosVisualizarModal.view.php';   
 
+    
 
    
   } 

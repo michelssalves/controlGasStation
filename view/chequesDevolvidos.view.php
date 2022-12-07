@@ -1,6 +1,7 @@
 <?php
 include('model/chequesDevolvidos.model.php');
 ?>
+
 <div class='row'>
     <div class='col-md-12'>   
         <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-start'>
@@ -75,7 +76,7 @@ include('model/chequesDevolvidos.model.php');
                             <div class='form-check'>
                                 <input class='form-check-input' type="checkbox" name="s6" value="checked" <?= $s[6]; ?> >
                                 <label class='form-check-label' for='flexCheckChecked'>
-                                    Execu√ß√£o
+                                    ExecuÁ„o
                                 </label>
                             </div>
                         </td>
@@ -107,10 +108,10 @@ include('model/chequesDevolvidos.model.php');
                     <tr>
                         <td colspan='2'>
                             <select id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
-                                <option selected value='0'>Data Inclus√£o</option>
+                                <option selected value='0'>Data Inclus„o</option>
                                 <option value='1'>Data Cheque</option>
-                                <option value='2'>Data Devolu√ß√£o</option>
-                                <option value='3'>Data Quita√ß√£o</option>
+                                <option value='2'>Data DevoluÁ„o</option>
+                                <option value='3'>Data QuitaÁ„o</option>
                             </select>
                         </td>
 

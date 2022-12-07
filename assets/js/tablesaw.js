@@ -1846,6 +1846,7 @@ if (Tablesaw.mustard) {
 		}
 
 		this.createToolbar();
+		
 
 		this._initCells();
 

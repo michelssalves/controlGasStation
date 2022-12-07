@@ -16743,8 +16743,8 @@ be a descendant of the grid when it is being dragged.
 
 .tabela-ver-cheque{
   font-family: 'Times New Roman', Times, serif;
-  font-size: 12px;
-  width: 100%;
+ 
+
 }
 
 .tabela-ver-cheque th, .tabela-ver-cheque td{
@@ -16784,10 +16784,14 @@ be a descendant of the grid when it is being dragged.
   height: 70px;
 }
   @media (max-width: 1000px) {
-
     
-.fundo-rodape {
-  background-color:#009688;
-  height: 220px;
+  .fundo-rodape {
+    background-color:#009688;
+    height: 220px;
+  }
 }
+.centralizar{
+
+  text-align: center;
+
 }
