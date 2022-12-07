@@ -146,9 +146,10 @@ include('model/chequesDevolvidos.model.php');
         </form>
         <hr class='border-dark'>
         <div class="table-responsive">
-             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 fst-italic mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-               
-                <thead>
+        <div class="tabela-ver-todos-os-cheques">
+             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
+                
+             <thead>
                     <tr style='background-color:#009688'>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">Id</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Reg</th>
@@ -167,14 +168,10 @@ include('model/chequesDevolvidos.model.php');
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">UltAlt</th>
                     </tr>
                 </thead>
-                <tbody class="listar-filtro">
-                      
-                </tbody>    
-                </table> 
+                
+                     <?= $txtTab ?> 
+            </table>
         </div>    
     </div>
 </div>
-<?php
-include('view/modal/chequesDevolvidosVisualizar.view.php');
-
-?>
+</div>

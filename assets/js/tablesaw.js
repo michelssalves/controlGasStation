@@ -1737,7 +1737,7 @@ var Tablesaw = {
 		modeSwitchColumns: "Columns",
 		columnToggleButton: "Columns",
 		columnToggleError: "No eligible columns.",
-		sort: "Sort",
+		sort: "Ordenar",
 		swipePreviousColumn: "Previous column",
 		swipeNextColumn: "Next column"
 	},

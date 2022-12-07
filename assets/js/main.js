@@ -1,5 +1,3 @@
-const tabela = document.querySelector(".listar-filtro")
-
 (function () {
 
 	$('[data-toggle="sidebar"]').click(function(event) {
@@ -13,6 +11,7 @@ const tabela = document.querySelector(".listar-filtro")
 
 	const formulario = document.getElementById('formulario-cheques')
 	$('[data-toggle="limpar-formulario"]').click(function(event) {
+
 		event.preventDefault();
 		formulario.reset()
 	});
@@ -21,11 +20,3 @@ const tabela = document.querySelector(".listar-filtro")
 
 
 
-
-async function consultar(dados){
-
-    console.log(dados)
-    const response = await dados.text()
-    console.log(response)
-    tabela.innerHTML = response
-}

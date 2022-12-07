@@ -42,7 +42,7 @@ if ($filtroStatus == '' ){
     $filtroStatus = "AND status IN ('NOVO', 'NEGOCIANDO', 'PFIN')";
     $s1 = 'checked';$s2 = 'checked';$s4 = 'checked';}
 else{
-    $filtroStatus = "and status in (''".$filtroStatus.")";}
+    $filtroStatus = "AND status IN (''".$filtroStatus.")";}
 
 if ($id <> '') {
     $Fid = "AND ch.id = $id";
@@ -55,6 +55,10 @@ if ($banco <> '') {
 }
 if ($med <> '') {
     $Fmed = "AND ch.id_med = $med";
+}
+if (empty($tipoData)) {
+
+    $tipoData = 'dthrInclusao';
 }
 if ($tipoData  === '0') {
     $tipoData = 'dthrInclusao';
@@ -127,9 +131,14 @@ while ($row = odbc_fetch_array($qry)) {
     }else {
         $obs = '';
     } 
-
-    //$txtTab .= "<tr class='w3-hover-red'>
-    $txtTab .= "<tr>
+    //atribui um id a todos os modais gerados no loop
+    $modal = "modal$id";
+    //gatilho para ativação do modal
+    $link = "data-bs-toggle='modal' data-bs-target='#$modal' style='cursor:pointer'";
+   
+    $txtTab .= "
+    <tbody>
+    <tr $link>
                     <td>$id</td>
                     <td>";
     $txtTab .= dma($dthrInclusao);
@@ -159,12 +168,17 @@ while ($row = odbc_fetch_array($qry)) {
     $txtTab .= l5($status);
     $txtTab .= "    </td>
                     <td>$ultimaAlt</td>
-                    </tr>";
-                    $totalValor += $valor;
-                    $totalValorCorrigido += $valorCorr;
+                    </tr>
+                    </tbody>    
+                    ";
+
+    include 'chequesDevolvidosVisualizar.view.php';   
+
+                  // $totalValor += $valor;
+                    //$totalValorCorrigido += $valorCorr;
+   
   } 
-  
-  include('chequesDevolvidosVisualizar.view.php');
+ 
    /* $txtTab .="
         </tbody>
               <tr>

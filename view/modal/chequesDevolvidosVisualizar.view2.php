@@ -1,6 +1,6 @@
 <?php include('model/chequesDevolvidosVisualizar.model.php'); ?>
 
-<div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header ">
@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <div class="container col-10">
-          <div class="tabela-ver-cheques">
+          <div class="tabela-ver-cheque">
 
             <table class="table-sm table-striped fs-6">
               <tr>
