@@ -1,4 +1,5 @@
 <?php include('model/chequesDevolvidosVisualizar.model.php'); ?>
+
 <div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -174,7 +175,7 @@
                             <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
                             <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
                         </div>
                     </form>
@@ -194,12 +195,12 @@
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="registerForm">
+                    <form id="semSolucaoForm">
                       <input type="text" name="id" value="<?= $row['id'] ?>" required>
-                        <span id="msgAlertErrorCad"></span>
                         <div class="mb-3">
-                            <label for="email" class="col-form-label">Comprovante:</label>
-                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                          <p class="texto-de-advertencia">ESCREVA O MOTIVO DO CANCELAMENTO</p>
+                            <label for="email" class="col-form-label">Justificativa:</label>
+                            <input style="width:350px; text-transform:uppercase;" type="text" name="obs" class="form-control" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
