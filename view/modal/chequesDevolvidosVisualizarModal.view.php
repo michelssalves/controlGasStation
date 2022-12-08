@@ -1,5 +1,4 @@
 <?php include('model/chequesDevolvidosVisualizar.model.php'); ?>
-
 <div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -102,13 +101,18 @@
               <?php 
               $sql2 = ("SELECT * FROM ccp_chequeDevAnexo WHERE id_cheque = $id ORDER BY datahora") ;
               $qry2 = odbc_exec($connP, $sql2);
-                    while($row2 = odbc_fetch_array($qry2)){
-                    $link2 = "'".$row_Anexo['id'].'.'.$row_Anexo['tipo']."','chDev'";  
+            
+              while($row2 = odbc_fetch_array($qry2)){
+              //com esse metodo extract eu posso declarar a variavel direto sem precisar do $row['varivel']    
+              extract($row2);
+
+              $link2= "'view/modal/visualizarDocumentosModal.view.php?doc=$id.$tipo&pasta=chequesDevolvidos'";
+  
         echo '<tr>
                   <th colspan="2">'.dmaH($row2['datahora']).'</th>
                   <th>'.$row2['usuario'].'</th>
                   <th>'.$row2['descricao'].'</th>
-                  <th>'.$row2['tipo'].'</th>
+                  <th><a href="javascript:abreJanela('.$link2.')">'.$row2['tipo'].'</th>
               </tr>';
               } 
               ?>

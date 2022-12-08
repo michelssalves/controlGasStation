@@ -25,6 +25,7 @@
     <script src="assets/js/tablesaw.js"></script>
     <script src="assets/js/tablesaw-init.js"></script>
      <!-- /TABLESAW - DEIXA A TABELA RESPONSIVA--> 
+    <script src="assets/js/abreJanela.js"></script>
 </head>
 <?php
 
