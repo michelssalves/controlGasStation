@@ -16775,7 +16775,6 @@ be a descendant of the grid when it is being dragged.
   
   background-color:#009688;
   
-
 }
 .fundo-cabecalho h1{
 
@@ -16785,6 +16784,24 @@ be a descendant of the grid when it is being dragged.
   text-justify: auto;
 }
 
+.fundo-cabecalho h3{
+
+  text-align: center;
+  font-family:Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-justify: auto;
+}
+.texto-de-advertencia{
+
+  text-align: center;
+  font-family:Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-justify: auto;
+  background-color:rgba(220, 53, 69, 0.9);
+  border-radius: 5px;
+  font-size: 14px;
+
+}
 .fundo-rodape {
   background-color:#009688;
   height: 70px;

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
-  
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MED WEB</title>
@@ -12,20 +13,19 @@
     <!-- Bootstrap-->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <!-- W3-SCHOOL-->
-    <link href="assets/css/w3.min.css" rel="stylesheet">  
-    <!-- TABLESAW - DEIXA A TABELA RESPONSIVA-->  
+    <link href="assets/css/w3.min.css" rel="stylesheet">
+    <!-- TABLESAW - DEIXA A TABELA RESPONSIVA-->
     <link rel="stylesheet" href="assets/css/tablesaw.css">
     <script>
-	TablesawConfig = {
-		getColumnToggleLabelTemplate: function( text ) {
-			return "<label><input type='checkbox' checked><span>" + text + "</span></label>";
-		}
-	};
-	</script>
+        TablesawConfig = {
+            getColumnToggleLabelTemplate: function(text) {
+                return "<label><input type='checkbox' checked><span>" + text + "</span></label>";
+            }
+        };
+    </script>
     <script src="assets/js/tablesaw.js"></script>
     <script src="assets/js/tablesaw-init.js"></script>
-     <!-- /TABLESAW - DEIXA A TABELA RESPONSIVA--> 
-    <script src="assets/js/abreJanela.js"></script>
+    <!-- /TABLESAW - DEIXA A TABELA RESPONSIVA-->
 </head>
 <?php
 
@@ -48,4 +48,5 @@ include 'controller/gerenciadorDePaginas.php';
 <script src="assets/js/main.js"></script>
 
 </body>
+
 </html>

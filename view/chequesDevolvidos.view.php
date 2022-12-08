@@ -10,7 +10,7 @@ include('model/chequesDevolvidos.model.php');
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button class='btn btn-warning btn-sm' >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
-                <button class='btn btn-danger btn-sm' data-toggle="limpar-formulario" >Limpar</button>
+                <button class='btn btn-danger btn-sm' data-toggle="sem-solucao" >Limpar</button>
         </div>
         <div class='table-responsive'> 
             <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>

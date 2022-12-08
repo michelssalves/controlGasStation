@@ -9,6 +9,7 @@
       <div class="modal-body">
           <div class="tabela-ver-cheque">
           <div class="table-responsive">
+    
             <table class="table-sm table-striped fs-6">
               <tr>
                 <th colspan="2">STATUS</th>
@@ -81,7 +82,9 @@
               </tr>
               <?php $sql1 = ("SELECT * FROM ccp_chequeDevObs AS Obs WHERE id_cheque = $id ORDER BY datahora"); 
                     $qry1 = odbc_exec($connP, $sql1);
+                    
                     while($row1 = odbc_fetch_array($qry1)){
+
         echo '<tr>
                   <th colspan="2">'.dmaH($row1['datahora']).'</th>
                   <th>'.$row1['usuario'].'</th>
@@ -138,15 +141,129 @@
             </div>
           </div>
       </div>
-      <div class="fundo-rodape">
-        <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-center'>
-          <button type="button" class="btn btn-sm btn-light" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-sm btn-light">Confirmar Quitação</button>
-          <button type="button" class="btn btn-sm btn-light">Sem Solução</button>
-          <button type="button" class="btn btn-sm btn-light">Incluir Observação</button>
-          <button type="button" class="btn btn-sm btn-light">Incluir Anexo</button>
+      <div class="modal-footer ">      
+          <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#comfirmarQuitacaoModal">Confirmar Quitação</button>
+          <button type="button" class="btn btn-outline-danger btn-sm"  data-bs-toggle="modal" data-bs-target="#semSolucaoModal">Sem Solução</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#incluirObservacaoModal">Incluir Observação</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#incluirAnexoModal">Incluir Anexo</button>
+          </div>    
         </div>
       </div>
-    </div>
+
+    
   </div>
 </div>
+<!--MODAL CONFIRMAÇÃO DE QUITAÇÃO-->
+<div class="modal fade" id="comfirmarQuitacaoModal" tabindex="-1" aria-labelledby="comfirmarQuitacaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>CONFIRMAR QUITAÇÃO?</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>    
+                <div class="modal-body">
+                    <form id="confirmarQuitacaoForm">
+                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
+                        <div class="mb-3">
+                              <p class="texto-de-advertencia">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
+                            <label  for="email" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL CONFIRMAÇÃO DE QUITAÇÃO--> 
+<!--MODAL SEM SOLUÇÃO-->
+<div class="modal fade" id="semSolucaoModal" tabindex="-1" aria-labelledby="semSolucaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>SEM SOLUÇÃO</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>    
+                <div class="modal-body">
+                    <form id="registerForm">
+                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
+                        <span id="msgAlertErrorCad"></span>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL SEM SOLUÇÃO-->
+<!--MODAL INCLUIR OBSERVAÇÃO-->
+<div class="modal fade" id="incluirObservacaoModal" tabindex="-1" aria-labelledby="incluirObservacaoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>INCLUIR OBSERVAÇÃO</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>    
+                <div class="modal-body">
+                    <form id="registerForm">
+                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
+                        <span id="msgAlertErrorCad"></span>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL INCLUIR OBSERVAÇÃO-->
+<!--MODAL INCLUIR ANEXO-->
+<div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>INCLUIR ANEXO</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>    
+                <div class="modal-body">
+                    <form id="registerForm">
+                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
+                        <span id="msgAlertErrorCad"></span>
+                        <div class="mb-3">
+                            <label for="email" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL INCLUIR ANEXO-->
