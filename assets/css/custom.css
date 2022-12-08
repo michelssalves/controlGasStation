@@ -16742,25 +16742,31 @@ be a descendant of the grid when it is being dragged.
 }
 
 .tabela-ver-cheque{
+
   font-family: 'Times New Roman', Times, serif;
- 
 
 }
 
 .tabela-ver-cheque th, .tabela-ver-cheque td{
+
   border: 1px solid black;
+  
 }
 .tabela-ver-todos-os-cheques{
+
   font-family: 'Times New Roman', Times, serif;
   font-weight: bold;
   font-size: 13px;
-  width: 100%;
+ 
 }
 
 .tabela-ver-todos-os-cheques th, .tabela-ver-todos-os-cheques td{
   border: 1px solid black;
-}
 
+}
+.tabela-ver-todos-os-cheques tr{
+    width: 100%;
+}
 .tabela-ver-todos-os-cheques select,  .tabela-ver-todos-os-cheques label{
   font-size: 15px;
 }

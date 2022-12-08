@@ -18,6 +18,10 @@
 	});
 
 })();
+function abriNovaJanela(url) {
 
+	window.open(url, 'visualizar', 'top=100,width=500,height=650');
+	
+}
 
 

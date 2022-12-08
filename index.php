@@ -42,10 +42,8 @@ include 'controller/gerenciadorDePaginas.php';
 <script src="assets/js/fontawesome.all.min.js"></script>
 <!--Jquery-->
 <script src="assets/js/jquery-3.6.1.min.js"></script>
-<!--Bootstrap
-<script src="assets/js/bootstrap.bundle.min.4.3.1.js"></script>-->
+<!--Bootstrap-->
 <script src="assets/js/bootstrap.bundle.min.v5.2.3.js"></script>
-
 <!--Custom -->
 <script src="assets/js/main.js"></script>
 

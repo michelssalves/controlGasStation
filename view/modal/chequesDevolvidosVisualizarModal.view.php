@@ -111,8 +111,8 @@
         echo '<tr>
                   <th colspan="2">'.dmaH($row2['datahora']).'</th>
                   <th>'.$row2['usuario'].'</th>
-                  <th>'.$row2['descricao'].'</th>
-                  <th><a href="javascript:abreJanela('.$link2.')">'.$row2['tipo'].'</th>
+                  <th><a style="cursor:pointer" onclick="abriNovaJanela('.$link2.')">'.$row2['descricao'].'</th>
+                  <th>'.$row2['tipo'].'</th>
               </tr>';
               } 
               ?>
