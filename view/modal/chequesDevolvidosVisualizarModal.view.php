@@ -174,7 +174,7 @@
                 <div class="modal-body">
                     <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
                         <div class="mb-3">
                               <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
                             <label  for="email" class="col-form-label">Comprovante:</label>
@@ -203,7 +203,8 @@
                 <div class="modal-body">
                     <form id="semSolucaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
+                    <input type="hidden" value="semsolucao" name="action">
+                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
                         <div class="mb-3">
                           <p class="texto-de-alerta">ESCREVA O MOTIVO DO CANCELAMENTO</p>
                             <label for="email" class="col-form-label">Justificativa:</label>
@@ -211,7 +212,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" onClick="this.form.submit()">Sem solução</button>
                         </div>
                     </form>
                 </div>
@@ -232,8 +233,8 @@
                 <div class="modal-body">
                     <form id="incluirObservacaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
-                       <input type="hidden" value="gravaObs" name="acao">
+                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
+                       <input type="hidden" value="gravaObs" name="action">
                         <div class="mb-3">
                           <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZAÇÃO SOBRE ESTE CLIENTE</p>
                             <textarea name="obs" cols="50" lines="5" style="white-space: pre;"></textarea>
@@ -256,22 +257,23 @@
             <div class="fundo-cabecalho">
                 <div class="modal-header">
                   <h3>INCLUIR ANEXO</h3>
-                    
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="incluirAnexoForm" method="POST" enctype="multipart/form-data">
+                    <form method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
-                      <input type="hidden" value="gravarAnexo" name="acao" required>
+                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" value="gravarAnexo" name="action" required>
                         <div class="mb-3">
                           <p class="texto-de-advertencia">AQUI SERÁ INCLUIDO TODA A DOCUMENTAÇÃO REFERENTE A ESTE CLIENTE</p>
-                            <label for="email" class="col-form-label">Comprovante:</label>
-                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                            <label  for="descricao" class="col-form-label">Descrição:</label>
+                            <input type="text" name="descricao" class="form-control" id="descricao" placeholder="Titulo para o arquivo" required>
+                            <label for="descricao" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="file" class="form-control">
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
                         </div>
                     </form>
                 </div>
