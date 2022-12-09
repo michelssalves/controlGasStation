@@ -81,8 +81,9 @@
                   <th>Usuário</th>
                   <th colspan="2">Observação</th>
               </tr>
-              <?php $sql1 = ("SELECT * FROM ccp_chequeDevObs AS Obs WHERE id_cheque = $id ORDER BY datahora"); 
+              <?php $sql1 = ("SELECT * FROM ccp_chequeDevObs AS Obs WHERE id_cheque =  '".$row['id']."'  ORDER BY datahora"); 
                     $qry1 = odbc_exec($connP, $sql1);
+                    //var_dump($sql1);
                     
                     while($row1 = odbc_fetch_array($qry1)){
 
@@ -103,8 +104,9 @@
                   <th>Tipo</th>
               </tr>
               <?php 
-              $sql2 = ("SELECT * FROM ccp_chequeDevAnexo WHERE id_cheque = $id ORDER BY datahora") ;
+              $sql2 = ("SELECT * FROM ccp_chequeDevAnexo WHERE id_cheque = '".$row['id']."' ORDER BY datahora") ;
               $qry2 = odbc_exec($connP, $sql2);
+              //var_dump($sql2);
             
               while($row2 = odbc_fetch_array($qry2)){
               //com esse metodo extract eu posso declarar a variavel direto sem precisar do $row['varivel']    
@@ -128,9 +130,12 @@
                   <th>Usuário</th>
                   <th colspan="2">Descrição</th>
               </tr>
-              <?php $sql3 = ("SELECT * FROM ccp_chequeDevEventos AS e WHERE e.id_cheque = $id ORDER BY dthrEvento"); 
+              <?php $sql3 = ("SELECT * FROM ccp_chequeDevEventos WHERE id_cheque =  '".$row['id']."'  ORDER BY dthrEvento"); 
                     $qry3 = odbc_exec($connP, $sql3);
+                    //var_dump($sql3);
                     while($row3 = odbc_fetch_array($qry3)){
+
+                      
         echo '<tr>
                   <th colspan="2">'.dmaH($row3['dthrEvento']).'</th>
                   <th>'.$row3['usuario'].'</th>
@@ -163,20 +168,21 @@
             <div class="fundo-cabecalho">
                 <div class="modal-header">
                   <h3>CONFIRMAR QUITAÇÃO?</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="confirmarQuitacaoForm">
+                    <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="p" value="2" required>
                       <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
                         <div class="mb-3">
-                              <p class="texto-de-advertencia">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
+                              <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
                             <label  for="email" class="col-form-label">Comprovante:</label>
                             <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
                         </div>
                     </form>
                 </div>
@@ -191,20 +197,21 @@
             <div class="fundo-cabecalho">
                 <div class="modal-header">
                   <h3>SEM SOLUÇÃO</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="semSolucaoForm">
-                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
+                    <form id="semSolucaoForm" method="POST">
+                    <input type="hidden" name="p" value="2" required>
+                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
                         <div class="mb-3">
-                          <p class="texto-de-advertencia">ESCREVA O MOTIVO DO CANCELAMENTO</p>
+                          <p class="texto-de-alerta">ESCREVA O MOTIVO DO CANCELAMENTO</p>
                             <label for="email" class="col-form-label">Justificativa:</label>
-                            <input style="width:350px; text-transform:uppercase;" type="text" name="obs" class="form-control" required>
+                            <textarea name="obs" cols="50" lines="5" style="white-space: pre;"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
                         </div>
                     </form>
                 </div>
@@ -219,20 +226,22 @@
             <div class="fundo-cabecalho">
                 <div class="modal-header">
                   <h3>INCLUIR OBSERVAÇÃO</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="registerForm">
-                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
-                        <span id="msgAlertErrorCad"></span>
+                    <form id="incluirObservacaoForm" method="POST">
+                    <input type="hidden" name="p" value="2" required>
+                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
+                       <input type="hidden" value="gravaObs" name="acao">
                         <div class="mb-3">
-                            <label for="email" class="col-form-label">Comprovante:</label>
-                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                          <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZAÇÃO SOBRE ESTE CLIENTE</p>
+                            <textarea name="obs" cols="50" lines="5" style="white-space: pre;"></textarea>
+                            <input type="checkbox" name="enviarEmail" id="enviarEmail">Enviar notificaçao por email&nbsp;&nbsp;&nbsp;
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -247,20 +256,22 @@
             <div class="fundo-cabecalho">
                 <div class="modal-header">
                   <h3>INCLUIR ANEXO</h3>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    
                 </div>
             </div>    
                 <div class="modal-body">
-                    <form id="registerForm">
-                      <input type="text" name="id" value="<?= $row['id'] ?>" required>
-                        <span id="msgAlertErrorCad"></span>
+                    <form id="incluirAnexoForm" method="POST" enctype="multipart/form-data">
+                      <input type="hidden" name="p" value="2" required>
+                      <input type="hidden" name="id" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" value="gravarAnexo" name="acao" required>
                         <div class="mb-3">
+                          <p class="texto-de-advertencia">AQUI SERÁ INCLUIDO TODA A DOCUMENTAÇÃO REFERENTE A ESTE CLIENTE</p>
                             <label for="email" class="col-form-label">Comprovante:</label>
                             <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Confirmar Quitação?</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
                         </div>
                     </form>
                 </div>
