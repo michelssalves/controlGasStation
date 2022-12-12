@@ -186,8 +186,24 @@ $txtTab .= v2($totalValorCorrigido);
 $txtTab .="</a></td>
                 <td colspan='4'></td>
                 </tr>";
-                
+//GRAVAR OBS E NOTIFICAR POR EMAIL             
+if ($action == 'gravarObservacao'){
 
+    $id_cheque = $_REQUEST['id_cheque'];
+    $observacao = $_REQUEST['observacao'];
+    $evento = 'Incluiu Observação';
+
+    insertObersevacao($id_cheque, $usuarioLogado, $observacao);
+
+    insertEvento($evento, $id_cheque, $usuarioLogado);
+
+    if($_REQUEST['enviarEmail'] === 'on'){
+        
+        $QueryCliente = "SELECT * FROM rh_usuario WHERE loginName = ".$row['loginName']." ";
+        echo '<br>'.$QueryCliente.'<br>' ;
+    }
+
+}
 //QUITACAO DO CHEQUE OU PFIN
 if ($action == 'quitacao' || $action == 'pfin'){
 
@@ -203,7 +219,7 @@ if ($action == 'quitacao' || $action == 'pfin'){
     }
 
     updatePedido($status, $id_cheque);
-    insertEvento($evento, $id_cheque, $loginname);
+    insertEvento($evento, $id_cheque, $usuarioLogado);
      
      if ($_FILES['file']['name'] <> ''){ 
 
@@ -219,11 +235,11 @@ if ($action == 'semsolucao'){
     $evento = 'CHEQUE SEM SOLUCAO';
     
     updatePedido($status, $id_cheque);
-    insertEvento($evento, $id_cheque, $loginname);
+    insertEvento($evento, $id_cheque, $usuarioLogado);
 
     if ($observacao <> ''){
 
-        insertObersevacao($id_cheque, $loginname, $observacao);
+        insertObersevacao($id_cheque, $usuarioLogado, $observacao);
      }
  }
  //GRAVAR ANEXO
@@ -238,9 +254,9 @@ if ($action == 'semsolucao'){
 
       if($descricao == ''){$descricao = $_FILES['file']['name'];}
 
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+       $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        insertChequeAnexo($descricao, $extensao, $id_cheque, $loginname);
+        insertChequeAnexo($descricao, $extensao, $id_cheque, $usuarioLogado);
 
         $id = ultimo_id('ccp_chequeDevAnexo');
         $nomeDoArquivo = $id.'.'.$extensao;
@@ -250,15 +266,9 @@ if ($action == 'semsolucao'){
 
         updatePedido($status = "", $id_cheque);
          
-        insertEvento($evento, $id_cheque, $loginname);
+        insertEvento($evento, $id_cheque, $usuarioLogado);
 
         }else{
             echo "<script>alert('Houve algum erro, tente refazer o processo')</script>";
         }
     }
-/* echo "Filename: " . $_FILES['file']['name']."<br>";
-    echo "Type : " . $_FILES['file']['type'] ."<br>";
-    echo "Size : " . $_FILES['file']['size'] ."<br>";
-    echo "Temp name: " . $_FILES['file']['tmp_name'] ."<br>";
-    echo "Error : " . $_FILES['file']['error'] . "<br>";*/
-  

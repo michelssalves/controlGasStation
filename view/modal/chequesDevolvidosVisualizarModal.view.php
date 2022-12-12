@@ -1,16 +1,13 @@
-<?php include('model/chequesDevolvidosVisualizar.model.php'); ?>
-
+<form class="nada" type="hidden" id="<?= $row['id'] ?>" name="<?= $row['loginName']?>" method="POST"> 
 <div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="fundo-cabecalho">
-        
         <h1>DADOS DO CHEQUE</h1>
       </div>
       <div class="modal-body">
           <div class="tabela-ver-cheque">
           <div class="table-responsive">
-    
             <table class="table-sm table-striped fs-6">
               <tr>
                 <th colspan="2">STATUS</th>
@@ -22,7 +19,7 @@
               </tr>
               <tr>
                 <th colspan="2">MEDITERRÂNEO</th>
-                <th colspan="3"><?= $filial ?></th>
+                <th colspan="3"><?= $usuarioLogado ?></th>
               </tr>
               <tr>
                 <th colspan="2">BANCO</th>
@@ -149,19 +146,18 @@
       </div>
       <div class="modal-footer ">      
           <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#comfirmarQuitacaoModal">Confirmar Quitação</button>
-          <button type="button" class="btn btn-outline-danger btn-sm"  data-bs-toggle="modal" data-bs-target="#semSolucaoModal">Sem Solução</button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#incluirObservacaoModal">Incluir Observação</button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#incluirAnexoModal">Incluir Anexo</button>
+          <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" class="btn btn-outline-success btn-sm"data-bs-dismiss="modal"  onclick="confirmarQuitacao(this.form.id)">Confirmar Quitação</button>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="semSolucao(this.form.id)">Sem Solução</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id, this.form.name)" >Incluir Observação</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Incluir Anexo</button>
           </div>    
         </div>
       </div>
-
-    
   </div>
 </div>
-<!--MODAL CONFIRMAÇÃO DE QUITAÇÃO-->
+</form>    
+<!--MODAL CONFIRMAÇÃO DE QUITAÇÃO ENTEDER PFIN E OUTRO-->
 <div class="modal fade" id="comfirmarQuitacaoModal" tabindex="-1" aria-labelledby="comfirmarQuitacaoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -175,14 +171,14 @@
                     <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="p" value="2" required>
                     <input type="hidden" value="pfin" name="action">
-                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" id="id_cheque_quitacao" name="id_cheque" value="" required>
                         <div class="mb-3">
                               <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
                             <label for="file" class="col-form-label">Comprovante:</label>
                             <input type="file" name="file" class="form-control" id="file" required>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
                             <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
                         </div>
                     </form>
@@ -197,22 +193,21 @@
             <div class="modal-content">
             <div class="fundo-cabecalho">
                 <div class="modal-header">
-                  <h3>SEM SOLUÇÃO</h3>
-                    
+                  <h3>SEM SOLUÇÃO</h3>    
                 </div>
             </div>    
                 <div class="modal-body">
                     <form id="semSolucaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
                     <input type="hidden" value="semsolucao" name="action">
-                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" id="id_cheque_solucao" name="id_cheque" value="" required>
                         <div class="mb-3">
                           <p class="texto-de-alerta">ESCREVA O MOTIVO DO CANCELAMENTO</p>
                             <label for="email" class="col-form-label">Justificativa:</label>
                             <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
                             <button type="button" class="btn btn-outline-danger btn-sm" onClick="this.form.submit()">Sem solução</button>
                         </div>
                     </form>
@@ -234,16 +229,17 @@
                 <div class="modal-body">
                     <form id="incluirObservacaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
-                       <input type="hidden" value="gravaObs" name="action">
+                    <input  type="hidden" id="med" name="med" value="">
+                      <input  type="hidden" id="id_cheque_obs" name="id_cheque" value="" required>
+                       <input type="hidden" value="gravarObservacao" name="action">
                         <div class="mb-3">
                           <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZAÇÃO SOBRE ESTE CLIENTE</p>
-                            <textarea name="obs" cols="50" lines="5" style="white-space: pre;"></textarea>
+                            <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
                             <input type="checkbox" name="enviarEmail" id="enviarEmail">Enviar notificaçao por email&nbsp;&nbsp;&nbsp;
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
-                            <button type="button" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Salvar</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Salvar</button>
                         </div>
                     </form>
                 </div>
@@ -251,7 +247,7 @@
         </div>
     </div>  
 <!--/MODAL INCLUIR OBSERVAÇÃO-->
-<!--MODAL INCLUIR ANEXO-->
+<!--MODAL INCLUIR ANEXO OK-->
 <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -263,7 +259,7 @@
                 <div class="modal-body">
                     <form method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
+                      <input type="hidden" id="id_cheque_anexo" name="id_cheque" value="" required>
                       <input type="hidden" value="gravarAnexo" name="action" required>
                         <div class="mb-3">
                           <p class="texto-de-advertencia">AQUI SERÁ INCLUIDO TODA A DOCUMENTAÇÃO REFERENTE A ESTE CLIENTE</p>
@@ -273,7 +269,7 @@
                             <input type="file" name="file" class="form-control">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
                             <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
                         </div>
                     </form>
