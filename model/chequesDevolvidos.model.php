@@ -171,8 +171,6 @@ $txtTab .= "    </td>
 include 'view/modal/chequesDevolvidosVisualizarModal.view.php';   
 
 
-
-
 } 
 
 $txtTab .="
@@ -189,32 +187,50 @@ $txtTab .="</a></td>
                 <td colspan='4'></td>
                 </tr>";
                 
-//sem solucao
-if ($action == 'semsolucao'){
+
+//QUITACAO DO CHEQUE OU PFIN
+if ($action == 'quitacao' || $action == 'pfin'){
 
     $id_cheque = $_REQUEST['id_cheque'];
-    $dataHora = date('Y/m/d H:i');
-		
-    $sql = "UPDATE ccp_chequeDev SET status = 'SEM SOLUCAO', dtQuitacao = NULL , ultimaAlteracao = '$dataHora' WHERE id = '$id_cheque'";
-    //$qry = odbc_exec($connP, $sql);
-    var_dump($sql);
 
-    $sql1 = "INSERT INTO ccp_chequeDevEventos (id_cheque, usuario, dthrEvento, evento) VALUES ('$id_cheque' , '$loginname', '$dataHora', 'CHEQUE SEM SOLUCAO')";
-    //$qry1 = odbc_exec($connP, $sql1);
-    var_dump($sql1);
- if ($obs <> ''){
+    if($action == 'quitacao'){
+        $status = 'QUITADO';
+        $evento = 'Confirmada Quitação';
+    }
+    if($action == 'pfin'){
+        $status = 'PFIN';
+        $evento = 'Incluido em PFIN (Serasa/SPC)';
+    }
 
-     $sql2 = "INSERT INTO ccp_chequeDevObs (id_cheque, usuario, datahora, obs) VALUES ('$id_cheque', '$loginname', '$dataHora', '$obs')";
-     //$qry2 =  odbc_exec($connP, $sql2);
-     var_dump($sql2);
+    updatePedido($status, $id_cheque);
+    insertEvento($evento, $id_cheque, $loginname);
      
+     if ($_FILES['file']['name'] <> ''){ 
+
+        $action = 'gravarAnexo'; 
+    }
+ }
+//OPCAO SEM SOLUCAO
+if ($action == 'semsolucao'){
+
+    $observacao = $_REQUEST['observacao'];
+    $id_cheque = $_REQUEST['id_cheque'];
+    $status = 'SEM SOLUCAO';
+    $evento = 'CHEQUE SEM SOLUCAO';
+    
+    updatePedido($status, $id_cheque);
+    insertEvento($evento, $id_cheque, $loginname);
+
+    if ($observacao <> ''){
+
+        insertObersevacao($id_cheque, $loginname, $observacao);
+        
      }
  }
- // GRAVAR ANEXO
+ //GRAVAR ANEXO
  if ($action == 'gravarAnexo'){
 
     $id_cheque = $_REQUEST['id_cheque'];
-    $dataHora = date('Y/m/d H:i');
     $file = $_REQUEST['file'];
     $descricao = $_REQUEST['descricao'];
 
@@ -229,26 +245,24 @@ if ($action == 'semsolucao'){
       if($descricao == ''){$descricao = $_FILES['file']['name'];}
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-        $localTemporario = $_FILES['file']['tmp_name'];
 
         $sql= "INSERT INTO ccp_chequeDevAnexo (descricao, tipo, id_cheque, datahora, usuario) 
-                VALUES ('$descricao','$extensao','$id_cheque','$dataHora','$loginname')";
+                VALUES ('$descricao','$extensao','$id_cheque','".date('Y-m-d H:i:s')."','$loginname')";
         var_dump($sql);
     //  $qry = odbc_exec($connP, $sql) or die ('Não foi possivel executar');
     
         $id = ultimo_id('ccp_chequeDevAnexo');
         $nomeDoArquivo = $id.'.'.$extensao;
-
+     
         // movendo o arquivo de local temporario para  o endereço abaixo e renomeando com a variavel nomeDoArqivo
-        move_uploaded_file($localTemporario, "assets/docs/chequesDevolvidos/" . $nomeDoArquivo);
-    
+        move_uploaded_file($_FILES['file']['tmp_name'], "assets/docs/chequesDevolvidos/".$nomeDoArquivo);
 
-        $sql1 = "UPDATE ccp_chequeDev SET ultimaAlteracao = '$dataHora' WHERE id = '$id_cheque'";
+        $sql1 = "UPDATE ccp_chequeDev SET ultimaAlteracao = '".date('Y-m-d H:i:s')."' WHERE id = '$id_cheque'";
         //$qry1 = odbc_exec($connP, $sql1);
         var_dump($sql1);
          
         $sql2 = "INSERT INTO ccp_chequeDevEventos (id_cheque, usuario, dthrEvento, evento) 
-                    VALUES ('$id_cheque', '$loginname', '$dataHora', 'Incluiu Anexo')" ;
+                    VALUES ('$id_cheque', '$loginname', '".date('Y-m-d H:i:s')."', 'Incluiu Anexo')" ;
         //$qry2 = odbc_exec($connP, $sql2);
         var_dump($sql2);
 

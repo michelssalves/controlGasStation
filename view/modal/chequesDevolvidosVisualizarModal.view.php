@@ -174,15 +174,16 @@
                 <div class="modal-body">
                     <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="p" value="2" required>
+                    <input type="hidden" value="pfin" name="action">
                       <input type="hidden" name="id_cheque" value="<?= $row['id'] ?>" required>
                         <div class="mb-3">
                               <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
-                            <label  for="email" class="col-form-label">Comprovante:</label>
-                            <input type="file" name="arquivo" class="form-control" id="arquivo" placeholder="Email" required>
+                            <label for="file" class="col-form-label">Comprovante:</label>
+                            <input type="file" name="file" class="form-control" id="file" required>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
-                            <button type="submit" class="btn btn-outline-success btn-sm" onClick="this.form.submit()">Confirmar Quitação?</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
                         </div>
                     </form>
                 </div>
@@ -208,7 +209,7 @@
                         <div class="mb-3">
                           <p class="texto-de-alerta">ESCREVA O MOTIVO DO CANCELAMENTO</p>
                             <label for="email" class="col-form-label">Justificativa:</label>
-                            <textarea name="obs" cols="50" lines="5" style="white-space: pre;"></textarea>
+                            <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#<?= $modal ?>">Fechar</button>
