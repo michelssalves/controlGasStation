@@ -194,11 +194,11 @@ if ($action == 'quitacao' || $action == 'pfin'){
     $id_cheque = $_REQUEST['id_cheque'];
 
     if($action == 'quitacao'){
-        $status = 'QUITADO';
+        $status = "status = 'QUITADO',";
         $evento = 'Confirmada Quitação';
     }
     if($action == 'pfin'){
-        $status = 'PFIN';
+        $status = "status = 'PFIN',";
         $evento = 'Incluido em PFIN (Serasa/SPC)';
     }
 
@@ -215,7 +215,7 @@ if ($action == 'semsolucao'){
 
     $observacao = $_REQUEST['observacao'];
     $id_cheque = $_REQUEST['id_cheque'];
-    $status = 'SEM SOLUCAO';
+    $status = "status = 'SEM SOLUCAO',";
     $evento = 'CHEQUE SEM SOLUCAO';
     
     updatePedido($status, $id_cheque);
@@ -224,21 +224,15 @@ if ($action == 'semsolucao'){
     if ($observacao <> ''){
 
         insertObersevacao($id_cheque, $loginname, $observacao);
-        
      }
  }
  //GRAVAR ANEXO
  if ($action == 'gravarAnexo'){
 
     $id_cheque = $_REQUEST['id_cheque'];
-    $file = $_REQUEST['file'];
     $descricao = $_REQUEST['descricao'];
-
-   /* echo "Filename: " . $_FILES['file']['name']."<br>";
-    echo "Type : " . $_FILES['file']['type'] ."<br>";
-    echo "Size : " . $_FILES['file']['size'] ."<br>";
-    echo "Temp name: " . $_FILES['file']['tmp_name'] ."<br>";
-    echo "Error : " . $_FILES['file']['error'] . "<br>";*/
+    $file = $_REQUEST['file'];
+    $evento = 'Incluiu Anexo';
 
      if ($_FILES['file']['name'] <> "") {
 
@@ -246,29 +240,25 @@ if ($action == 'semsolucao'){
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        $sql= "INSERT INTO ccp_chequeDevAnexo (descricao, tipo, id_cheque, datahora, usuario) 
-                VALUES ('$descricao','$extensao','$id_cheque','".date('Y-m-d H:i:s')."','$loginname')";
-        var_dump($sql);
-    //  $qry = odbc_exec($connP, $sql) or die ('Não foi possivel executar');
-    
+        insertChequeAnexo($descricao, $extensao, $id_cheque, $loginname);
+
         $id = ultimo_id('ccp_chequeDevAnexo');
         $nomeDoArquivo = $id.'.'.$extensao;
+        $local = "assets/docs/chequesDevolvidos/";
      
-        // movendo o arquivo de local temporario para  o endereço abaixo e renomeando com a variavel nomeDoArqivo
-        move_uploaded_file($_FILES['file']['tmp_name'], "assets/docs/chequesDevolvidos/".$nomeDoArquivo);
+        uploadArquivo($local, $nomeDoArquivo);
 
-        $sql1 = "UPDATE ccp_chequeDev SET ultimaAlteracao = '".date('Y-m-d H:i:s')."' WHERE id = '$id_cheque'";
-        //$qry1 = odbc_exec($connP, $sql1);
-        var_dump($sql1);
+        updatePedido($status = "", $id_cheque);
          
-        $sql2 = "INSERT INTO ccp_chequeDevEventos (id_cheque, usuario, dthrEvento, evento) 
-                    VALUES ('$id_cheque', '$loginname', '".date('Y-m-d H:i:s')."', 'Incluiu Anexo')" ;
-        //$qry2 = odbc_exec($connP, $sql2);
-        var_dump($sql2);
+        insertEvento($evento, $id_cheque, $loginname);
 
         }else{
             echo "<script>alert('Houve algum erro, tente refazer o processo')</script>";
         }
     }
-
+/* echo "Filename: " . $_FILES['file']['name']."<br>";
+    echo "Type : " . $_FILES['file']['type'] ."<br>";
+    echo "Size : " . $_FILES['file']['size'] ."<br>";
+    echo "Temp name: " . $_FILES['file']['tmp_name'] ."<br>";
+    echo "Error : " . $_FILES['file']['error'] . "<br>";*/
   
