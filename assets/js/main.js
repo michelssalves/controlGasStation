@@ -34,7 +34,7 @@ function incluirObservacao(id_cheque, med){
 
     const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
 	document.getElementById("id_cheque_obs").value = id_cheque
-	document.getElementById("med").value = med
+//	document.getElementById("med").value = med
     incluirObs.show()
    
 }	
@@ -47,7 +47,33 @@ function incluirAnexo(id_cheque){
     incluirAnexo.show()
    
 }		
+function cancelarCheque(id_cheque){
 
+	console.log(id_cheque)
+
+    const cancelarCheque = new bootstrap.Modal(document.getElementById("cancelarChequeModal"))
+	document.getElementById("id_cheque_cancelar").value = id_cheque
+    cancelarCheque.show()
+   
+}
+function incluirCheque(id_cheque){
+
+	console.log(id_cheque)
+    const incluirCheque = new bootstrap.Modal(document.getElementById("incluirChequeModal"))
+    incluirCheque.show()
+   
+}
+function soNumeros(evento) {
+	var theEvent = evento || window.event;
+	var key = theEvent.keyCode || theEvent.which;
+	key = String.fromCharCode( key );
+	//var regex = /^[0-9.,]+$/;
+	var regex = /^[0-9,]+$/;
+	if( !regex.test(key) ) {
+	   theEvent.returnValue = false;
+	   if(theEvent.preventDefault) theEvent.preventDefault();
+	}
+ }
 
 
 

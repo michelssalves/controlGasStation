@@ -149,7 +149,8 @@
           <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" data-bs-dismiss="modal">Fechar</button>
           <button type="button" class="btn btn-outline-success btn-sm"data-bs-dismiss="modal"  onclick="confirmarQuitacao(this.form.id)">Confirmar Quitação</button>
           <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="semSolucao(this.form.id)">Sem Solução</button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id, this.form.name)" >Incluir Observação</button>
+          <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="cancelarCheque(this.form.id)">Cancelar Cheque</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id)" >Incluir Observação</button>
           <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Incluir Anexo</button>
           </div>    
         </div>
@@ -170,8 +171,8 @@
                 <div class="modal-body">
                     <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="p" value="2" required>
-                    <input type="hidden" value="pfin" name="action">
-                      <input type="hidden" id="id_cheque_quitacao" name="id_cheque" value="" required>
+                    <input type="hidden" value="quitacao" name="action">
+                      <input type="hidden" id="id_cheque_quitacao" name="idCheque" value="" required>
                         <div class="mb-3">
                               <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p> 
                             <label for="file" class="col-form-label">Comprovante:</label>
@@ -200,7 +201,7 @@
                     <form id="semSolucaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
                     <input type="hidden" value="semsolucao" name="action">
-                      <input type="hidden" id="id_cheque_solucao" name="id_cheque" value="" required>
+                      <input type="hidden" id="id_cheque_solucao" name="idCheque" value="" required>
                         <div class="mb-3">
                           <p class="texto-de-alerta">ESCREVA O MOTIVO DO CANCELAMENTO</p>
                             <label for="email" class="col-form-label">Justificativa:</label>
@@ -229,8 +230,7 @@
                 <div class="modal-body">
                     <form id="incluirObservacaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                    <input  type="hidden" id="med" name="med" value="">
-                      <input  type="hidden" id="id_cheque_obs" name="id_cheque" value="" required>
+                      <input  type="hidden" id="id_cheque_obs" name="idCheque" value="" required>
                        <input type="hidden" value="gravarObservacao" name="action">
                         <div class="mb-3">
                           <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZAÇÃO SOBRE ESTE CLIENTE</p>
@@ -259,7 +259,7 @@
                 <div class="modal-body">
                     <form method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" id="id_cheque_anexo" name="id_cheque" value="" required>
+                      <input type="hidden" id="id_cheque_anexo" name="idCheque" value="" required>
                       <input type="hidden" value="gravarAnexo" name="action" required>
                         <div class="mb-3">
                           <p class="texto-de-advertencia">AQUI SERÁ INCLUIDO TODA A DOCUMENTAÇÃO REFERENTE A ESTE CLIENTE</p>
@@ -278,3 +278,118 @@
         </div>
     </div>  
 <!--/MODAL INCLUIR ANEXO-->
+<!--MODAL INCLUIR CHEQUE-->
+<div class="modal fade" id="incluirChequeModal" tabindex="-1" aria-labelledby="incluirChequeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>INCLUIR CHEQUE</h3>
+                </div>
+            </div>    
+                <div class="modal-body">
+                <form method="POST" enctype="multipart/form-data">
+                      <input type="hidden" name="p" value="2" required>
+                      <input type="hidden" value="incluir-cheque" name="action" required>
+                        <div class="mb-3">
+                          <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Filial:</span>
+                              <select name="idMed" class="form-select" aria-label="Default select example" required>
+                              <option selected disabled value=''>Filial</option>
+                                <?= $cbFilialI?>
+                              </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Banco:</span>
+                              <select name="codigoBanco" class="form-select" aria-label="Default select example" required>
+                              <option selected disabled value=''>Bancos</option>
+                                <?= $cboBancos ?>
+                              </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">NOME/RZ SOCIAL(CHEQUE):</span>
+                              <input name="rzSocialCheque" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">NOME/RZ SOCIAL(CLIENTE):</span>
+                              <input name="rzSocialCliente" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Telefone::</span>
+                              <input name="telefone" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Nº do Cheque::</span>
+                              <input name="nrCheque" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Valor Do Cheque:</span>
+                              <input onkeypress="return soNumeros();" name="valor" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing-sm">Motivo:</span>
+                              <select name="motivo" class="form-select" aria-label="Default select example" required>
+                              <option selected disabled value=''>Motivo</option>
+                                  <?= $cboMotivos ?>  
+                              </select>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Data Cheque:</span>
+                              <input name="dataCheque" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Data Devolução:</span>
+                              <input name="dataDevol" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Cpf/Cnpj:</span>
+                              <input name="cpfcnpj" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Cheque Frente:</span>
+                              <input name="chequeFrente" type="file" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                              <span class="input-group-text" id="inputGroup-sizing-sm">Cheque Verso:</span>
+                              <input name="chequeVerso" type="file" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm" onclick="this.form(submit)">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL INCLUIR CHEQUE-->
+<!--MODAL CANCELAR CHEQUE-->
+<div class="modal fade" id="cancelarChequeModal" tabindex="-1" aria-labelledby="cancelarChequeModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="fundo-cabecalho">
+                <div class="modal-header">
+                  <h3>CANCELAR CHEQUE</h3>
+                </div>
+            </div>    
+                <div class="modal-body">
+                    <form method="POST" enctype="multipart/form-data">
+                      <input type="hidden" name="p" value="2" required>
+                      <input type="hidden" value="cancelar-cheque" name="action" required>
+                        <div class="mb-3">
+                            <label  for="descricao" class="col-form-label">Id do Cheque:</label>
+                            <input type="text" name="idCheque" class="form-control" id="id_cheque_cancelar" placeholder="Id" readonly required>
+                            <label  for="motivoCancelamento" class="col-form-label">Motivo:</label>
+                            <input type="text" name="motivoCancelamento" class="form-control" id="motivoCancelamento" placeholder="Motivo" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>  
+<!--/MODAL CANCELAR CHEQUE-->

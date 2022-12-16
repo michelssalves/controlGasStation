@@ -1,14 +1,13 @@
-<?php
-include('model/chequesDevolvidos.model.php');
-?>
+<?php include('model/chequesDevolvidos.model.php'); 
 
+?>
 <div class='row'>
     <div class='col-md-12'>   
         <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-start'>
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
-                <button class='btn btn-warning btn-sm' >Incluir</button>
+                <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()" >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
                 <button class='btn btn-danger btn-sm' data-toggle="sem-solucao" >Limpar</button>
         </div>
