@@ -87,12 +87,7 @@ $data2 = $amanha;
 
 $FtipoData = " AND $tipoData BETWEEN '".$data1."' AND '".$data2."' ";
 
-$sql = "SELECT ch.id, bco, nome , nrcheque, valor, motivo, dtCheque, dtDevol, ch.dthrInclusao, ch.cpfcnpj, u.loginName, status, ultimaAlteracao, dtQuitacao
-    ,NOW() as hoje,hoje - dtDevol AS dias, valor, valor + (valor * 0.001 * dias) AS valorCorr, valorQuitacao 
-    FROM ccp_chequeDev AS ch 
-    LEFT JOIN ti_clientes AS u ON ch.id_med = u.id AND inativo = 0 
-    WHERE ch.id > 0  $FtipoData $FBanco $Fid $Fcliente $Fbanco $Fmed $filtroStatus ORDER BY ch.id";
-$qry = odbc_exec($connP, $sql);
+$qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $filtroStatus);
 
 //var_dump($sql);
 // variaveis declaradas para apresentarem os valores totais e corrigidos ao fim da tabela
@@ -175,7 +170,7 @@ include 'view/modal/chequesDevolvidosVisualizarModal.view.php';
 
 $txtTab .="
     </tbody>
-          <tr>
+          <tr class='w3-yellow'>
                 <td colspan='7'><center>Total</td>
                 <td><center><a>";
 $txtTab .=v2($totalValor);
@@ -202,13 +197,13 @@ if ($action == 'incluir-cheque'){
     $cpfcnpj = $_REQUEST['cpfcnpj'];
     $evento = 'Incluído no Sistema';
 
-    $row = selectGerentes($idMed);
+    $row = selectMedCadatrosGerentesByMed($idMed);
     $emailGerentePosto = $row[0];
     $nomeGerentePosto = $row[1];
     $emailGerenteRede= $row[2];
     $nomeGerenteRede = $row[3];
 
-    $idCheque = insertNovoCheque($codigoBanco, $rzSocialCheque, $rzSocialCliente, $telefone, $nrCheque, $valor, $motivo, $dataCheque, $dataDevol, $cpfcnpj, $idMed, $idUsuario, $usuarioLogado, $evento);
+    $idCheque = insertNovoChequeDevolvido($codigoBanco, $rzSocialCheque, $rzSocialCliente, $telefone, $nrCheque, $valor, $motivo, $dataCheque, $dataDevol, $cpfcnpj, $idMed, $idUsuario, $usuarioLogado, $evento);
 
     if ($_FILES['chequeFrente']['name'] <> '' && $_FILES['chequeVerso']['name'] <> ''){ 
 
@@ -216,7 +211,7 @@ if ($action == 'incluir-cheque'){
         $temp = $_FILES['chequeFrente']['tmp_name'];
         $descricao = 'CHEQUE FRENTE';
 
-        insertChequeAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
+        insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
  
         uploadArquivoChequeDevolvido($temp, $extensao);
       
@@ -224,7 +219,7 @@ if ($action == 'incluir-cheque'){
         $temp = $_FILES['chequeVerso']['tmp_name'];
         $descricao = 'CHEQUE VERSO';
 
-        insertChequeAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
+        insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
 
         if(uploadArquivoChequeDevolvido($temp, $extensao)){
 
@@ -274,13 +269,13 @@ if ($action == 'quitacao' || $action == 'pfin' || $action == 'cancelar-cheque'){
         $evento = 'CANCELADO';
     }
 
-    updatePedido($status, $idCheque);
-    insertEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    updateChequeDevolvidoById($status, $idCheque);
+    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
 
      if($_REQUEST['motivoCancelamento'] <> ''){
 
         $observacao = $_REQUEST['motivoCancelamento']; 
-        insertObersevacao($idCheque, $idUsuario,$usuarioLogado, $observacao);
+        insertChequeDevolvidoObersevacao($idCheque, $idUsuario,$usuarioLogado, $observacao);
 
      }
      if ($_FILES['file']['name'] <> ''){ 
@@ -296,12 +291,12 @@ if ($action == 'semsolucao'){
     $status = "status = 'SEM SOLUCAO',";
     $evento = 'CHEQUE SEM SOLUCAO';
     
-    updatePedido($status, $idCheque);
-    insertEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    updateChequeDevolvidoById($status, $idCheque);
+    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
 
     if ($observacao <> ''){
 
-        insertObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
+        insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
      }
  }
  //GRAVAR ANEXO
@@ -321,13 +316,13 @@ if ($action == 'semsolucao'){
        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
        $temp = $_FILES['file']['tmp_name'];
 
-        insertChequeAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
+       insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
 
         uploadArquivoChequeDevolvido($temp, $extensao);
 
-        updatePedido($status = "", $idCheque);
+        updateChequeDevolvidoById($status = "", $idCheque);
          
-        insertEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+        insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
 
         }else{
             echo "<script>alert('Houve algum erro, tente refazer o processo')</script>";
@@ -340,9 +335,9 @@ if ($action == 'gravarObservacao'){
     $observacao = $_REQUEST['observacao'];
     $evento = 'Incluiu Observação';
 
-    insertObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
+    insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
 
-    insertEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
 
    if($_REQUEST['enviarEmail'] == 'on'){
 

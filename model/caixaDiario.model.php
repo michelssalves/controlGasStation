@@ -15,88 +15,128 @@ $action = $_REQUEST['action'];
 	if ($dataIni == '') { $dataIni = date('Y-m-d'); }
 	if ($dataFim == '') { $dataFim = date('Y-m-d'); }
 
-	$sql = "SELECT c.id AS id_reg, DATA,u.loginName, c.dinheiro, c.conta_dep AS conta, c.cheque, c.conta_depCh AS contaCh, 
-					c.dinheiro + c.cheque AS ttdep, debito, c.datahoraReg 	
-					FROM med_caixa AS c 
-					LEFT JOIN ti_clientes AS u ON c.id_med = u.id
-					WHERE c.id > 0 $filtroMed $filtroContaDep
-					AND data BETWEEN '$dataIni' AND '$dataFim' ORDER BY loginName, data";
+		$sql = selectMedCaixaDiarioByMed($filtroMed, $filtroContaDep, $dataIni, $dataFim);
 
 	if ($med == -1){
-		$sql = 	"SELECT loginName, 1 AS cont, sum(cont) AS dias, sum(c.dinheiro) AS dinheiro, sum(c.cheque) AS cheque, sum(debito) AS debito
-				FROM med_caixa AS c 
-				LEFT JOIN ti_clientes AS u ON c.id_med = u.id 
-				WHERE c.id > 0 AND month(data) = 8 AND year(data) = 2015
-				GROUP BY u.loginName
-				ORDER BY u.loginName";
-	
+
+		$sql = selectMedCaixaDiarioByPeriodo();
+		
 	}
-	
-	$qry = odbc_exec( $connP, $sql) or die('Erro.:'.$sql);
-$valorIncrementado = 0;
+		$qry = odbc_exec( $connP, $sql) or die('Erro.:'.$sql);
+
+	$valorIncrementado = 0;
+
 while ($row = odbc_fetch_array($qry)) { 
 
-//atribui um id a todos os modais gerados no loop
-$modal = "modal$valorIncrementado";
-//gatilho para ativação do modal
-$link = "data-bs-toggle='modal' data-bs-target='#$modal' style='cursor:pointer'";
+	//atribui um id a todos os modais gerados no loop
+	$modalAlterar = "modalAlterar$valorIncrementado";
+	$modalObservacao = "modalObservacao$valorIncrementado";
+	//gatilho para ativação do modal
+	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
+	$linkModalObservacao = "data-bs-toggle='modal' data-bs-target='#$modalObservacao' style='cursor:pointer'";
 
-//	if ($nivel == 5 or $id_u == 75){ 
-//	$link = "PopupCenter('caixaDiarioVisualizar.php?id_reg=".$row['id_reg']."','',800,400)".'"  style="cursor:pointer';
-//	}
+	//	if ($nivel == 5 or $id_u == 75){ 
 
-	$totalDia = $row['dinheiro'] + $row['cheque'] ;
+	//	}
 
-	if ($med == -1){	
-        $txtTab =  $txtTab.
-		'<tr >
-				    <th></th>
-					<th><center>'.$row['dias'].'</th>
-					<th><center>'.$row['loginName'].'</th>
-					<td>'.v2($row['dinheiro']).'</th>
-					<td>'.v2($row['cheque']).'</th>
-					<td>'.v2($totalDia).'</th>
-				    <td><center></th>
-					<td><center>'.v2($row['debito']).'</th>
-				    <th><center></th>
-				  </tr>';
-	} else{	
-        $txtTab =  $txtTab.
-		'<tr '.$link.'>
-                    <th >'.dma(date('Y-m-d')).'</th>
-					<th>'.$vetorDiaSem[w(date('Y-m-d'))].'</th>
-					<th><center>'.$row['loginName'].'</th>
-					<td>'.v2($row['dinheiro']).'</th>
-				    <td>'.$row['conta'].'</th>
-					<td>'.v2($row['cheque']).'</th>
-				    <th><center>'.$row['contaCh'].'</th>
-					<td>'.v2($row['ttdep']).'</th>
-					<td>'.v2($row['debito']).'</th>
-				    <th><center>'.date('d/m/Y H:i',strtotime($row['datahoraReg'])).'</th>
-				  </tr>';
+		$totalDia = $row['dinheiro'] + $row['cheque'] ;
+
+		if ($med == -1){	
+			$txtTab =  $txtTab.
+			'<tr >
+						<th></th>
+						<th><center>'.$row['dias'].'</th>
+						<th><center>'.$row['loginName'].'</th>
+						<td>'.v2($row['dinheiro']).'</th>
+						<td>'.v2($row['cheque']).'</th>
+						<td>'.v2($totalDia).'</th>
+						<td><center></th>
+						<td><center>'.v2($row['debito']).'</th>
+						<th><center></th>
+					</tr>';
+		} else{	
+			$txtTab =  $txtTab.
+			'<tr>
+				<td '.$linkModalAlterar.'>'.dma($row['DATA']).'</td>
+				<td '.$linkModalAlterar.'>'.$vetorDiaSem[w($row['DATA'])].'</td>
+				<td '.$linkModalAlterar.'><center>'.$row['loginName'].'</td>
+				<td '.$linkModalAlterar.'>'.v2($row['dinheiro']).'</td>
+				<td '.$linkModalAlterar.'>'.$row['conta'].'</td>
+				<td '.$linkModalAlterar.'>'.v2($row['cheque']).'</td>
+				<td '.$linkModalAlterar.'><center>'.$row['contaCh'].'</td>
+				<td '.$linkModalAlterar.'>'.v2($row['ttdep']).'</td>
+				<td '.$linkModalAlterar.'>'.v2($row['debito']).'</td>
+				<td '.$linkModalAlterar.'><center>'.date('d/m/Y H:i',strtotime($row['datahoraReg'])).'</td>
+				<td><center><i class="fa-solid fa-pencil" '.$linkModalObservacao.'></i></td>
+			</tr>';
+		} 
+
+		$totalDinheiro += $row['dinheiro'];
+		$totalCheque += $row['cheque'];
+		$totalDebito += $row['debito'];
+		$totalGeral += $row['ttdep'];
+
+		include 'view/modal/caixaDiarioVisualizarModal.view.php';   
+
+	$valorIncrementado++; 
 	} 
+	$txtTab =  $txtTab.'
+				</tbody>
+				<tfoot>
+				<tr class="w3-yellow">
+						<td colspan="3">Totais</ttdh>
+						<td colspan="1">'.v2($totalDinheiro).'</td>
+						<td colspan="1" >&nbsp;</td>
+						<td colspan="1">'.v2($totalCheque).'</td>
+						<td colspan="1" >&nbsp;</td>
+						<td colspan="1">'.v2($totalGeral).'</td>
+						<td colspan="1">'.v2($totalDebito).'</td>
+						<td colspan="2" >&nbsp;</td>
+					</tr>
+				</tfoot>
+				</table>';
 
-	$totalDinheiro += $row['dinheiro'];
-	$totalCheque += $row['cheque'];
-	$totalDebito += $row['debito'];
-	$totalGeral += $row['ttdep'];
+if($action == 'alterar-cx-diario'){
 
-    include 'view/modal/caixaDiarioVisualizarModal.view.php';   
+	$hoje = date('Y-m-d H:i');
+	$id_reg = $_REQUEST['id_reg'];
+	$dinheiro = str_replace(',', ".", $_REQUEST['dinheiro']);
+	$cheque = str_replace(',', ".", $_REQUEST['cheque']);
+	$debito = str_replace(',', ".", $_REQUEST['debito']);
+	$data = $_REQUEST['data'];
+	$conta = $_REQUEST['conta'];
+	$contaCh = $_REQUEST['contaCh'];
 
-   $valorIncrementado++; 
-} 
-$txtTab =  $txtTab.'
-			</tbody>
-			<tfoot>
-			<tr class="versalete14Amarelo">
-				    <th colspan="3">Totais</th>
-					<th><center>'.v2($totalDinheiro).'</th>
-				    <th colspan="1" >&nbsp;</th>
-					<th><center>'.v2($totalCheque).'</th>
-				    <th colspan="1" >&nbsp;</th>
-					<th><center>'.v2($totalGeral).'</th>
-					<th><center>'.v2($totalDebito).'</th>
-				    <th colspan="1" >&nbsp;</th>
-				  </tr>
-			</tfoot>
-		    </table>';
+	$row = selectMedCaixaDiarioById($id_reg);
+
+	$dinheiroAnt = $row['dinheiro'];
+	$chequeAnt = $row['cheque'];
+	$debitoAnt = $row['debito'];
+	$contaAnt = $row['conta_dep'];
+	$contaAntCh = $row['conta_depCh'];
+	$dataAnt = 	$row['data'];
+	$txtConta = '';
+
+	if (v2($chequeAnt) <> v2($cheque)) 		{ $txtConta = $txtConta."<br>CHEQUE ERA ".v2($chequeAnt)." PASSOU PARA ".v2($cheque);}
+	if (v2($debitoAnt) <> v2($debito)) 		{ $txtConta = $txtConta."<br>DEBITO ERA ".v2($debitoAnt)." PASSOU PARA ".v2($debito);}
+	if (v2($dinheiroAnt) <> v2($dinheiro)) 	{ $txtConta = $txtConta."<br>DINHEIRO ERA ".v2($dinheiroAnt)." PASSOU PARA ".v2($dinheiro);}
+	if ($contaAnt <> $conta) 				{ $txtConta = $txtConta.'<br>CONTA DINHEIRO ERA '.$contaAnt.' PASSOU PARA '.$conta;}
+	if ($contaAntCh <> $contaCh) 			{ $txtConta = $txtConta.'<br>CONTA CHEQUE ERA '.$contaAntCh.' PASSOU PARA '.$contaCh;}
+	if ($dataAnt <> $data) 					{ $txtConta = $txtConta.'<br>DATA DO MOVIMENTO ERA '.$dataAnt.' PASSOU PARA '.$data;}
+	if ($dinheiro == '') {$dinheiro = 0;}
+	if ($cheque == '') {$cheque = 0;}
+	if ($debito == '') {$debito = 0;}
+
+	updateMedCaixaById($dinheiro, $cheque, $debito, $conta, $data, $contaCh, $id_reg);
+
+	insertObservacaoCaixaDiarioObservacao2($id_reg, $id_u, $dataYmd, $txtConta);
+
+}
+if ($action == 'observacao-cx-diario'){
+	
+	$textoObs = limpaObservacao($_REQUEST['textoObs']);
+	$id_reg = $_REQUEST['id_reg'];
+
+	insertObservacaoCaixaDiarioObservacao1($id_reg, $id_u, $textoObs);
+	
+}

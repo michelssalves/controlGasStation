@@ -1,24 +1,24 @@
-<?php include('model/chequesDevolvidos.model.php'); 
-
-?>
-<div class='row'>
-    <div class='col-md-12'>   
-        <div class='d-grid gap-2 d-md-flex mt-4 justify-content-md-start'>
+<?php include('model/chequesDevolvidos.model.php'); ?>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto mt-4">  
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()" >Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
-                <button class='btn btn-danger btn-sm' data-toggle="sem-solucao" >Limpar</button>
+                <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
         </div>
-        <div class='table-responsive'> 
-            <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
-                <thead>
-                    <tr>
-                        <th colspan='10' style='background-color:#009688'>
-                            <center>FILTROS</center>
-                        </th>
-                    </tr>
+    </div>
+</div>
+    <div class='table-responsive'> 
+        <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
+            <thead>
+                <tr>
+                    <th colspan='10' style='background-color:#009688'>
+                        <center>FILTROS</center>
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
                     <tr>
@@ -142,7 +142,6 @@
             </table>
         </div>
         </form>
-        <hr class='border-dark'>
         <div class="table-responsive">
         <div class="tabela-ver-todos-os-cheques">
              <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
