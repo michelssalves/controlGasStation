@@ -113,7 +113,6 @@
                                 <option value='3'>Data Quitação</option>
                             </select>
                         </td>
-
                         <td colspan='2'>
                             <select id='filial' name='filial' class='form-select' aria-label='Default select example'>
                                 <option selected disabled value=''>Filial</option>
