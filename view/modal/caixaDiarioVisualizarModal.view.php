@@ -8,7 +8,7 @@
                 </div>
             </div>    
                 <div class="modal-body">
-                <form method="get">
+                <form method="POST">
                       <input type="hidden" name="p" value="3" required>
                       <input type="hidden" value="<?= $row['id_reg']?>" name="id" required>
                       <input type="hidden" value="alterar-cx-diario" name="action" required>
@@ -79,7 +79,7 @@
                 </div>
             </div>    
                 <div class="modal-body">
-                <form method="get">
+                <form method="POST">
                       <input type="hidden" name="p" value="3" required>
                       <input type="hidden" value="<?= $row['id_reg']?>" name="id_reg" required>
                       <input type="hidden" value="observacao-cx-diario" name="action" required>

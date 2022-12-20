@@ -2,7 +2,7 @@
 $action = $_REQUEST['action'];
 
 	$contaDeposito = trim($_REQUEST['contaDeposito']); 
-    $med = $_REQUEST['med']; 
+    $med = $_REQUEST['id_med']; 
     $dataIni = $_REQUEST['dataIni'];
 	$dataFim = $_REQUEST['dataFim'];
 
@@ -98,7 +98,7 @@ while ($row = odbc_fetch_array($qry)) {
 
 if($action == 'alterar-cx-diario'){
 
-	$hoje = date('Y-m-d H:i');
+	
 	$id_reg = $_REQUEST['id_reg'];
 	$dinheiro = str_replace(',', ".", $_REQUEST['dinheiro']);
 	$cheque = str_replace(',', ".", $_REQUEST['cheque']);
@@ -115,21 +115,23 @@ if($action == 'alterar-cx-diario'){
 	$contaAnt = $row['conta_dep'];
 	$contaAntCh = $row['conta_depCh'];
 	$dataAnt = 	$row['data'];
-	$txtConta = '';
+	$textoObs = '';
 
-	if (v2($chequeAnt) <> v2($cheque)) 		{ $txtConta = $txtConta."<br>CHEQUE ERA ".v2($chequeAnt)." PASSOU PARA ".v2($cheque);}
-	if (v2($debitoAnt) <> v2($debito)) 		{ $txtConta = $txtConta."<br>DEBITO ERA ".v2($debitoAnt)." PASSOU PARA ".v2($debito);}
-	if (v2($dinheiroAnt) <> v2($dinheiro)) 	{ $txtConta = $txtConta."<br>DINHEIRO ERA ".v2($dinheiroAnt)." PASSOU PARA ".v2($dinheiro);}
-	if ($contaAnt <> $conta) 				{ $txtConta = $txtConta.'<br>CONTA DINHEIRO ERA '.$contaAnt.' PASSOU PARA '.$conta;}
-	if ($contaAntCh <> $contaCh) 			{ $txtConta = $txtConta.'<br>CONTA CHEQUE ERA '.$contaAntCh.' PASSOU PARA '.$contaCh;}
-	if ($dataAnt <> $data) 					{ $txtConta = $txtConta.'<br>DATA DO MOVIMENTO ERA '.$dataAnt.' PASSOU PARA '.$data;}
+	if (v2($chequeAnt) <> v2($cheque)) 		{ $textoObs = $textoObs."<br>CHEQUE ERA ".v2($chequeAnt)." PASSOU PARA ".v2($cheque);}
+	if (v2($debitoAnt) <> v2($debito)) 		{ $textoObs = $textoObs."<br>DEBITO ERA ".v2($debitoAnt)." PASSOU PARA ".v2($debito);}
+	if (v2($dinheiroAnt) <> v2($dinheiro)) 	{ $textoObs = $textoObs."<br>DINHEIRO ERA ".v2($dinheiroAnt)." PASSOU PARA ".v2($dinheiro);}
+	if ($contaAnt <> $conta) 				{ $textoObs = $textoObs.'<br>CONTA DINHEIRO ERA '.$contaAnt.' PASSOU PARA '.$conta;}
+	if ($contaAntCh <> $contaCh) 			{ $textoObs = $textoObs.'<br>CONTA CHEQUE ERA '.$contaAntCh.' PASSOU PARA '.$contaCh;}
+	if ($dataAnt <> $data) 					{ $textoObs = $textoObs.'<br>DATA DO MOVIMENTO ERA '.$dataAnt.' PASSOU PARA '.$data;}
 	if ($dinheiro == '') {$dinheiro = 0;}
 	if ($cheque == '') {$cheque = 0;}
 	if ($debito == '') {$debito = 0;}
 
+	$textoObs = "REGISTRO ALTERADO: $textoObs";
+
 	updateMedCaixaById($dinheiro, $cheque, $debito, $conta, $data, $contaCh, $id_reg);
 
-	insertObservacaoCaixaDiarioObservacao2($id_reg, $id_u, $dataYmd, $txtConta);
+	insertObservacaoCaixaDiarioObservacao($id_reg, $idUsuario, $textoObs);
 
 }
 if ($action == 'observacao-cx-diario'){
@@ -137,6 +139,6 @@ if ($action == 'observacao-cx-diario'){
 	$textoObs = limpaObservacao($_REQUEST['textoObs']);
 	$id_reg = $_REQUEST['id_reg'];
 
-	insertObservacaoCaixaDiarioObservacao1($id_reg, $id_u, $textoObs);
+	insertObservacaoCaixaDiarioObservacao($id_reg, $idUsuario, $textoObs);
 	
 }

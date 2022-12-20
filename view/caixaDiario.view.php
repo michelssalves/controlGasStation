@@ -22,7 +22,7 @@
                         <div class="container">
                             <div class="row justify-content-md-center">
                                 <div class="col-md-auto">      
-                                    <select required id='med' name='med' class='form-select-sm' aria-label='Default select example'>
+                                    <select required id='idMed' name='idMed' class='form-select-sm' aria-label='Default select example'>
                                         <option selected disabled value="<?= $med; ?>"><?= $nome_f[$med]; ?></option>
                                         <?= $cbFilialI ?>
                                         <option = "-1">PERIODO</option>
