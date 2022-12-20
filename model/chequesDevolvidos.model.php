@@ -4,7 +4,7 @@ $action = $_REQUEST['action'];
 $data1 = $_REQUEST['data1'];
 $data2 = $_REQUEST['data2'];
 $tipoData = $_REQUEST['tipoData'];
-$med = $_REQUEST['med'];
+$id_med = $_REQUEST['id_med'];
 $cliente = $_REQUEST['cliente'];
 $id = $_REQUEST['p2'];
 $banco = $_REQUEST['banco'];
@@ -53,8 +53,8 @@ $Fcliente = "AND nome LIKE '%$cliente%' ";
 if ($banco <> '') {
 $Fbanco = "AND bco = $banco";
 }
-if ($med <> '') {
-$Fmed = "AND ch.id_med = $med";
+if ($id_med <> '') {
+$Fmed = "AND ch.id_med = $id_med";
 }
 if (empty($tipoData)) {
 

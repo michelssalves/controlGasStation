@@ -114,9 +114,9 @@
                             </select>
                         </td>
                         <td colspan='2'>
-                            <select id='filial' name='filial' class='form-select' aria-label='Default select example'>
-                                <option selected disabled value=''>Filial</option>
-                                <?= $cbFilialI ?>
+                            <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
+                            <option selected value="<?=($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
+                            <?= $cboMed ?>
                             </select>
                         </td>
                         <td colspan='2'>

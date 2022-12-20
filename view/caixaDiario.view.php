@@ -1,73 +1,92 @@
-<?php include('model/caixaDiario.model.php');?>
-        <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col-md-auto mt-4">  
-                    <form method='POST' id='formulario-caixa-diario'>
-                        <input type='hidden' name='p' value='3'>
-                        <input type='hidden' id='action' name='action' value='filtrar-caixa-diario'>
-                        <button type="submit" class='btn btn-info btn-sm'>Filtrar</button>
-                        <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
-                </div>
-            </div>
+<?php include('model/caixaDiario.model.php'); ?>
+<div class="container">
+    <div class="row justify-content-md-center">
+        <div class="col-md-auto mt-4">  
+            <form method='POST' id='formulario-fechamento-caixa'>
+                <input type='hidden' name='p' value='4'>
+                <input type='hidden' id='action' name='action' value='filtrar-fechamento-caixa'>
+                <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()" >Incluir</button>
+                <button name='filtrar-fechamento-caixa' class='btn btn-info btn-sm'>Filtrar</button>
+                <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
         </div>
-        <div class='table-responsive mt-1'>
-            <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
+    </div>
+</div>
+    <div class='table-responsive'> 
+        <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
+            <thead>
                 <tr>
                     <th colspan='10' style='background-color:#009688'>
                         <center>FILTROS</center>
                     </th>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="container">
-                            <div class="row justify-content-md-center">
-                                <div class="col-md-auto">      
-                                    <select required id='idMed' name='idMed' class='form-select-sm' aria-label='Default select example'>
-                                        <option selected disabled value="<?= $med; ?>"><?= $nome_f[$med]; ?></option>
-                                        <?= $cbFilialI ?>
-                                        <option = "-1">PERIODO</option>
-                                    </select>
-                                    <select required id='contaDeposito' name='contaDeposito' class='form-select-sm' aria-label='Default select example'>
-                                        <option selected disabled><?= $contaDeposito; ?></option>
-                                        <option>CONTA</option>
-                                        <option>BB</option>
-                                        <option>BB MEDS</option>
-                                        <option>BB PROPRIO</option>
-                                        <option>ITAU</option>
-                                        <option>BRINKS</option>
-                                        <option>PROSEGUR</option>
-                                    </select>
-                                    <input class='form-control-sm' type='date' name='dataIni' id='dataIni' value='<?= $dataIni ?>'>      
-                                    <input class='form-control-sm' type='date' name='dataFim' id='dataFim' value='<?= $dataFim ?>'>
-                                </div> 
-                            </div>
-                        </div> 
-                    </td>
-                </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <?= $checkBox ?>   
+                    </tr>  
+                    <tr>
+                        <td>
+                            <select id='controleMed' name='controleMed' class='form-select' aria-label='Default select example'>
+                                <option><?php echo ($controleMed ? $controleMed : 'Controle'); ?></option> 
+                                <option>Controle01</option>
+                                <option>Controle02</option>
+                                <option>Controle03</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
+                                <option selected value="<?= ($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
+                                <?= $cboMed ?>
+                            </select>
+                        </td>
+                        <td>
+                            <input class='form-control' type='date' name='data1' id='data1' value='<?=$data1?>'>
+                        </td>
+                        <td>
+                            <input class='form-control' type='date' name='data2' id='data2' value='<?=$data2?>'>
+                        </td>
+                        <td>
+                            <select id='definitivo' name='definitivo' class='form-select' aria-label='Default select example'>
+                                <option><?php echo ($definitivo? $definitivo : 'Fechamento Definitivo'); ?></option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select id='concBancaria' name='concBancaria' class='form-select' aria-label='Default select example'>
+                                <option><?php echo ($concBancaria ? $concBancaria : 'Conciliação Bancaria'); ?></option> 
+                                <option>Conciliação Bancaria</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
             </table>
         </div>
         </form>
         <div class="table-responsive">
-            <div class="tabela-ver-todos-os-cheques">
-                <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-                    <thead>
-                        <tr style='background-color:#009688'>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEM</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="1">DINHEIRO</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">CONTA DIN</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">CHEQUE</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">CONTA CH</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="1">TOTAL DEP</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="1">DÉBITO</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT REG</th>
-                            <th data-tablesaw-sortable-col data-tablesaw-priority="1">OBS</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?= $txtTab ?>
-            </div>
-        </div>
+         <div class="tabela-ver-todos-os-cheques">
+             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
+                <thead>
+                    <tr style='background-color:#009688'>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">MED</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">DATA</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEMANA</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">DINHEIRO</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">CHEQUE</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">BRINKS</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">PIX</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">TOTAL</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">TURNOS EM DEFINITIVO</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">OBSERVAÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                     <?= $txtTab ?> 
+                </tbody>  
+            </table>
+         </div>    
+       </div>
     </div>
 </div>

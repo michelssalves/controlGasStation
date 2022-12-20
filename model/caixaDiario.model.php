@@ -1,144 +1,121 @@
-<?php
+<?php 
 $action = $_REQUEST['action'];
+$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT); 
+$data1 = $_REQUEST['data1'];
+$data2 = $_REQUEST['data2'];
+$concBancaria = $_REQUEST['concBancaria'];
+$definitivo = $_REQUEST['definitivo'];
+$controleMed = $_REQUEST['controleMed'];
+$id_med = $_REQUEST['id_med'];
+$statusPesquisas ="";
 
-	$contaDeposito = trim($_REQUEST['contaDeposito']); 
-    $med = $_REQUEST['id_med']; 
-    $dataIni = $_REQUEST['dataIni'];
-	$dataFim = $_REQUEST['dataFim'];
-
-	if ($contaDeposito == '') {$contaDeposito = 'CONTA'; }
-	if ($contaDeposito <> 'CONTA' ) { $filtroContaDep = "AND conta LIKE '%".$contaDeposito."%'";}
-	if ($contaDeposito == 'BB MEDS' ) { $filtroContaDep = " AND conta LIKE 'BB' AND loginName NOT IN ( 'MED03','MED10','MED13','MED16','MED18','MED20','MED23','MED27')";}
-	if ($contaDeposito == 'BB PROPRIO' ) { $filtroContaDep = " AND conta LIKE 'BB' AND loginName IN ( 'MED03','MED10','MED13','MED16','MED18','MED20','MED23','MED27')";}
-	if ($med == '') {$med = 0; }
-	if ($med <> '') { $filtroMed = "AND u.id = $med";}
-	if ($dataIni == '') { $dataIni = date('Y-m-d'); }
-	if ($dataFim == '') { $dataFim = date('Y-m-d'); }
-
-		$sql = selectMedCaixaDiarioByMed($filtroMed, $filtroContaDep, $dataIni, $dataFim);
-
-	if ($med == -1){
-
-		$sql = selectMedCaixaDiarioByPeriodo();
-		
-	}
-		$qry = odbc_exec( $connP, $sql) or die('Erro.:'.$sql);
-
-	$valorIncrementado = 0;
-
-while ($row = odbc_fetch_array($qry)) { 
-
-	//atribui um id a todos os modais gerados no loop
-	$modalAlterar = "modalAlterar$valorIncrementado";
-	$modalObservacao = "modalObservacao$valorIncrementado";
-	//gatilho para ativação do modal
-	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
-	$linkModalObservacao = "data-bs-toggle='modal' data-bs-target='#$modalObservacao' style='cursor:pointer'";
-
-	//	if ($nivel == 5 or $id_u == 75){ 
-
-	//	}
-
-		$totalDia = $row['dinheiro'] + $row['cheque'] ;
-
-		if ($med == -1){	
-			$txtTab =  $txtTab.
-			'<tr >
-						<th></th>
-						<th><center>'.$row['dias'].'</th>
-						<th><center>'.$row['loginName'].'</th>
-						<td>'.v2($row['dinheiro']).'</th>
-						<td>'.v2($row['cheque']).'</th>
-						<td>'.v2($totalDia).'</th>
-						<td><center></th>
-						<td><center>'.v2($row['debito']).'</th>
-						<th><center></th>
-					</tr>';
-		} else{	
-			$txtTab =  $txtTab.
-			'<tr>
-				<td '.$linkModalAlterar.'>'.dma($row['DATA']).'</td>
-				<td '.$linkModalAlterar.'>'.$vetorDiaSem[w($row['DATA'])].'</td>
-				<td '.$linkModalAlterar.'><center>'.$row['loginName'].'</td>
-				<td '.$linkModalAlterar.'>'.v2($row['dinheiro']).'</td>
-				<td '.$linkModalAlterar.'>'.$row['conta'].'</td>
-				<td '.$linkModalAlterar.'>'.v2($row['cheque']).'</td>
-				<td '.$linkModalAlterar.'><center>'.$row['contaCh'].'</td>
-				<td '.$linkModalAlterar.'>'.v2($row['ttdep']).'</td>
-				<td '.$linkModalAlterar.'>'.v2($row['debito']).'</td>
-				<td '.$linkModalAlterar.'><center>'.date('d/m/Y H:i',strtotime($row['datahoraReg'])).'</td>
-				<td><center><i class="fa-solid fa-pencil" '.$linkModalObservacao.'></i></td>
-			</tr>';
-		} 
-
-		$totalDinheiro += $row['dinheiro'];
-		$totalCheque += $row['cheque'];
-		$totalDebito += $row['debito'];
-		$totalGeral += $row['ttdep'];
-
-		include 'view/modal/caixaDiarioVisualizarModal.view.php';   
-
-	$valorIncrementado++; 
-	} 
-	$txtTab =  $txtTab.'
-				</tbody>
-				<tfoot>
-				<tr class="w3-yellow">
-						<td colspan="3">Totais</ttdh>
-						<td colspan="1">'.v2($totalDinheiro).'</td>
-						<td colspan="1" >&nbsp;</td>
-						<td colspan="1">'.v2($totalCheque).'</td>
-						<td colspan="1" >&nbsp;</td>
-						<td colspan="1">'.v2($totalGeral).'</td>
-						<td colspan="1">'.v2($totalDebito).'</td>
-						<td colspan="2" >&nbsp;</td>
-					</tr>
-				</tfoot>
-				</table>';
-
-if($action == 'alterar-cx-diario'){
-
-	
-	$id_reg = $_REQUEST['id_reg'];
-	$dinheiro = str_replace(',', ".", $_REQUEST['dinheiro']);
-	$cheque = str_replace(',', ".", $_REQUEST['cheque']);
-	$debito = str_replace(',', ".", $_REQUEST['debito']);
-	$data = $_REQUEST['data'];
-	$conta = $_REQUEST['conta'];
-	$contaCh = $_REQUEST['contaCh'];
-
-	$row = selectMedCaixaDiarioById($id_reg);
-
-	$dinheiroAnt = $row['dinheiro'];
-	$chequeAnt = $row['cheque'];
-	$debitoAnt = $row['debito'];
-	$contaAnt = $row['conta_dep'];
-	$contaAntCh = $row['conta_depCh'];
-	$dataAnt = 	$row['data'];
-	$textoObs = '';
-
-	if (v2($chequeAnt) <> v2($cheque)) 		{ $textoObs = $textoObs."<br>CHEQUE ERA ".v2($chequeAnt)." PASSOU PARA ".v2($cheque);}
-	if (v2($debitoAnt) <> v2($debito)) 		{ $textoObs = $textoObs."<br>DEBITO ERA ".v2($debitoAnt)." PASSOU PARA ".v2($debito);}
-	if (v2($dinheiroAnt) <> v2($dinheiro)) 	{ $textoObs = $textoObs."<br>DINHEIRO ERA ".v2($dinheiroAnt)." PASSOU PARA ".v2($dinheiro);}
-	if ($contaAnt <> $conta) 				{ $textoObs = $textoObs.'<br>CONTA DINHEIRO ERA '.$contaAnt.' PASSOU PARA '.$conta;}
-	if ($contaAntCh <> $contaCh) 			{ $textoObs = $textoObs.'<br>CONTA CHEQUE ERA '.$contaAntCh.' PASSOU PARA '.$contaCh;}
-	if ($dataAnt <> $data) 					{ $textoObs = $textoObs.'<br>DATA DO MOVIMENTO ERA '.$dataAnt.' PASSOU PARA '.$data;}
-	if ($dinheiro == '') {$dinheiro = 0;}
-	if ($cheque == '') {$cheque = 0;}
-	if ($debito == '') {$debito = 0;}
-
-	$textoObs = "REGISTRO ALTERADO: $textoObs";
-
-	updateMedCaixaById($dinheiro, $cheque, $debito, $conta, $data, $contaCh, $id_reg);
-
-	insertObservacaoCaixaDiarioObservacao($id_reg, $idUsuario, $textoObs);
-
+if(!empty($dados['filtro'])){
+    foreach($dados['filtro'] as $filtros){
+            $statusPesquisas .= "$filtros,";
+    }
 }
-if ($action == 'observacao-cx-diario'){
-	
-	$textoObs = limpaObservacao($_REQUEST['textoObs']);
-	$id_reg = $_REQUEST['id_reg'];
 
-	insertObservacaoCaixaDiarioObservacao($id_reg, $idUsuario, $textoObs);
-	
-}
+foreach($arrayStatusCaixa as $key => $row){
+                    
+    $descricao = $row['descricao']; 
+    $cod = $row['cod']; 
+    $result_valor = mb_strpos($statusPesquisas, $cod);
+    if($result_valor === false){
+        $checked = "";
+    }else{
+        $checked = "checked";
+    }       
+
+   $checkBox.="<td>
+        <div class='form-check'>
+            <input class='form-check-input' type='checkbox' $checked name='filtro[]' value='$cod'>
+            <label class='form-check-label' for='flexCheckChecked'>$descricao</label>
+        </div>
+    </td>";
+} 
+
+$fStatus = "";
+$controleDaVirgula = 1;
+    if(!empty($dados['filtro'])){
+        foreach($dados['filtro'] as $filtros){
+            if($controleDaVirgula == 1 ){
+                $fStatus .= "'$filtros'";
+            }else{
+                $fStatus .= ",'$filtros'";
+            }
+            $controleDaVirgula++;
+        }
+    }   
+var_dump($fStatus);
+if ($data1 == '') { $data1 ='2017-08-01'; }
+if ($data2 == '') { $data2 = date('Y-m-d'); }
+
+    $dia[0] = 'Domingo';
+    $dia[1] = 'Segunda-Feira';
+    $dia[2] = 'Terca-Feira';
+    $dia[3] = 'Quarta-Feira';
+    $dia[4] = 'Quinta-Feira';
+    $dia[5] = 'Sexta-Feira';
+    $dia[6] = 'Sabado';
+
+   $fStatus = "AND status IN ($fStatus)";
+
+    $qry = selectFechamentoCaixa($fStatus);
+    
+    while($row = odbc_fetch_array($qry)){
+        
+        $id = $row['id']; 
+        $title = $row['obs'];
+        if($title == ""){
+            $obs = "Não";
+        }else{
+            $obs = "Sim";
+        }
+
+        $link = "<a href='index.php?m=Indice&a=visualizarRequisicao&id_requisicao=$id' style='color: black;'>";
+        $total = $row['dep_dinheiro'] + $row['dep_cheque'] + $row['dep_brinks']  + $row['pix'];
+
+        $txtTab.= "<tr class='".$row['status']."'>
+        <td class='center'>".$link.$row['loginName']."</a></td>
+        <td class='center'>".$link.date('d/m/Y', strtotime($row['data_caixa']))."</a></td>
+        <td class='center'>".$dia[date('w',strtotime($row['data_caixa']))]."</td>
+        <td class='direita'>".v2($row['dep_dinheiro'])."</td>
+        <td class='direita'>".v2($row['dep_cheque'])."</td>
+        <td class='direita'>".v2($row['dep_brinks'])."</td>
+        <td class='direita'>".v2($row['pix'])."</td>
+        <td class='direita'>".v2($total)."</td>
+        <td class='center'>".$row['turnos_definitivo']."</td>
+        <td class='center' title='".$title."'>$obs</td>
+        </tr>";
+    
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+?>
