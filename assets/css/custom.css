@@ -16829,3 +16829,15 @@ be a descendant of the grid when it is being dragged.
   text-align: center;
 
 }
+.NOVO {
+  background-color: #FF6347;
+}
+.ABERTO {
+  background-color: #FFD700;
+}
+.FECHADO {
+  background-color: #8FBC8F;
+}
+.CANCELADO {
+  background-color: #8B4513;
+}

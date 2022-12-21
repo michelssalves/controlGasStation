@@ -34,9 +34,9 @@
                             </select>
                         </td>
                         <td>
-                            <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
-                                <option selected value="<?= ($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
-                                <?= $cboMed ?>
+                        <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
+                            <option selected value="<?=($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] == '' ? $nome_f[$id_med] : 'Filial'); ?></option>
+                            <?= $cboMed ?>
                             </select>
                         </td>
                         <td>
@@ -46,8 +46,8 @@
                             <input class='form-control' type='date' name='data2' id='data2' value='<?=$data2?>'>
                         </td>
                         <td>
-                            <select id='definitivo' name='definitivo' class='form-select' aria-label='Default select example'>
-                                <option><?php echo ($definitivo? $definitivo : 'Fechamento Definitivo'); ?></option>
+                            <select id='turnoDefinitivo' name='turnoDefinitivo' class='form-select' aria-label='Default select example'>
+                                <option><?php echo ($turnoDefinitivo? $turnoDefinitivo : 'Turno Definitivo'); ?></option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -67,7 +67,7 @@
         </form>
         <div class="table-responsive">
          <div class="tabela-ver-todos-os-cheques">
-             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
+             <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover  fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
                 <thead>
                     <tr style='background-color:#009688'>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">MED</th>
@@ -78,8 +78,8 @@
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">BRINKS</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">PIX</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="1">TOTAL</th>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">TURNOS EM DEFINITIVO</th>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">OBSERVAÇÕES</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5" title="TURNOS EM DEFINITIVO">TURNOS D</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">OBS</th>
                     </tr>
                 </thead>
                 <tbody>
