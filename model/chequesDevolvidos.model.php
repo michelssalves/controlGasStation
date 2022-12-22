@@ -131,35 +131,21 @@ $link = "data-bs-toggle='modal' data-bs-target='#$modal' style='cursor:pointer'"
 
 $txtTab .= "<tr $link>
                 <td>$id</td>
-                <td>";
-$txtTab .= dma($dthrInclusao);
-$txtTab .= "    </td>
+                <td>".dma($dthrInclusao)."</td>
                 <td title='$bancoTitle'>$bco</td>
-                <td>";
-$txtTab .= l10($nome);
-$txtTab .= "    </td>
+                <td>".l10($nome)."</td>
                 <td>$nrcheque</td>
                 <td title='$motivoTitle'>$motivo</td>
-                <td>";
-$txtTab .= dma($dtCheque);
-$txtTab .= "    </td>
-                <td>";
-$txtTab .= v2($valor);
-$txtTab .= "    </td>
-                <td>";
-$txtTab .= dma($dtDevol);
-$txtTab .= "    </td>
+                <td>".dma($dtCheque)."</td>
+                <td>".v2($valor)."</td>
+                <td>".dma($dtDevol)."</td>
                 <td>$dias</td>
-                <td title=$tituloValCorr>";
-$txtTab .= v2($valorCorrigido);
-$txtTab .= "    </td>
+                <td title=$tituloValCorr>".v2($valorCorrigido)."</td>
                 <td>$dtQuita</td>
                 <td>$loginName </td>
-                <td>";
-$txtTab .= l5($status);
-$txtTab .= "    </td>
+                <td>".l5($status)."</td>
                 <td>$ultimaAlt</td>
-                </tr>";
+            </tr>";
             $totalValor += $valor;
             $totalValorCorrigido += $valorCorr;
 

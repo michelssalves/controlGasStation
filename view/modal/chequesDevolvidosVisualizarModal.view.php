@@ -1,4 +1,4 @@
-<form class="nada" type="hidden" id="<?= $row['id'] ?>" name="<?= $row['loginName']?>" method="POST"> 
+<form id="<?= $row['id'] ?>" name="<?= $row['loginName']?>" method="POST"> 
 <div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
@@ -163,10 +163,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>CONFIRMAR QUITA플O?</h3>
-                    
-                </div>
+                <h1>CONFIRMAR QUITA플O?</h1>
             </div>    
                 <div class="modal-body">
                     <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
@@ -193,9 +190,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>SEM SOLU플O</h3>    
-                </div>
+                <h1>SEM SOLU플O</h1>    
             </div>    
                 <div class="modal-body">
                     <form id="semSolucaoForm" method="POST">
@@ -222,15 +217,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>INCLUIR OBSERVA플O</h3>
-                    
-                </div>
+                  <h1>INCLUIR OBSERVA플O</h1>
             </div>    
                 <div class="modal-body">
                     <form id="incluirObservacaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                      <input  type="hidden" id="id_cheque_obs" name="idCheque" value="" required>
+                      <input  type="hidden" id="id_observacao" name="idCheque" value="" required>
                        <input type="hidden" value="gravarObservacao" name="action">
                         <div class="mb-3">
                           <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZA플O SOBRE ESTE CLIENTE</p>
@@ -252,14 +244,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>INCLUIR ANEXO</h3>
-                </div>
+                  <h1>INCLUIR ANEXO</h1>
             </div>    
                 <div class="modal-body">
                     <form method="POST" enctype="multipart/form-data">
                       <input type="hidden" name="p" value="2" required>
-                      <input type="hidden" id="id_cheque_anexo" name="idCheque" value="" required>
+                      <input type="hidden" id="id_anexo" name="idCheque" value="" required>
                       <input type="hidden" value="gravarAnexo" name="action" required>
                         <div class="mb-3">
                           <p class="texto-de-advertencia">AQUI SER� INCLUIDO TODA A DOCUMENTA플O REFERENTE A ESTE CLIENTE</p>
@@ -283,9 +273,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>INCLUIR CHEQUE</h3>
-                </div>
+                <h1>INCLUIR CHEQUE</h1>
             </div>    
                 <div class="modal-body">
                 <form method="POST" enctype="multipart/form-data">
@@ -369,9 +357,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>CANCELAR CHEQUE</h3>
-                </div>
+                <h1>CANCELAR CHEQUE</h1>
             </div>    
                 <div class="modal-body">
                     <form method="POST" enctype="multipart/form-data">

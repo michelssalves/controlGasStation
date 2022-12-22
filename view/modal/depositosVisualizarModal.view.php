@@ -3,9 +3,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>ALTERAR CAIXA DIÁRIO</h3>
-                </div>
+                  <h1>ALTERAR DEPÓSITO</h1>
             </div>    
                 <div class="modal-body">
                 <form method="POST">
@@ -74,9 +72,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="fundo-cabecalho">
-                <div class="modal-header">
-                  <h3>INCLUIR OBSERVAÇÃO</h3>
-                </div>
+                  <h1>INCLUIR OBSERVAÇÃO</h1>
             </div>    
                 <div class="modal-body">
                 <form method="POST">

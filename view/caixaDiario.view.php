@@ -70,11 +70,11 @@
              <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover  fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
                 <thead>
                     <tr style='background-color:#009688'>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">MED</th>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">DATA</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">DATA</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEMANA</th>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">DINHEIRO</th>
-                        <th data-tablesaw-sortable-col data-tablesaw-priority="1">CHEQUE</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">DINHEIRO</th>
+                        <th data-tablesaw-sortable-col data-tablesaw-priority="5">CHEQUE</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">BRINKS</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="5">PIX</th>
                         <th data-tablesaw-sortable-col data-tablesaw-priority="1">TOTAL</th>
