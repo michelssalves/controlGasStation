@@ -66,30 +66,43 @@ function incluirCheque(id_cheque){
 }
 async function editarForm(id){
 
+	console.log(id)
+
 	const dados = await fetch(`model/caixaDiario.model.php?action=editarModal&id=${id}`)
     const response = await dados.json()
-	console.log(response)
 	const editForm = new bootstrap.Modal(document.getElementById("editarInformacoesModal"))
-	
 	editForm.show()
-
+	/*EXEMPLO DE COMO CONVERTER DATA EM DIA DA SEMANA
 	const data = new Date(response['dados'].data_caixa)
 	const diaDaSemana = data.getDay()
-	
-	var semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
-	console.log(semana[diaDaSemana+1])
+	var semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];*
+	document.getElementById("data_caixa_dia_semana").value = semana[diaDaSemana+1]*/
+
 	document.getElementById("edit_form").value = response['dados'].id_requisicao
 	document.getElementById("dep_dinheiro").value = response['dados'].dep_dinheiro
 	document.getElementById("dep_cheque").value = response['dados'].dep_cheque
 	document.getElementById("dep_brinks").value = response['dados'].dep_brinks
 	document.getElementById("data_caixa").value = response['dados'].data_caixa
-	document.getElementById("data_caixa_dia_semana").value = semana[diaDaSemana+1]
 	document.getElementById("turnos_definitivo").value = response['dados'].turnos_definitivo
 	document.getElementById("obs").value = response['dados'].obs
 	document.getElementById("conc").value = response['dados'].conc
 	document.getElementById("caixa").value = response['dados'].caixa
 
 }
+function openEditarCaixa(id){
+	
+	var modal = "modalAlterar" + id 
+
+	var shit = `'${modal}'`
+
+	const cccc = new bootstrap.Modal(document.getElementById(shit))
+	//console.log(teste)
+  // const asd = new bootstrap.Modal(teste)
+   //console.log(asd)
+   cccc.show()
+
+   
+}	
 function soNumeros(evento) {
 	var theEvent = evento || window.event;
 	var key = theEvent.keyCode || theEvent.which;
@@ -101,8 +114,5 @@ function soNumeros(evento) {
 	   if(theEvent.preventDefault) theEvent.preventDefault();
 	}
  }
-
-
-
 
 

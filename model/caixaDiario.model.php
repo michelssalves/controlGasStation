@@ -1,29 +1,75 @@
 <?php 
+
 $action = $_REQUEST['action'];
 
 if($action == 'editarModal'){
- 
+
+    //quando é realizado um requisiçao ajax precisa ser incluido no escopo 
+    include '../controller/functionsBD.php';
+
     $id_requisicao = $_REQUEST['id'];
   
-      //include('chavesBD.php');
+    $row = selectFechamentoCaixaById($id_requisicao);
+   
+    $return = ['error' => false,  'dados' => $row];
   
-      $connP = odbc_connect( "sb-pedidos",'dba','rdp' );
-  
-      $sql = "SELECT 3, isnull(concBancaria, '') AS conc, isnull(f.fechaCaixa, '') AS caixa, u.id AS id_user, 
-      u.loginName, u.controladorMed, f.id AS id_requisicao, f.obs, f.status, f.data_caixa, f.dep_dinheiro, f.dep_cheque, 
-      f.dep_brinks, f.pix, f.turnos_definitivo, f.id_med
-              FROM ccp_fechamentoCaixa AS f
-              JOIN ti_clientes AS u ON f.id_med = u.id
-              WHERE f.id = $id_requisicao ORDER BY f.data_caixa ASC";
-             $qry = odbc_exec($connP, $sql);
-             $row = odbc_fetch_array($qry);
-              //var_dump($row);
-             $return = ['error' => false,  'dados' => $row];
-  
-             echo json_encode($return);
-  
-  
-  }
+    echo json_encode($return);
+
+}
+if($action == 'fecharCxDiario' && $_REQUEST['concBancariaSim'] == 'on' &&  $_REQUEST['fechamentoSim'] == 'on'){
+
+    ECHO $id_requisicao = $_REQUEST['id_requisicao'];
+
+   /* $observacao = "ALTEROU O STATUS PARA FECHADO";
+    $sql = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado)
+            VALUES ('$id_requisicao', '$datahora', '$usuarioLogado', '$observacao', 'USUARIO')";
+    odbc_exec($connP, $sql);
+    
+    $sql = "UPDATE ccp_fechamentoCaixa SET concBancaria = 'SIM', fechaCaixa = 'SIM', statys = 'FECHADO' WHERE id = '$id_requisicao'";
+    odbc_exec($connP, $sql);*/
+
+    ECHO 'FECHOU O CAIXA';
+
+}
+if($action == 'abrirCxDiario'){
+
+    ECHO $id_requisicao = $_REQUEST['id_requisicao'];
+
+    /* $observacao = "ALTEROU O STATUS PARA ABERTO";
+     $sql = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado)
+             VALUES ('$id_requisicao', '$datahora', '$usuarioLogado', '$observacao', 'USUARIO')";
+     odbc_exec($connP, $sql);*/
+
+     ECHO 'ABRIU O CAIXA';
+
+}
+if($action == 'gravarAnexo'){
+
+
+}
+if($action == 'cancelarCaixa'){
+
+    $id_requisicao  = $_REQUEST['id_requisicao'];
+    $usuario        = $_SESSION['login'];
+    $datahora       = date('Y-m-d H:i:s');
+
+    $sqlCancelar    = "UPDATE ccp_fechamentoCaixa SET status = 'CANCELADO' WHERE id = '".$id_requisicao."'";
+    //$execCancelar   = odbc_exec($conectar, $sqlCancelar) or die(odbc_error());
+    $sqlObs = "INSERT INTO ccp_fechamentoCaixa_obs (id, id_requisicao, datahora, usuario, obs, gerado) VALUES (null, '".$id_requisicao."', '".$datahora."', '".$usuario."', 'ALTEROU O STATUS PARA CANCELADO', 'SISTEMA')";
+    //$obsExec = odbc_exec($conectar, $sqlObs) or die(odbc_errormsg());
+
+    
+}
+if($action == 'gravarObservacao'){
+
+    $observacao = $_REQUEST['observacao'];
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $usuario = $_SESSION['login'];
+
+    insertFechamentoCaixaObservacao($observacao,$id_requisicao, $usuarioLogado);
+
+}
+if($action <> 'editarModal'){
 
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT); 
 $data1 = $_REQUEST['data1'];
@@ -88,7 +134,7 @@ $controleDaVirgula = 1;
     while($row = odbc_fetch_array($qry)){
 
         	//atribui um id a todos os modais gerados no loop
-	$modalAlterar = "modalAlterar$valorIncrementado";
+	$modalAlterar = "modalAlterar$id";
 	$modalObservacao = "modalObservacao$valorIncrementado";
 	//gatilho para ativação do modal
 	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
@@ -119,9 +165,7 @@ $controleDaVirgula = 1;
         $valorIncrementado++; 
     
     }
-
-
-
+}
 
 
 

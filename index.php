@@ -25,14 +25,10 @@
     <script src="assets/js/tablesaw-init.js"></script>
     <!-- /TABLESAW - DEIXA A TABELA RESPONSIVA-->
 </head>
-<?php
-
-include 'controller/conn.php';
-
-?>
-
+        <?php include 'controller/conn.php';?>
 </div>
 </main>
+
 <!--Awesome-->
 <script src="assets/js/fontawesome.all.min.js"></script>
 <!--Jquery-->
@@ -41,7 +37,5 @@ include 'controller/conn.php';
 <script src="assets/js/bootstrap.bundle.min.v5.2.3.js"></script>
 <!--Custom -->
 <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>
