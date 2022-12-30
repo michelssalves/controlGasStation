@@ -1,11 +1,20 @@
-(function () {
+function esconderSideBar(){
 
-	$('[data-toggle="sidebar"]').click(function(event) {
-		event.preventDefault();
-		$('.app').toggleClass('sidenav-toggled');
-	});
+	const nomeClasseBody = document.getElementById('idBody').className;
+	const el = document.getElementById('idBody');
 
-})();
+	if(nomeClasseBody  == 'app sidebar-mini'){
+
+		el.classList.remove('app', 'sidebar-mini');
+		el.classList.add('app', 'sidebar-mini', 'sidenav-toggled');
+
+	}else{
+		el.classList.remove('app', 'sidebar-mini', 'sidenav-toggled');
+		el.classList.add('app', 'sidebar-mini');
+		
+	}
+
+}
 function abriNovaJanela(url) {
 
 	window.open(url, 'visualizar', 'top=100,width=500,height=650');
@@ -75,7 +84,7 @@ async function editarForm(id){
 	/*EXEMPLO DE COMO CONVERTER DATA EM DIA DA SEMANA
 	const data = new Date(response['dados'].data_caixa)
 	const diaDaSemana = data.getDay()
-	var semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];*
+	var semana = ["Domingo", "Segunda-Feira", "Terï¿½a-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sï¿½bado"];*
 	document.getElementById("data_caixa_dia_semana").value = semana[diaDaSemana+1]*/
 
 	document.getElementById("edit_form").value = response['dados'].id_requisicao

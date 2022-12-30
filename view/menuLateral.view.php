@@ -1,30 +1,7 @@
-<body class="app sidebar-mini">
-    
-    <!-- Navbar-->
+<body id="idBody" class="app sidebar-mini">
     <header class="app-header"><a class="app-header__logo" href="?p=1"><i class="fa-solid fa-gas-pump"></i>Controle Postos</a>
-        <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
+        <a onclick="esconderSideBar('idBody')" class="app-sidebar__toggle" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
         <ul class="app-nav">
-            <!-- Navbar Right Menu
-            <li class="app-search">
-                <input class="app-search__input" type="search" placeholder="Search">
-                <button class="app-search__button"><i class="fa fa-search"></i></button>
-            </li>-->
-            <!--Notification Menu
-            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i class="fa-regular fa-bell"></i></a>
-                <ul class="app-notification dropdown-menu dropdown-menu-right">
-                    <li class="app-notification__title">You have 4 new notifications.</li>
-                    <div class="app-notification__content">
-                        <li><a class="app-notification__item" href="javascript:;"><span class="app-notification__icon"><span class="fa-stack fa-lg"><i class="fa-regular fa-envelope"></i></span></span>
-                                <div>
-                                    <p class="app-notification__message">Lisa sent you a mail</p>
-                                    <p class="app-notification__meta">2 min ago</p>
-                                </div>
-                            </a></li>
-                    </div>
-                    <li class="app-notification__footer"><a href="#">See all notifications.</a></li>
-                </ul>
-            </li>-->
-            <!-- User Menu-->
             <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class=""></i></a>
                 <ul class="dropdown-menu settings-menu dropdown-menu-right">
                     <li><a class="dropdown-item" href="page-user.html"><i class="fa-solid fa-user"></i> Settings</a></li>
@@ -52,6 +29,14 @@
             <li><a class="app-menu__item <?= $active[13]; ?>" href="?p=13"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Ctrl Qualidade</span></a></li>
         </ul>  
     </aside>
-    <hr style="border:30px">
     <main class="app-content">
     <div>
+    <?php $gif = rand(1,4);?>
+    <div id="preloader">
+        <div class="inner">
+                <img src="assets/img/gifs/aguarde<?= $gif ?>.gif">
+           </div>
+        </div>
+
+  
+ 

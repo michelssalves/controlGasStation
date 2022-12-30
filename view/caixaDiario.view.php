@@ -1,4 +1,5 @@
 <?php include('model/caixaDiario.model.php'); ?>
+
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-auto mt-4">  
