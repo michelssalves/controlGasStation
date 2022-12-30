@@ -11,7 +11,6 @@
           <?php if ($status == "ABERTO") {
             echo $menuCaixaAberto = "
                                <input type='hidden' name='p' value='4' required>
-                               <input type='hidden' value='fecharCxDiario' name='action' required>
                                <input type='hidden' value='$id_requisicao' name='id_requisicao' required>
                                  <div class='mb-3'>
                                <span class='input-group-text mb-2' id='inputGroup-sizing'>Conciliação bancaria:
@@ -26,13 +25,11 @@
                                  <label class='form-check-label' for='concBancariaSim'>SIM</label>
                                </div>
                                </span>";
-                            
+
             //SE O CAIXA FOR NOVO RENDERIZA OS MENUS ABAIXO
           } elseif ($status == "NOVO") {
             echo $menuCaixaNovo = "<input type='hidden' name='p' value='4' required>
-                               <input type='hidden' value='abrirCxDiario' name='action' required>
                                <input type='hidden' value=' $id_requisicao' name='id_requisicao' required>";
-                              
           }
           ?>
           <div class='mb-3'>
@@ -90,44 +87,43 @@
             </div>
           </div>
           </br>
-            <div class="table-responsive">
-              <div class="tabela-ver-todos-os-cheques">
-                <table class="table table-hover table-striped fs-6 mb-0">
-                  <thead>
-                    <tr>
-                      <th>Data/Hora</th>
-                      <th>Usuário</th>
-                      <th>Eventos</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?= selectFechamentoCaixaObservacao($id_requisicao) ?>
-                  </tbody>
-                </table>
-              </div>
+          <div class="table-responsive">
+            <div class="tabela-ver-todos-os-cheques">
+              <table class="table table-hover table-striped fs-6 mb-0">
+                <thead>
+                  <tr>
+                    <th>Data/Hora</th>
+                    <th>Usuário</th>
+                    <th>Eventos</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?= selectFechamentoCaixaObservacao($id_requisicao) ?>
+                </tbody>
+              </table>
             </div>
+          </div>
       </div>
-      </div>
-        <div class="modal-footer">
-          <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
+      <div class="modal-footer">
+        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
             <?php if ($status == 'ABERTO') {
-              echo $buttonCaixaAberto = '<button type="submit" class="btn btn-outline-primary btn-sm">Fechar Caixa</button>';
+              echo $buttonCaixaAberto = '<button type="submit" name="action" value="fecharCxDiario" class="btn btn-outline-primary btn-sm">Fechar Caixa</button>';
             } elseif ($status == 'NOVO') {
-              echo $buttonCaixaNovo = '<button type="submit" class="btn btn-outline-primary btn-sm">Abrir Caixa</button>';
+              echo $buttonCaixaNovo = '<button type="submit" name="action" value="abrirCxDiario" class="btn btn-outline-primary btn-sm">Abrir Caixa</button>';
             } else {
               echo $buttonReabrirCaixa = '<button type="submit" class="btn btn-outline-primary btn-sm">Reabrir Caixa</button>';
             } ?>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="editarForm(this.form.id_requisicao.value)">Editar</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id)">Observação</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Anexos</button>
-            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="cancelarCheque(this.form.id)">Cancelar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="cancelarCaixa(this.form.id)">Cancelar</button>
             <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
       </form>
-      </div>
     </div>
   </div>
+</div>
 <!--/MODAL VISUALIZAR CX DIÁRIO-->
 <!--MODAL INCLUIR ANEXO OK-->
 <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
@@ -166,13 +162,13 @@
             </div>
             <br>
             <input type="file" name="file" class="form-control" required>
-        </div>
-      </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
           </div>
-        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -193,12 +189,12 @@
             <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE CAIXA</p>
             <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
           </div>
-        </div>  
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-            <button type="submit" class="btn btn-outline-success btn-sm">Salvar</button>
-          </div>
-        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+        <button type="submit" class="btn btn-outline-success btn-sm">Salvar</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>
@@ -207,9 +203,9 @@
 <div class="modal fade" id="editarInformacoesModal" tabindex="-1" aria-labelledby="editarInformacoesModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
-        <div class="fundo-cabecalho">
-          <h1>EDITAR CAIXA</h1>
-        </div>
+      <div class="fundo-cabecalho">
+        <h1>EDITAR CAIXA</h1>
+      </div>
       <div class="modal-body">
         <form method="POST">
           <input type="hidden" name="p" value="4" required>
