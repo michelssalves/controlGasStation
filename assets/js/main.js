@@ -21,7 +21,6 @@ function abriNovaJanela(url) {
 	
 }
 function confirmarQuitacao(id_cheque){
-	console.log(id_cheque)
 
     const confirmQuitacao = new bootstrap.Modal(document.getElementById("comfirmarQuitacaoModal"))
 	document.getElementById("id_cheque_quitacao").value = id_cheque
@@ -29,8 +28,6 @@ function confirmarQuitacao(id_cheque){
    
 }	
 function semSolucao(id_cheque){
-
-	console.log(id_cheque)
 
     const semSolucao = new bootstrap.Modal(document.getElementById("semSolucaoModal"))
 	document.getElementById("id_cheque_solucao").value = id_cheque
@@ -43,14 +40,10 @@ function incluirObservacao(id){
 
     const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
 	document.getElementById("id_observacao").value = id
-//	document.getElementById("med").value = med
     incluirObs.show()
    
 }	
 function incluirAnexo(id){
-
-	console.log(id)
-
 
     const incluirAnexo = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
 	document.getElementById("id_anexo").value = id

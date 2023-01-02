@@ -1,5 +1,4 @@
 <?php include('model/caixaDiario.model.php'); ?>
-
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-auto mt-4">  
@@ -19,49 +18,49 @@
                         <center>FILTROS</center>
                     </th>
                 </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <?= $checkBox ?>   
-                    </tr>  
-                    <tr>
-                        <td>
-                            <select id='controleMed' name='controleMed' class='form-select' aria-label='Default select example'>
-                                <option><?php echo ($controleMed ? $controleMed : 'Controle'); ?></option> 
-                                <option>Controle01</option>
-                                <option>Controle02</option>
-                                <option>Controle03</option>
-                            </select>
-                        </td>
-                        <td>
+            </thead>
+            <tbody>
+                <tr>
+                    <?= $checkBox ?>   
+                </tr>  
+                <tr>
+                    <td>
+                        <select id='controleMed' name='controleMed' class='form-select' aria-label='Default select example'>
+                            <option><?php echo ($controleMed ? $controleMed : 'Controle'); ?></option> 
+                            <option>Controle01</option>
+                            <option>Controle02</option>
+                            <option>Controle03</option>
+                        </select>
+                    </td>
+                    <td>
                         <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
                             <option selected value="<?=($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] == '' ? $nome_f[$id_med] : 'Filial'); ?></option>
                             <?= $cboMed ?>
-                            </select>
-                        </td>
-                        <td>
-                            <input class='form-control' type='date' name='data1' id='data1' value='<?=$data1?>'>
-                        </td>
-                        <td>
-                            <input class='form-control' type='date' name='data2' id='data2' value='<?=$data2?>'>
-                        </td>
-                        <td>
-                            <select id='turnoDefinitivo' name='turnoDefinitivo' class='form-select' aria-label='Default select example'>
-                                <option><?php echo ($turnoDefinitivo? $turnoDefinitivo : 'Turno Definitivo'); ?></option>
-                                <option>Sim</option>
-                                <option>Não</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select id='concBancaria' name='concBancaria' class='form-select' aria-label='Default select example'>
-                                <option><?php echo ($concBancaria ? $concBancaria : 'Conciliação Bancaria'); ?></option> 
-                                <option>Conciliação Bancaria</option>
-                                <option>Sim</option>
-                                <option>Não</option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
+                        </select>
+                    </td>
+                    <td>
+                        <input class='form-control' type='date' name='data1' id='data1' value='<?=$data1?>'>
+                    </td>
+                    <td>
+                        <input class='form-control' type='date' name='data2' id='data2' value='<?=$data2?>'>
+                    </td>
+                    <td>
+                        <select id='turnoDefinitivo' name='turnoDefinitivo' class='form-select' aria-label='Default select example'>
+                            <option><?php echo ($turnoDefinitivo? $turnoDefinitivo : 'Turno Definitivo'); ?></option>
+                            <option>Sim</option>
+                            <option>Não</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id='concBancaria' name='concBancaria' class='form-select' aria-label='Default select example'>
+                            <option><?php echo ($concBancaria ? $concBancaria : 'Conciliação Bancaria'); ?></option> 
+                            <option>Conciliação Bancaria</option>
+                            <option>Sim</option>
+                            <option>Não</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
             </table>
         </div>
         </form>
@@ -89,5 +88,4 @@
          </div>    
        </div>
     </div>
-
 </div>
