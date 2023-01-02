@@ -9,7 +9,6 @@
         <form id="incluirObservacaoForm" method="POST">
           <input type="hidden" name="p" value="4" required>
           <input type="hidden" id="id_observacao" name="id_requisicao" value="" required>
-          <input type="hidden" value="gravarObservacao" name="action">
           <div class="mb-3">
             <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE CAIXA</p>
             <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
@@ -17,7 +16,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-outline-success btn-sm">Salvar</button>
+        <button value="gravarObservacao" name="action" type="submit" class="btn btn-outline-success btn-sm">Salvar</button>
       </div>
       </form>
     </div>

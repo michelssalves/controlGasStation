@@ -114,7 +114,7 @@
             } else {
               echo $buttonReabrirCaixa = '<button type="submit" name="action" value="reabrirCxDiario" class="btn btn-outline-primary btn-sm">Reabrir Caixa</button>';
             } ?>
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="editarForm(this.form.id_requisicao.value)">Editar</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="editarCaixa(this.form.id)">Editar</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id)">Observação</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Anexos</button>
             <button type="submit" class="btn btn-outline-danger btn-sm" name="action" value="cancelarCaixa">Cancelar</button>

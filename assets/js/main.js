@@ -73,7 +73,7 @@ function incluirCheque(id_cheque){
     incluirCheque.show()
    
 }
-async function editarForm(id){
+async function editarCaixa(id){
 
 	const dados = await fetch(`model/caixaDiario.model.php?action=editarModal&id=${id}`)
     const response = await dados.json()
@@ -96,7 +96,7 @@ async function editarForm(id){
 	document.getElementById("conc").value = response['dados'].conc
 	document.getElementById("caixa").value = response['dados'].caixa
 
-}	
+}
 function soNumeros(evento) {
 	var theEvent = evento || window.event;
 	var key = theEvent.keyCode || theEvent.which;

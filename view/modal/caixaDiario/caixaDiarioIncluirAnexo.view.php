@@ -9,7 +9,6 @@
         <form method="POST" enctype="multipart/form-data">
           <input type="hidden" name="p" value="4" required>
           <input type="hidden" id="id_anexo" name="idCheque" value="" required>
-          <input type="hidden" value="gravarAnexo" name="action" required>
           <div class="mb-3">
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
@@ -38,7 +37,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
+        <button type="submit" value="gravarAnexo" name="action" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
       </div>
       </form>
     </div>

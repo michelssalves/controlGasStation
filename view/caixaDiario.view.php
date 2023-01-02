@@ -6,7 +6,6 @@
             <form method='POST' id='formulario-fechamento-caixa'>
                 <input type='hidden' name='p' value='4'>
                 <input type='hidden' id='action' name='action' value='filtrar-fechamento-caixa'>
-                <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()" >Incluir</button>
                 <button name='filtrar-fechamento-caixa' class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
         </div>
