@@ -11,7 +11,17 @@ if($action == 'editarModal'){
   
     $row = selectFechamentoCaixaById($id_requisicao);
    
-    $return = ['error' => false,  'dados' => $row];
+    function utf8ize($d) {
+        if (is_array($d)) {
+            foreach ($d as $k => $v) {
+                $d[$k] = utf8ize($v);
+            }
+        } else if (is_string ($d)) {
+            return utf8_encode($d);
+        }
+        return $d;
+    }
+    $return = ['dados' =>  utf8ize($row)];
   
     echo json_encode($return);
 
@@ -43,13 +53,25 @@ if($action == 'abrirCxDiario'){
      ECHO 'ABRIU O CAIXA';
 
 }
+if($action == 'reabrirCxDiario'){
+
+    ECHO $id_requisicao = $_REQUEST['id_requisicao'];
+
+    /* $observacao = "ALTEROU O STATUS PARA ABERTO";
+     $sql = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado)
+             VALUES ('$id_requisicao', '$datahora', '$usuarioLogado', '$observacao', 'USUARIO')";
+     odbc_exec($connP, $sql);*/
+
+     ECHO 'REABRIU O CAIXA';
+
+}
 if($action == 'gravarAnexo'){
 
 
 }
 if($action == 'cancelarCaixa'){
 
-    $id_requisicao  = $_REQUEST['id_requisicao'];
+    echo $id_requisicao  = $_REQUEST['id_requisicao'];
     $usuario        = $_SESSION['login'];
     $datahora       = date('Y-m-d H:i:s');
 
@@ -57,7 +79,7 @@ if($action == 'cancelarCaixa'){
     //$execCancelar   = odbc_exec($conectar, $sqlCancelar) or die(odbc_error());
     $sqlObs = "INSERT INTO ccp_fechamentoCaixa_obs (id, id_requisicao, datahora, usuario, obs, gerado) VALUES (null, '".$id_requisicao."', '".$datahora."', '".$usuario."', 'ALTEROU O STATUS PARA CANCELADO', 'SISTEMA')";
     //$obsExec = odbc_exec($conectar, $sqlObs) or die(odbc_errormsg());
-
+    echo 'caixa cancelado';
     
 }
 if($action == 'gravarObservacao'){
@@ -70,7 +92,6 @@ if($action == 'gravarObservacao'){
 
 }
 if($action <> 'editarModal'){
-
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT); 
 $data1 = $_REQUEST['data1'];
 $data2 = $_REQUEST['data2'];
@@ -128,21 +149,21 @@ $controleDaVirgula = 1;
     elseif($concBancaria == 'Não'){ $FConciliacao = "AND conc = 'NÃO'";}
 
     $qry = selectFechamentoCaixa($fData, $fStatus, $FcontroleMed, $FCaixa, $FConciliacao);
-    
-    $valorIncrementado = 0;
-
+    $x=0;
     while($row = odbc_fetch_array($qry)){
-
-        	//atribui um id a todos os modais gerados no loop
-	$modalAlterar = "modalAlterar$id";
-	$modalObservacao = "modalObservacao$valorIncrementado";
-	//gatilho para ativação do modal
-	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
-	$linkModalObservacao = "data-bs-toggle='modal' data-bs-target='#$modalObservacao' style='cursor:pointer'";
 
         extract($row);
         $id = $row['id']; 
         $title = $row['obs'];
+
+    //atribui um id a todos os modais gerados no loop
+	$modalAlterar = "modalAlterar$x";
+	$modalObservacao = "modalObservacao$x";
+	//gatilho para ativação do modal
+	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
+	$linkModalObservacao = "data-bs-toggle='modal' data-bs-target='#$modalObservacao' style='cursor:pointer'";
+
+     
 
         $link = "<a href='index.php?m=Indice&a=visualizarRequisicao&id_requisicao=$id' style='color: black;'>";
         $total = $row['dep_dinheiro'] + $row['dep_cheque'] + $row['dep_brinks']  + $row['pix'];
@@ -160,13 +181,15 @@ $controleDaVirgula = 1;
             <td title='$title'>".($obs?'Sim':'Não')."</td>
         </tr>";
 
-        include 'view/modal/caixaDiarioVisualizarModal.view.PHP';   
+        include 'view/modal/caixaDiario/caixaDiarioVisualizar.view.php';   
 
-        $valorIncrementado++; 
-    
+        $x++;
     }
-}
 
+    include 'view/modal/caixaDiario/caixaDiarioIncluirObservacao.view.php';   
+    include 'view/modal/caixaDiario/caixaDiarioIncluirAnexo.view.php';   
+    include 'view/modal/caixaDiario/caixaDiarioeEditar.view.php';   
+}
 
 
 

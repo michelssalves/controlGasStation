@@ -75,8 +75,6 @@ function incluirCheque(id_cheque){
 }
 async function editarForm(id){
 
-	console.log(id)
-
 	const dados = await fetch(`model/caixaDiario.model.php?action=editarModal&id=${id}`)
     const response = await dados.json()
 	const editForm = new bootstrap.Modal(document.getElementById("editarInformacoesModal"))
@@ -91,26 +89,13 @@ async function editarForm(id){
 	document.getElementById("dep_dinheiro").value = response['dados'].dep_dinheiro
 	document.getElementById("dep_cheque").value = response['dados'].dep_cheque
 	document.getElementById("dep_brinks").value = response['dados'].dep_brinks
+
 	document.getElementById("data_caixa").value = response['dados'].data_caixa
 	document.getElementById("turnos_definitivo").value = response['dados'].turnos_definitivo
 	document.getElementById("obs").value = response['dados'].obs
 	document.getElementById("conc").value = response['dados'].conc
 	document.getElementById("caixa").value = response['dados'].caixa
 
-}
-function openEditarCaixa(id){
-	
-	var modal = "modalAlterar" + id 
-
-	var shit = `'${modal}'`
-
-	const cccc = new bootstrap.Modal(document.getElementById(shit))
-	//console.log(teste)
-  // const asd = new bootstrap.Modal(teste)
-   //console.log(asd)
-   cccc.show()
-
-   
 }	
 function soNumeros(evento) {
 	var theEvent = evento || window.event;
