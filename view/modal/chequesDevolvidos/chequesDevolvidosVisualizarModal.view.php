@@ -1,5 +1,5 @@
 <!--MODAL VISUALIZAR CHEQUES-->
-<form id="<?= $row['id'] ?>" name="<?= $row['loginName']?>" method="POST"> 
+<form id="<?= $row['id'] ?>" method="POST"> 
 <div class="modal fade" id="<?= $modal ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
