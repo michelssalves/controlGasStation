@@ -8,7 +8,7 @@
                 <div class="modal-body">
                     <form id="incluirObservacaoForm" method="POST">
                     <input type="hidden" name="p" value="2" required>
-                      <input  type="hidden" id="id_observacao" name="idCheque" value="" required>
+                      <input  type="hidden" id="id_observacao" name="idCheque" required>
                        <input type="hidden" value="gravarObservacao" name="action">
                         <div class="mb-3">
                           <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA ATUALIZAÇÃO SOBRE ESTE CLIENTE</p>

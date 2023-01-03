@@ -5,8 +5,8 @@
  * ================================*/
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400,400i,700);
 @import url(https://fonts.googleapis.com/css?family=Niconne);
-@import 'lista-de-tarefas.css';
 @import 'pre-loader.css';
+
 /*!
  * Bootstrap v4.3.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
@@ -16307,6 +16307,7 @@ be a descendant of the grid when it is being dragged.
   font-weight: bold;
   text-justify: auto;
   color: #FFFFFF;
+  font-size: 50px;
 
 }
 
@@ -16317,6 +16318,7 @@ be a descendant of the grid when it is being dragged.
   font-weight: bold;
   text-justify: auto;
   color: #FFFFFF;
+  font-size: 50px;
 
 }
 .texto-de-advertencia{
@@ -16370,12 +16372,10 @@ be a descendant of the grid when it is being dragged.
   background-color: #8B4513;
 }
 
-
 .tabela-caixa-diario-anexos th, .tabela-caixa-diario-anexos td{
   border: 1px solid black;
 
 }
-
 
 .tabela-caixa-diario-observacoes th, .tabela-caixa-diario-observacoes td{
   border: 1px solid black;
