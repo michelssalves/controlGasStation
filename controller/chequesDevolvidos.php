@@ -216,10 +216,12 @@ if ($action == 'incluir-cheque') {
         $extensao = strtolower(end(explode('.', $_FILES['chequeFrente']['name'])));
         $temp = $_FILES['chequeFrente']['tmp_name'];
         $descricao = 'CHEQUE FRENTE';
+        $localDeArmazenagem = "assets/docs/chequesDevolvidos/";
+        $tabela = "ccp_chequeDevAnexo";
 
         insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
 
-        uploadArquivoChequeDevolvido($temp, $extensao);
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
         $extensao = strtolower(end(explode('.', $_FILES['chequeVerso']['name'])));
         $temp = $_FILES['chequeVerso']['tmp_name'];
@@ -227,7 +229,7 @@ if ($action == 'incluir-cheque') {
 
         insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
 
-        if (uploadArquivoChequeDevolvido($temp, $extensao)) {
+        if (uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)) {
 
             $assunto = 'NOTIFICAÇÃO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . " - Cliente: " . $rzSocialCheque;
             $mensagemHTML = '
@@ -317,10 +319,12 @@ if ($action == 'gravarAnexo') {
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
         $temp = $_FILES['file']['tmp_name'];
+        $localDeArmazenagem = "assets/docs/chequesDevolvidos/";
+        $tabela = "ccp_chequeDevAnexo";
 
         insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
 
-        uploadArquivoChequeDevolvido($temp, $extensao);
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
         updateChequeDevolvidoById($status = "", $idCheque);
 

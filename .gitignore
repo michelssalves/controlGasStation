@@ -71,6 +71,7 @@ build/Release
 chavesBD.php
 conn.php
 functionsAuxiliar.php
+validaLogin.php
 model
 node_modules/
 jspm_packages/

@@ -5,7 +5,8 @@ $action = $_REQUEST['action'];
 if($action == 'editarModal'){
 
     //quando é realizado um requisiçao ajax precisa ser incluido no escopo 
-    include '../controller/functionsBD.php';
+    include '../model/CaixaDiario.php';
+    include '../controller/controllerAux/functionsAuxiliar.php';
 
     $id_requisicao = $_REQUEST['id'];
   
@@ -18,73 +19,54 @@ if($action == 'editarModal'){
 }
 if($action == 'fecharCxDiario' && $_REQUEST['concBancariaSim'] == 'on' &&  $_REQUEST['fechamentoSim'] == 'on'){
 
-    ECHO $id_requisicao = $_REQUEST['id_requisicao'];
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $obs = 'ALTEROU O STATUS PARA FECHADO';
+    $status = 'FECHADO';
+    $confirmarConciliacao = "'concBancaria = 'SIM', fechaCaixa = 'SIM',";
 
-    $observacao = "ALTEROU O STATUS PARA FECHADO";
-    $sql = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado)
-            VALUES ('$id_requisicao', '".date('Y-m-d H:i')."', '$usuarioLogado', '$observacao', 'USUARIO')";
-             var_dump($sql);
-    //odbc_exec($connP, $sql);
-    
-    $sql1 = "UPDATE ccp_fechamentoCaixa SET concBancaria = 'SIM', fechaCaixa = 'SIM', status = 'FECHADO' WHERE id = '$id_requisicao'";
-    var_dump($sql1);
-    //odbc_exec($connP, $sql);
+    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
+    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'abrirCxDiario'){
 
+    $status = 'ABERTO';
     $id_requisicao = $_REQUEST['id_requisicao'];
+    $obs = 'ALTEROU O STATUS PARA ABERTO';
 
-    $sql = "UPDATE ccp_fechamentoCaixa SET status = 'ABERTO' WHERE id = $id_requisicao";
-    //odbc_exec($connP, $sql);
+    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-     $observacao = "ALTEROU O STATUS PARA ABERTO";
-     $sql = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado)
-             VALUES ('$id_requisicao', '".date('Y-m-d H:i')."', '$usuarioLogado', '$observacao', 'USUARIO')";
-
-             var_dump($sql);
-     //odbc_exec($connP, $sql) or die(odbc_error());;
-
-     ECHO 'ABRIU O CAIXA';
-
+    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 }
 if($action == 'reabrirCxDiario'){
 
-    ECHO $id_requisicao = $_REQUEST['id_requisicao'];
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $status = 'ABERTO';
+    $obs = 'REABRIU O CAIXA';
 
-    $sql = "UPDATE ccp_fechamentoCaixa SET status = 'ABERTO' WHERE id = $id_requisicao";
-    var_dump($sql);
-    //odbc_exec($connP, $sql) or die(odbc_error());
+    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-
-    $sql1 = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado) VALUES ('$id_requisicao', '".date('Y-m-d H:i')."', '$usuarioLogado', 'REABRIU O CAIXA', 'USUARIO')";
-    //odbc_exec($connP, $sql) or die(odbc_error());
-    var_dump($sql1);
-
-     ECHO 'REABRIU O CAIXA';
+    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'cancelarCaixa'){
 
     $id_requisicao  = $_REQUEST['id_requisicao'];
+    $obs = 'ALTEROU O STATUS PARA CANCELADO';
+    $status = 'CANCELADO';
 
-    $sql    = "UPDATE ccp_fechamentoCaixa SET status = 'CANCELADO' WHERE id = $id_requisicao ";
-    //odbc_exec($connP, $sql) or die(odbc_error());
-    var_dump($sql);
-    $sql1 = "INSERT INTO ccp_fechamentoCaixa_obs (id_requisicao, datahora, usuario, obs, gerado) VALUES ('$id_requisicao', '".date('Y-m-d H:i:s')."', '".$usuarioLogado."', 'ALTEROU O STATUS PARA CANCELADO', 'USUARIO')";
-    //odbc_exec($connP, $sql) or die(odbc_error());
-    var_dump($sql1);
-    echo 'caixa cancelado';
-    
+    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
+
+    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+ 
 }
 if($action == 'gravarObservacao'){
 
-    $descricao = $_REQUEST['descricao'];
+    $obs = limpaObservacao($_REQUEST['observacao']);
     $id_requisicao = $_REQUEST['id_requisicao'];
- 
-     var_dump($sql);
-    //insertFechamentoCaixaObservacao($observacao,$id_requisicao, $usuarioLogado);
+
+    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'gravarAnexo'){
@@ -96,18 +78,19 @@ if($action == 'gravarAnexo'){
 
     $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-    $sql = "INSERT INTO ccp_fechamentoCaixa_anexo (id_requisicao, descricao, extensao, dthr_anexo) 
-    VALUES ('$id_requisicao','$descricao','$extensao', '".date('Y-m-d H:i:s')."')";
-    var_dump($sql);
+   echo insertFechamentoCaixaAnexo($id_requisicao, $descricao, $extensao);
 
     $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "assets/docs/fechamentoCaixa/";
+    $tabela = "ccp_fechamentoCaixa_anexo";
 
-    uploadArquivoFechamentoCaixa($temp, $extensao);
+    uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
     }
 
 }
 if($action <> 'editarModal'){
+    
 $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT); 
 $data1 = $_REQUEST['data1'];
 $data2 = $_REQUEST['data2'];

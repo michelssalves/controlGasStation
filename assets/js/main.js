@@ -68,7 +68,7 @@ function incluirCheque(id_cheque){
 }
 async function editarCaixa(id){
 
-	const dados = await fetch(`model/caixaDiario.model.php?action=editarModal&id=${id}`)
+	const dados = await fetch(`controller/caixaDiario.php?action=editarModal&id=${id}`)
     const response = await dados.json()
 	const editForm = new bootstrap.Modal(document.getElementById("editarInformacoesModal"))
 	editForm.show()

@@ -6,10 +6,10 @@
     <title>MED WEB</title>
     <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
     <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css">
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet">
     <!-- TABLESAW - DEIXA A TABELA RESPONSIVA-->
-    <link href="assets/css/w3.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/tablesaw.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/w3.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="assets/css/tablesaw.css">
     <script src="assets/js/impedirSubmit.js"></script>
     <script src="assets/js/tablesawn-label.js"></script>
     <script src="assets/js/tablesaw.js"></script>

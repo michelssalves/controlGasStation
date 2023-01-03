@@ -11,7 +11,7 @@
           <?php if ($status == "ABERTO") {
             echo $menuCaixaAberto = "
                                <input type='hidden' name='p' value='4' required>
-                               <input type='text' value='$id_requisicao' name='id_requisicao' required>
+                               <input type='hidden' value='$id_requisicao' name='id_requisicao' required>
                 
                                <span class='input-group-text mb-2' id='inputGroup-sizing'>Conciliação bancaria:
                                <div class='form-check  mt-2 ml-2'>
@@ -29,10 +29,10 @@
             //SE O CAIXA FOR NOVO RENDERIZA OS MENUS ABAIXO
           } elseif ($status == "NOVO") {
             echo $menuCaixaNovo = "<input type='hidden' name='p' value='4' required>
-                               <input type='text' value=' $id_requisicao' name='id_requisicao' required>";
+                               <input type='hidden' value='$id_requisicao' name='id_requisicao' required>";
           }else {
             echo $menuCaixaFechado = "<input type='hidden' name='p' value='4' required>
-            <input type='hidden' value=' $id_requisicao' name='id_requisicao' required>";
+            <input type='hidden' value='$id_requisicao' name='id_requisicao' required>";
           }
           ?>
             <div class="input-group input-group-sm mb-3">

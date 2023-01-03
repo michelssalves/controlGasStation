@@ -11,7 +11,7 @@
           <input type="hidden" id="id_observacao" name="id_requisicao" value="" required>
           <div class="mb-3">
             <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE CAIXA</p>
-            <textarea name="observacao" cols="50" lines="5" style="white-space: pre;"></textarea>
+            <textarea name="observacao" cols="50" rows="10" style="white-space: pre;"></textarea>
           </div>
       </div>
       <div class="modal-footer">
