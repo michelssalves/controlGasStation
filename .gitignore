@@ -71,9 +71,7 @@ build/Release
 chavesBD.php
 conn.php
 functionsAuxiliar.php
-CaixaDiario.php
-Depositos.php
-ChequesDevolvidos.php
+model
 node_modules/
 jspm_packages/
 
