@@ -1,7 +1,7 @@
 <form method="POST">
   <?php
   session_start();
-  if ($_REQUEST['doc'] <> '') {
+  include('../../model/CaixaDiario.php');
     $id_requisicao = $_REQUEST['id_requisicao'];
     $doc = $_REQUEST['doc'];
     $pasta = $_REQUEST['pasta'];
@@ -10,9 +10,11 @@
 
     list($idArquivo, $extensao) = explode(".", $doc);
 
+    if(verificaExcluido($idArquivo) <> 1){
+
     //$raiz = "../../assets/docs/".$pasta."/".$doc; original
-    $raiz = "../../../medweb/fechamentoCaixa/docs/" . $doc;
-    $raiz2 = "../../assets/docs/FechamentoCaixa/367539.pdf";
+    $raiz = "../../../medweb/fechamentoCaixa/docs/".$doc;
+   // $raiz2 = "../../assets/docs/$pasta/$doc";
   ?>
 
     <head>
@@ -27,7 +29,7 @@
           </div>
         </div>
       </div>
-      <input type="hidden" name="raiz2" value="<?= $raiz2 ?>">
+      <input type="hidden" name="raiz" value="<?= $raiz?>">
       <input type="hidden" name="id_requisicao" value="<?= $id_requisicao ?>">
       <input type="hidden" name="idArquivo" value="<?= $idArquivo ?>">
       <input type="hidden" name="extensao" value="<?= $extensao ?>">
@@ -49,9 +51,7 @@
     if ($action == 'excluirAnexo') {
 
       include('../../controller/controllerAux/validaLogin.php');
-      include('../../model/CaixaDiario.php');
-
-      $raiz2 = $_REQUEST['raiz2'];
+     
       $idArquivo = $_REQUEST['idArquivo'];
       $extensao = $_REQUEST['extensao'];
       $doc = $_REQUEST['doc'];
@@ -60,14 +60,12 @@
       $usuarioLogado;
       $obs = "EXCLUIU UM ANEXO: $descricao - $doc";
 
-      echo deleteFechamentoCaixaAnexo($idArquivo);
+      deleteFechamentoCaixaAnexo($idArquivo);
 
-      echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
-
-      //unlink($raiz2);
+      insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
       header("Location: documentoExcluido.php");
-    }
+  }
   } else {
     header("Location: documentoExcluido.php");
   }

@@ -8,7 +8,7 @@
       <div class="modal-body">
         <form method="POST" enctype="multipart/form-data">
           <input type="hidden" name="p" value="4" required>
-          <input type="text" id="id_anexo" name="id_requisicao" required>
+          <input type="hidden" id="id_anexo" name="id_requisicao" required>
           <div class="mb-3">
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>

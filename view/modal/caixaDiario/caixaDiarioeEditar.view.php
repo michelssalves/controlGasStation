@@ -11,15 +11,15 @@
           <input type="hidden" id="edit_form" name="id_requisicao" required>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Depósito dinheiro:</span>
-              <input id="dep_dinheiro" name="dep_dinheiro" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+              <input onkeypress="return soNumeros();" id="dep_dinheiro" name="dep_dinheiro" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Depósito Cheque:</span>
-              <input  id="dep_cheque" name="dep_cheque" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+              <input onkeypress="return soNumeros();"  id="dep_cheque" name="dep_cheque" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Depósito Brinks:</span>
-              <input id="dep_brinks" name="dep_brinks" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+              <input onkeypress="return soNumeros();" id="dep_brinks" name="dep_brinks" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Data do Caixa:</span>
@@ -35,7 +35,7 @@
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
-              <textarea id="obs" name="obs" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
+              <textarea style="white-space: pre;" id="obs" name="obs" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Concialiação bancaria:</span>
@@ -55,7 +55,7 @@
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
           <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-          <button type="button" value="salvarAlteracoes" name="action" class="btn btn-outline-success btn-sm">Salvar</button>
+          <button type="submit" value="salvarAlteracoes" name="action" class="btn btn-outline-success btn-sm">Salvar</button>
         </div>
       </div>
       </form>

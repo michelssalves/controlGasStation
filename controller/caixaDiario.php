@@ -11,12 +11,45 @@ if($action == 'editarModal'){
     $id_requisicao = $_REQUEST['id'];
   
     $row = selectFechamentoCaixaById($id_requisicao);
-   
+
     $return = ['dados' =>  utf8ize($row)];
-  
+
     echo json_encode($return);
 
 }
+if($action  == 'salvarAlteracoes'){
+
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $obs = limpaObservacao($_REQUEST['obs']);
+    $caixa = $_REQUEST['caixa'];
+    $conc = $_REQUEST['conc'];
+    $turnos_definitivo = $_REQUEST['turnos_definitivo'];
+    $data_caixa = $_REQUEST['data_caixa'];
+    $dep_brinks = $_REQUEST['dep_brinks'];
+    $dep_cheque = $_REQUEST['dep_cheque'];
+    $dep_dinheiro = $_REQUEST['dep_dinheiro'];
+
+    $row = verificarUltimoRegistro($id_requisicao);
+ 
+    updateFechamentoCaixaAlteracao($id_requisicao, $dep_dinheiro, $dep_cheque, $dep_brinks, $data_caixa, $turnos_definitivo,$conc, $caixa, $obs);
+
+    $obs = "<b>Alterou o caixa para:</b> <br>
+    Depósito Dinheiro: $dep_dinheiro <br>
+    Depósito Cheque: $dep_cheque <br>
+    Depósito Brinks: $dep_brinks <br>
+    Turnos definitivo: $turnos_definitivo <br>
+    Observações: $obs <br>
+    <br>
+    <b>Antes os campos eram:</b> <br>
+    Depósito Dinheiro: ".$row['dep_dinheiro']."  <br>
+    Depósito Cheque: ".$row['dep_cheque']." <br>
+    Depósito Brinks: ".$row['dep_brinks']." <br>
+    Turnos definitivo: ".$row['turnos_definitivo']." <br>
+    Observações: ".$row['obs']."<br>";
+
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+}
+
 if($action == 'fecharCxDiario' && $_REQUEST['concBancariaSim'] == 'on' &&  $_REQUEST['fechamentoSim'] == 'on'){
 
     $id_requisicao = $_REQUEST['id_requisicao'];
@@ -24,9 +57,9 @@ if($action == 'fecharCxDiario' && $_REQUEST['concBancariaSim'] == 'on' &&  $_REQ
     $status = 'FECHADO';
     $confirmarConciliacao = "'concBancaria = 'SIM', fechaCaixa = 'SIM',";
 
-    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
+    updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'abrirCxDiario'){
@@ -35,9 +68,9 @@ if($action == 'abrirCxDiario'){
     $id_requisicao = $_REQUEST['id_requisicao'];
     $obs = 'ALTEROU O STATUS PARA ABERTO';
 
-    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
+    updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 }
 if($action == 'reabrirCxDiario'){
 
@@ -45,9 +78,9 @@ if($action == 'reabrirCxDiario'){
     $status = 'ABERTO';
     $obs = 'REABRIU O CAIXA';
 
-    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
+    updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'cancelarCaixa'){
@@ -56,9 +89,9 @@ if($action == 'cancelarCaixa'){
     $obs = 'ALTEROU O STATUS PARA CANCELADO';
     $status = 'CANCELADO';
 
-    echo updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
+    updateFechamentoCaixa($id_requisicao, $status, $confirmarConciliacao);
 
-    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
  
 }
 if($action == 'gravarObservacao'){
@@ -66,7 +99,7 @@ if($action == 'gravarObservacao'){
     $obs = limpaObservacao($_REQUEST['observacao']);
     $id_requisicao = $_REQUEST['id_requisicao'];
 
-    echo insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
+    insertFechamentoCaixaObservacao($id_requisicao, $usuarioLogado, $obs);
 
 }
 if($action == 'gravarAnexo'){
@@ -78,7 +111,7 @@ if($action == 'gravarAnexo'){
 
     $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-   echo insertFechamentoCaixaAnexo($id_requisicao, $descricao, $extensao);
+    insertFechamentoCaixaAnexo($id_requisicao, $descricao, $extensao);
 
     $temp = $_FILES['file']['tmp_name'];
     $localDeArmazenagem = "assets/docs/fechamentoCaixa/";
@@ -151,20 +184,15 @@ $controleDaVirgula = 1;
     $x=0;
     while($row = odbc_fetch_array($qry)){
 
-        extract($row);
-        $id = $row['id']; 
-        $title = $row['obs'];
+    extract($row);
+    
+    $title = $row['obs'];
 
     //atribui um id a todos os modais gerados no loop
 	$modalAlterar = "modalAlterar$x";
-	$modalObservacao = "modalObservacao$x";
 	//gatilho para ativação do modal
 	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
-	$linkModalObservacao = "data-bs-toggle='modal' data-bs-target='#$modalObservacao' style='cursor:pointer'";
 
-     
-
-        $link = "<a href='index.php?m=Indice&a=visualizarRequisicao&id_requisicao=$id' style='color: black;'>";
         $total = $row['dep_dinheiro'] + $row['dep_cheque'] + $row['dep_brinks']  + $row['pix'];
 
         $txtTab.= "<tr class='$status' $linkModalAlterar>
