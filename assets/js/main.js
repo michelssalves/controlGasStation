@@ -1,75 +1,75 @@
-function esconderSideBar(){
+function esconderSideBar() {
 
 	const nomeClasseBody = document.getElementById('idBody').className;
 	const el = document.getElementById('idBody');
 
-	if(nomeClasseBody  == 'app sidebar-mini'){
+	if (nomeClasseBody == 'app sidebar-mini') {
 
 		el.classList.remove('app', 'sidebar-mini');
 		el.classList.add('app', 'sidebar-mini', 'sidenav-toggled');
 
-	}else{
+	} else {
 		el.classList.remove('app', 'sidebar-mini', 'sidenav-toggled');
 		el.classList.add('app', 'sidebar-mini');
-		
+
 	}
 
 }
 function abriNovaJanela(url) {
 
 	window.open(url, 'visualizar', 'top=100,width=500,height=650');
-	
+
 }
-function confirmarQuitacao(id_cheque){
+function confirmarQuitacao(id_cheque) {
 
-    const confirmQuitacao = new bootstrap.Modal(document.getElementById("comfirmarQuitacaoModal"))
+	const confirmQuitacao = new bootstrap.Modal(document.getElementById("comfirmarQuitacaoModal"))
 	document.getElementById("id_cheque_quitacao").value = id_cheque
-    confirmQuitacao.show()
-   
-}	
-function semSolucao(id_cheque){
+	confirmQuitacao.show()
 
-    const semSolucao = new bootstrap.Modal(document.getElementById("semSolucaoModal"))
+}
+function semSolucao(id_cheque) {
+
+	const semSolucao = new bootstrap.Modal(document.getElementById("semSolucaoModal"))
 	document.getElementById("id_cheque_solucao").value = id_cheque
-    semSolucao.show()
-   
-}	
-function incluirObservacao(id){
+	semSolucao.show()
+
+}
+function incluirObservacao(id) {
 
 	console.log(id)
 
-    const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
+	const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
 	document.getElementById("id_observacao").value = id
-    incluirObs.show()
-   
-}	
-function incluirAnexo(id){
+	incluirObs.show()
 
-    const incluirAnexo = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
+}
+function incluirAnexo(id) {
+
+	const incluirAnexo = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
 	document.getElementById("id_anexo").value = id
-    incluirAnexo.show()
-   
-}		
-function cancelarCheque(id_cheque){
+	incluirAnexo.show()
+
+}
+function cancelarCheque(id_cheque) {
 
 	console.log(id_cheque)
 
-    const cancelarCheque = new bootstrap.Modal(document.getElementById("cancelarChequeModal"))
+	const cancelarCheque = new bootstrap.Modal(document.getElementById("cancelarChequeModal"))
 	document.getElementById("id_cheque_cancelar").value = id_cheque
-    cancelarCheque.show()
-   
+	cancelarCheque.show()
+
 }
-function incluirCheque(id_cheque){
+function incluirCheque(id_cheque) {
 
 	console.log(id_cheque)
-    const incluirCheque = new bootstrap.Modal(document.getElementById("incluirChequeModal"))
-    incluirCheque.show()
-   
+	const incluirCheque = new bootstrap.Modal(document.getElementById("incluirChequeModal"))
+	incluirCheque.show()
+
 }
-async function editarCaixa(id){
+async function editarCaixa(id) {
 
 	const dados = await fetch(`controller/caixaDiario.php?action=editarModal&id=${id}`)
-    const response = await dados.json()
+	const response = await dados.json()
 	const editForm = new bootstrap.Modal(document.getElementById("editarInformacoesModal"))
 	editForm.show()
 	/*EXEMPLO DE COMO CONVERTER DATA EM DIA DA SEMANA
@@ -93,19 +93,28 @@ async function editarCaixa(id){
 function soNumeros(evento) {
 	var theEvent = evento || window.event;
 	var key = theEvent.keyCode || theEvent.which;
-	key = String.fromCharCode( key );
+	key = String.fromCharCode(key);
 	//var regex = /^[0-9.,]+$/;
 	var regex = /^[0-9,]+$/;
-	if( !regex.test(key) ) {
-	   theEvent.returnValue = false;
-	   if(theEvent.preventDefault) theEvent.preventDefault();
+	if (!regex.test(key)) {
+		theEvent.returnValue = false;
+		if (theEvent.preventDefault) theEvent.preventDefault();
 	}
- }
-//<![CDATA[
-	$(window).on('load', function () {
-		$('#preloader .inner').fadeOut();
-		$('#preloader').delay(10).fadeOut('slow'); 
-		$('body').delay(10).css({'overflow': 'visible'});
-	  })
-	  //]]>
+}
 
+$(window).on('load', function () {
+	$('#preloader .inner').fadeOut();
+	$('#preloader').delay(10).fadeOut('slow');
+	$('body').delay(10).css({ 'overflow': 'visible' });
+})
+var expanded = false;
+function showCheckboxes() {
+	var checkboxes = document.getElementById("checkboxes");
+	if (!expanded) {
+	  checkboxes.style.display = "block";
+	  expanded = true;
+	} else {
+	  checkboxes.style.display = "none";
+	  expanded = false;
+	}
+  }
