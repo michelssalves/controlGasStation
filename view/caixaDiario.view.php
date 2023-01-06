@@ -1,6 +1,6 @@
-<?php 
-include('model/CaixaDiario.php'); 
-include('controller/caixaDiario.php'); 
+<?php
+include('model/CaixaDiario.php');
+include('controller/caixaDiario.php');
 ?>
 <div class="container">
     <div class="row justify-content-md-center">
@@ -65,13 +65,13 @@ include('controller/caixaDiario.php');
             </tr>
         </tbody>
     </table>
+    </form>
 </div>
-</form>
 <div class="table-responsive">
     <div class="tabela-ver-todos-os-cheques">
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover  fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-            <thead>
-                <tr style='background-color:#009688'>
+            <thead class="header-tabela">
+                <tr>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1">DATA</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEMANA</th>
@@ -89,6 +89,4 @@ include('controller/caixaDiario.php');
             </tbody>
         </table>
     </div>
-</div>
-</div>
 </div>

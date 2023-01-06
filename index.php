@@ -1,27 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt">
 
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MED WEB</title>
-  
-    <link rel="stylesheet" type="text/css" href="assets/css/custom.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/fontawesome.all.min.6.2.1.css">
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="assets/css/w3.min.css" rel="stylesheet">.
-    <link rel="stylesheet" type="text/css" href="assets/css/tablesaw.css">
-    <script src="assets/js/impedirSubmit.js"></script>
-    <script src="assets/js/tablesawn-label.js"></script>
-    <script src="assets/js/tablesaw.js"></script>
-    <script src="assets/js/tablesaw-init.js"></script>
-    <script src="assets/js/fontawesome.all.min.js"></script>
-    <script src="assets/js/jquery-3.6.1.min.js"></script>
-    <script src="assets/js/bootstrap.bundle.min.v5.2.3.js"></script>
-    <script src="assets/js/main.js"></script>
-</head>
-<?php include 'controller/controllerAux/conn.php'; ?>
-</div>
-</main>
-</body>
-</html>
+
+    <?php include 'view/partials/head.php'; ?>
+
+
+
+    <?php include 'controller/controllerAux/conn.php'; ?>
+
+
+    <?php include 'veiw/partials/footer.php'; ?>

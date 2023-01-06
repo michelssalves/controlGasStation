@@ -48,13 +48,13 @@ include('controller/depositos.php');
             </td>
         </tr>
     </table>
+    </form>
 </div>
-</form>
 <div class="table-responsive">
     <div class="tabela-ver-todos-os-cheques">
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-            <thead>
-                <tr style='background-color:#009688'>
+            <thead class="header-tabela">
+                <tr>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEM</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
@@ -71,6 +71,4 @@ include('controller/depositos.php');
             <tbody>
                 <?= $txtTab ?>
     </div>
-</div>
-</div>
 </div>

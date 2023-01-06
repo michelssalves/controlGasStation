@@ -107,14 +107,3 @@ $(window).on('load', function () {
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
-var expanded = false;
-function showCheckboxes() {
-	var checkboxes = document.getElementById("checkboxes");
-	if (!expanded) {
-	  checkboxes.style.display = "block";
-	  expanded = true;
-	} else {
-	  checkboxes.style.display = "none";
-	  expanded = false;
-	}
-  }

@@ -16,9 +16,9 @@ include('controller/chequesDevolvidos.php');
 </div>
 <div class='table-responsive'>
     <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
-        <thead>
+        <thead class="header-tabela">
             <tr>
-                <th colspan='10' style='background-color:#009688'>
+                <th colspan='10'>
                     <center>FILTROS</center>
                 </th>
             </tr>
@@ -143,8 +143,8 @@ include('controller/chequesDevolvidos.php');
             </tr>
         </tbody>
     </table>
+    </form>
 </div>
-</form>
 <div class="table-responsive">
     <div class="tabela-ver-todos-os-cheques">
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
@@ -173,6 +173,4 @@ include('controller/chequesDevolvidos.php');
             </tbody>
         </table>
     </div>
-</div>
-</div>
 </div>
