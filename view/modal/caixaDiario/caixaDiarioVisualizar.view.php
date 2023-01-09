@@ -1,5 +1,5 @@
 <!--MODAL VISUALIZAR CX DIÁRIO-->
-<div class="modal fade" id="<?= $modalAlterar ?>" tabindex="-1" aria-labelledby="incluirChequeModalLabel" aria-hidden="true">
+<div class="modal fade" id="<?= $modalVisualizar ?>" tabindex="-1" aria-labelledby="verCaixaDiarioModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
     <div class="modal-content">
       <div class="fundo-cabecalho">

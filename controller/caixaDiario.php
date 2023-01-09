@@ -186,16 +186,13 @@ $controleDaVirgula = 1;
 
     extract($row);
     
-    $title = $row['obs'];
-
-    //atribui um id a todos os modais gerados no loop
-	$modalAlterar = "modalAlterar$x";
+	$modalVisualizar= "modalVisualizar$x";
 	//gatilho para ativação do modal
-	$linkModalAlterar = "data-bs-toggle='modal' data-bs-target='#$modalAlterar' style='cursor:pointer'";
+	$linkModalVisualizar = "data-bs-toggle='modal' data-bs-target='#$modalVisualizar' style='cursor:pointer'";
 
         $total = $row['dep_dinheiro'] + $row['dep_cheque'] + $row['dep_brinks']  + $row['pix'];
 
-        $txtTab.= "<tr class='$status' $linkModalAlterar>
+        $txtTab.= "<tr class='$status' $linkModalVisualizar>
             <td>$loginName</td>
             <td>".date('d/m/Y', strtotime($data_caixa))."</td>
             <td>".$vetorDiaSem[w($data_caixa)]."</td>
@@ -205,7 +202,7 @@ $controleDaVirgula = 1;
             <td>".v2($pix)."</td>
             <td>".v2($total)."</td>
             <td>".($caixa?'Sim':'Não')."</td>
-            <td title='$title'>".($obs?'Sim':'Não')."</td>
+            <td title='$obs'>".($obs?'Sim':'Não')."</td>
         </tr>";
 
         include 'view/modal/caixaDiario/caixaDiarioVisualizar.view.php';   
@@ -215,7 +212,7 @@ $controleDaVirgula = 1;
 
     include 'view/modal/caixaDiario/caixaDiarioIncluirObservacao.view.php';   
     include 'view/modal/caixaDiario/caixaDiarioIncluirAnexo.view.php';   
-    include 'view/modal/caixaDiario/caixaDiarioeEditar.view.php';   
+    include 'view/modal/caixaDiario/caixaDiarioEditar.view.php';   
 }
 
 
