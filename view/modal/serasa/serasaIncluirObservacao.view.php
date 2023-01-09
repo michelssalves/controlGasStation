@@ -7,11 +7,11 @@
       </div>
       <div class="modal-body">
         <form id="incluirObservacaoForm" method="POST">
-          <input type="hidden" name="p" value="4" required>
-          <input type="hidden" id="id_observacao" name="id_requisicao" value="" required>
+          <input type="hidden" name="p" value="5" required>
+          <input type="hidden" id="id_observacao" name="id_requisicao" required>
           <div class="mb-3">
-            <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE CAIXA</p>
-            <textarea name="observacao" cols="50" rows="10" style="white-space: pre;"></textarea>
+            <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE SERASA</p>
+            <textarea name="observacao" id="Text" cols="50" rows="10" style="white-space: pre"></textarea>
           </div>
       </div>
       <div class="modal-footer">

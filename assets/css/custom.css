@@ -16403,7 +16403,8 @@ be a descendant of the grid when it is being dragged.
  
 }
 
-.tabela-ver-todos-os-cheques th, .tabela-ver-todos-os-cheques td{
+.tabela-ver-todos-os-cheques th, .tabela-ver-todos-os-cheques td, .tabela-ver-todos-os-cheques tr{
+
   border: 1px solid black;
 
 }
@@ -16503,5 +16504,7 @@ be a descendant of the grid when it is being dragged.
 .header-tabela{
 
   background-color: #009688;
+  border-bottom: 3px solid black;
+
 
 }

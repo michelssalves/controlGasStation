@@ -7,6 +7,11 @@
       </div>
       <div class="modal-body">
         <form id="<?= $id_requisicao ?>" method="POST">
+        <input type="hidden" value="<?= $id_requisicao ?>" name="id_requisicao" required>
+          <div class="input-group input-group-sm mb-3">
+              <span class="input-group-text" id="inputGroup-sizing">Status:</span>
+              <input readonly value="<?= $status ?>" name="status" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+            </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Documento:</span>
               <input readonly value="<?= $tipo ?>" name="tipo" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
@@ -41,7 +46,7 @@
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Valor Inicial:</span>
-              <input readonly value="<?= ($valor)  ?>" name="valor" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+              <input readonly value="<?= v2($valor)  ?>" name="valor" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
             </div>
             <div class="input-group input-group-sm mb-3">
               <span class="input-group-text" id="inputGroup-sizing">Valor(Juros):</span>
@@ -64,15 +69,14 @@
           <div class="table-responsive">
             <div class="tabela-ver-todos-os-cheques">
               <table class="table table-hover table-striped fs-6 mb-0">
-                <thead>
+                <thead class="header-tabela">
                   <tr>
-                    <th>Arquivo</th>
-                    <th>Extensão</th>
-                    <th>Data/Hora</th>
+                    <th>Descrição</th>
+                    <th>Numero do documento</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <?php //selectSerasaAnexos($id_requisicao) ?>
+                  <?=  selectSerasaAnexos($id_requisicao) ?>
                 </tbody>
               </table>
             </div>
@@ -81,7 +85,7 @@
           <div class="table-responsive">
             <div class="tabela-ver-todos-os-cheques">
               <table class="table table-hover table-striped fs-6 mb-0">
-                <thead>
+                <thead class="header-tabela">
                   <tr>
                     <th>Data/Hora</th>
                     <th>Usuário</th>
@@ -89,7 +93,24 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php // selectSerasaObservacao($id_requisicao) ?>
+                  <?= selectSerasaEventos($id_requisicao) ?>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          </br>
+          <div class="table-responsive">
+            <div class="tabela-ver-todos-os-cheques">
+              <table class="table table-hover table-striped fs-6 mb-0">
+                <thead class="header-tabela">
+                  <tr>
+                    <th>Data/Hora</th>
+                    <th>Usuário</th>
+                    <th>Observações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?= selectSerasaObs($id_requisicao) ?>
                 </tbody>
               </table>
             </div>
@@ -97,10 +118,10 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="editarCaixa(this.form.id)">Editar</button>
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal" onclick="baixarRequisicao(this.form.id)">Baixar</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id)">Observação</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Anexos</button>
-            <button type="submit" class="btn btn-outline-danger btn-sm" name="action" value="cancelarCaixa">Cancelar</button>
+            <button type="submit" class="btn btn-outline-danger btn-sm" name="action" value="cancelarRequisicao">Cancelar</button>
             <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>
@@ -108,5 +129,5 @@
     </div>
   </div>
 </div>
-<!--/MODAL VISUALIZAR CX DIÁRIO-->
+<!--/MODAL VISUALIZAR SERASA-->
 

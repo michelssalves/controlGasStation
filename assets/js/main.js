@@ -43,6 +43,13 @@ function incluirObservacao(id) {
 	incluirObs.show()
 
 }
+function baixarRequisicao(id) {
+
+	const baixarRequisicao = new bootstrap.Modal(document.getElementById("baixarRequisicaoModal"))
+	document.getElementById("id_requisicao").value = id
+	baixarRequisicao.show()
+
+}
 function incluirAnexo(id) {
 
 	const incluirAnexo = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
