@@ -1,3 +1,28 @@
+async function buscaCep(cep) {
+
+	if (cep.length >= 8) {
+
+		const dados = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+		//console.log(dados)
+		const response = await dados.json()
+		console.log(response)
+		console.log(response['erro'])
+		if (response['erro'] != true) {
+
+			document.getElementById('endereco').value = response['logradouro']
+			document.getElementById('bairro').value = response['bairro']
+			document.getElementById('uf').value = response['uf']
+			document.getElementById('cidade').value = response['localidade']
+		}
+	} else {
+		document.getElementById('endereco').value = 'ERROR'
+		document.getElementById('bairro').value = 'ERROR'
+		document.getElementById('uf').value = 'ERROR'
+		document.getElementById('cidade').value = 'ERROR'
+	}
+
+}
+
 function esconderSideBar() {
 
 	const nomeClasseBody = document.getElementById('idBody').className;
@@ -109,8 +134,10 @@ function soNumeros(evento) {
 	}
 }
 
+
 $(window).on('load', function () {
 	$('#preloader .inner').fadeOut();
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
+

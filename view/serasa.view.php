@@ -10,7 +10,7 @@ include('controller/serasa.php');
                 <input type='hidden' id='action' name='action' value='filtrar-fechamento-caixa'>
                 <button type="submit" name="acao" value="filtrar" class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" name="acao" value="limpar" class='btn btn-danger btn-sm'>Limpar</button>
-                <button type="submit" name="acao" value="solicitarPfin" class='btn btn-secondary btn-sm'>PFIN</button>
+                <button type="button" data-bs-toggle='modal' data-bs-target='#criaNovoPfin' style='cursor:pointer' class='btn btn-secondary btn-sm'>PFIN</button>
             </div>
         </div>
     </div>

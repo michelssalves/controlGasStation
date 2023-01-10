@@ -18,7 +18,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-        <button type="submit" value="baixarRequisicao" name="action" class="btn btn-outline-success btn-sm">Salvar</button>
+        <button type="submit" value="baixarRequisicao" name="action" class="btn btn-outline-success btn-sm" onclick="return confirm('Confirmar a SOLICITAÇÃO DE BAIXA?')">Salvar</button>
       </div>
       </form>
     </div>
