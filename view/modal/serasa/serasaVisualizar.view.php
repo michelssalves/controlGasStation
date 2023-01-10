@@ -118,10 +118,10 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal" onclick="baixarRequisicao(this.form.id)">Baixar</button>
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal" onclick="baixarRequisicao(this.form.id, this.form.status.value, this.form.tipo.value, this.form.nomeCliente.value, this.form.valor.value)">Baixar</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirObservacao(this.form.id)">Observação</button>
             <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal" onclick="incluirAnexo(this.form.id)">Anexos</button>
-            <button type="submit" class="btn btn-outline-danger btn-sm" name="action" value="cancelarRequisicao">Cancelar</button>
+            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal" onclick="cancelarRequisicao(this.form.id, this.form.status.value, this.form.tipo.value, this.form.nomeCliente.value, this.form.valor.value)">Cancelar</button>
             <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
           </div>
         </div>

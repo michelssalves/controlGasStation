@@ -237,7 +237,8 @@ if($action == 'baixarRequisicao'){
 
         $x++;
     }
-
+    
+       include 'view/modal/serasa/serasaCancelarRequisicao.view.php';   
        include 'view/modal/serasa/serasaCriarPfin.view.php';   
        include 'view/modal/serasa/serasaBaixarRequisicao.view.php';  
        include 'view/modal/serasa/serasaIncluirObservacao.view.php';   

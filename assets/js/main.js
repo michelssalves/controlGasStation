@@ -22,7 +22,6 @@ async function buscaCep(cep) {
 	}
 
 }
-
 function esconderSideBar() {
 
 	const nomeClasseBody = document.getElementById('idBody').className;
@@ -68,11 +67,30 @@ function incluirObservacao(id) {
 	incluirObs.show()
 
 }
-function baixarRequisicao(id) {
+function baixarRequisicao(id, statusCliente, tipo, cliente, valor) {
+
+	console.log(id)
 
 	const baixarRequisicao = new bootstrap.Modal(document.getElementById("baixarRequisicaoModal"))
-	document.getElementById("id_requisicao").value = id
+	document.getElementById("id_requisicao1").value = id
+	document.getElementById("statusCliente1").value = statusCliente
+	document.getElementById("tipo1").value = tipo
+	document.getElementById("cliente1").value = cliente
+	document.getElementById("valor1").value = valor
 	baixarRequisicao.show()
+
+}
+function cancelarRequisicao(id, statusCliente, tipo, cliente, valor) {
+
+
+	
+	const cancelarRequisicao = new bootstrap.Modal(document.getElementById("cancelarRequisicaoModal"))
+	document.getElementById("id_requisicao").value = id
+	document.getElementById("statusCliente").value = statusCliente
+	document.getElementById("tipo").value = tipo
+	document.getElementById("cliente").value = cliente
+	document.getElementById("valor").value = valor
+	cancelarRequisicao.show()
 
 }
 function incluirAnexo(id) {
