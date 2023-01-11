@@ -67,30 +67,59 @@ function incluirObservacao(id) {
 	incluirObs.show()
 
 }
+function acoesRequisicao(id, statusCliente, tipo, cliente, valor) {
+
+	const acoesRequisicao = new bootstrap.Modal(document.getElementById("acoesRequisicaoModal"))
+	document.getElementById("id_requisicaoAcoes").value = id
+	document.getElementById("statusClienteAcoes").value = statusCliente
+	document.getElementById("tipoAcoes").value = tipo
+	document.getElementById("clienteAcoes").value = cliente
+	document.getElementById("valorAcoes").value = valor
+	acoesRequisicao.show()
+
+}
 function baixarRequisicao(id, statusCliente, tipo, cliente, valor) {
 
-	console.log(id)
-
 	const baixarRequisicao = new bootstrap.Modal(document.getElementById("baixarRequisicaoModal"))
-	document.getElementById("id_requisicao1").value = id
-	document.getElementById("statusCliente1").value = statusCliente
-	document.getElementById("tipo1").value = tipo
-	document.getElementById("cliente1").value = cliente
-	document.getElementById("valor1").value = valor
+	document.getElementById("id_requisicaoBaixar").value = id
+	document.getElementById("statusClienteBaixar").value = statusCliente
+	document.getElementById("tipoBaixar").value = tipo
+	document.getElementById("clienteBaixar").value = cliente
+	document.getElementById("valorBaixar").value = valor
 	baixarRequisicao.show()
 
 }
 function cancelarRequisicao(id, statusCliente, tipo, cliente, valor) {
 
-
-	
 	const cancelarRequisicao = new bootstrap.Modal(document.getElementById("cancelarRequisicaoModal"))
-	document.getElementById("id_requisicao").value = id
-	document.getElementById("statusCliente").value = statusCliente
-	document.getElementById("tipo").value = tipo
-	document.getElementById("cliente").value = cliente
-	document.getElementById("valor").value = valor
+	document.getElementById("id_requisicaoCancelar").value = id
+	document.getElementById("statusClienteCancelar").value = statusCliente
+	document.getElementById("tipoCancelar").value = tipo
+	document.getElementById("clienteCancelar").value = cliente
+	document.getElementById("valorCancelar").value = valor
 	cancelarRequisicao.show()
+
+}
+function pfinRequisicao(id, statusCliente, tipo, cliente, valor) {
+
+	const pfinRequisicao = new bootstrap.Modal(document.getElementById("pfinRequisicaoModal"))
+	document.getElementById("id_requisicaoPfin").value = id
+	document.getElementById("statusClientePfin").value = statusCliente
+	document.getElementById("tipoPfin").value = tipo
+	document.getElementById("clientePfin").value = cliente
+	document.getElementById("valorPfin").value = valor
+	pfinRequisicao.show()
+
+}
+function pagarRequisicao(id, statusCliente, tipo, cliente, valor) {
+
+	const pagouRequisicao = new bootstrap.Modal(document.getElementById("pagouRequisicaoModal"))
+	document.getElementById("id_requisicaoPagar").value = id
+	document.getElementById("statusClientePagar").value = statusCliente
+	document.getElementById("tipoPagar").value = tipo
+	document.getElementById("clientePagar").value = cliente
+	document.getElementById("valorPagar").value = valor
+	pagouRequisicao.show()
 
 }
 function incluirAnexo(id) {

@@ -59,7 +59,7 @@
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
-                        <textarea name="obs" type="text" cols="10" rows="5" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"></textarea>
+                        <textarea name="obs" type="text" cols="10" rows="2" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"></textarea>
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing">Nº Doc:</span>

@@ -113,6 +113,7 @@ if($action == 'gravarAnexo'){
         var_dump($sql1);
     }
 }
+/*
 if($action == 'paraPefin'){
 
     $id_requisicao = $_REQUEST['id_requisicao'];
@@ -137,14 +138,57 @@ if($action == 'paraPefin'){
 
    // uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
+	$evento = "ALTEROU O STATUS PARA PEFIN";
+				
+	$sql = ("INSERT INTO ccp_serasa_eventos (id_requisicao, evento, usuario, datahora) VALUES '$id_requisicao', '$evento', '$usuarioLogado', '".date('Y-m-d H:i:s')."')");
+    var_dump($sql);
+			
+
+
+
     }
 
 }
-if($action == 'cancelarRequisicao'){
+if($action == 'paraPago'){
+
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $numDoc = $_REQUEST['numDoc'];
+    $descricaoAnexo = "COMPROVANTE DE PAGAMENTO";
+
+    $sql = ("UPDATE ccp_serasa SET status = 'PAGO' WHERE id_requisicao = $id_requisicao");
+    //odbc_exec($connP,$sql);
+    var_dump($sql);
+
+    if ($_FILES['arquivo']['name'] <> ''){
+
+    $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+    $sql1 = ("INSERT INTO ccp_serasa_anexo (id_requisicao, numDoc, descricao, extensao) VALUES ('$id_requisicao','$numDoc','$descricaoAnexo','$extensao')");
+    //odbc_exec($connP,$sql);
+    var_dump($sql1);
+
+    $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "assets/docs/serasa/";
+    $tabela = 'ccp_serasa_anexo';
+
+   // uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+
+    $evento = "ALTEROU O STATUS PARA PAGO";
+				
+	$sql = ("INSERT INTO ccp_serasa_eventos (id_requisicao, evento, usuario, datahora) VALUES '$id_requisicao', '$evento', '$usuarioLogado', '".date('Y-m-d H:i:s')."')");
+    var_dump($sql);
+			
+
+
+
+    }
+
+}
+if($action == 'paraCancelado'){
 
         $id_requisicao = $_REQUEST['id_requisicao'];
         $evento = "CANCELOU A REQUISIÇÃO";
-        $descricaoAnexo = "DOC. BAIXA";
+        $descricaoAnexo = "DOC. CANCELAMENTO";
 
 		$sql = ("UPDATE ccp_serasa SET status = 'CANCELADO' WHERE id_requisicao = $id_requisicao");
         var_dump($sql);
@@ -174,7 +218,7 @@ if($action == 'cancelarRequisicao'){
         }
 
 }
-if($action == 'baixarRequisicao'){
+if($action == 'paraBaixado'){
 
         $id_requisicao = $_REQUEST['id_requisicao'];
         $numDoc = limpaObservacao($_REQUEST['numDoc']);
@@ -207,6 +251,70 @@ if($action == 'baixarRequisicao'){
 			
         }
 }
+*/
+if($action == 'alterarStatus'){
+
+    if($_REQUEST['statusAcao'] == '1'){
+
+        $numDoc = 'EXCLUSÃO DO SPC';
+        $status = 'PAGO';
+        $descricaoAnexo = "COMPROVANTE DE PAGAMENTO";
+        $evento = "ALTEROU O STATUS PARA PAGO";
+
+    }
+    if($_REQUEST['statusAcao'] == '2'){
+        
+        $numDoc = 'INCLUSÃO NO SPC';
+        $status = 'PEFIN';
+        $descricaoAnexo = "DOC. BAIXA";
+        $evento = "ALTEROU O STATUS PARA PEFIN";
+
+    }
+
+   $id_requisicao = $_REQUEST['id_requisicao'];
+   
+    if($_REQUEST['statusAcao'] == '3'){
+
+        $numDoc = 'BAIXADO';
+        $status = 'BAIXADO';
+        $descricaoAnexo = "DOC. BAIXA";
+        $evento = "ALTEROU O STATUS PARA BAIXADO";
+
+    }
+    if($_REQUEST['statusAcao'] == '4'){
+
+        $numDoc = 'CANCELADO';
+        $status = 'CANCELADO';
+        $descricaoAnexo = "DOC. CANCELAMENTO";
+        $evento = "CANCELOU A REQUISIÇÃO";
+       
+    }
+
+    $sql = ("UPDATE ccp_serasa SET status = $status WHERE id_requisicao = $id_requisicao"); //ALTERA O STATUS PARA BAIXADO
+    //odbc_exec($connP,$sql);
+    var_dump($sql);
+
+    $sql2 = ("INSERT INTO ccp_serasa_eventos (id_requisicao, evento, usuario, datahora) VALUES ('$id_requisicao', '$evento', '$usuarioLogado', '".date('Y-m-d H:i:s')."')");
+    //odbc_exec($connP,$sql);
+    var_dump($sql2);
+        
+    if ($_FILES['file']['name'] <> ''){
+
+        $temp = $_FILES['file']['tmp_name'];
+        $localDeArmazenagem = "assets/docs/serasa/";
+        $tabela = 'ccp_serasa_anexo';
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+        $sql1 = ("INSERT INTO ccp_serasa_anexo (id_requisicao, numDoc, descricao, extensao) VALUES ('$id_requisicao','$numDoc','$descricaoAnexo','$extensao')");
+        //odbc_exec($connP, $sql);
+        var_dump($sql1);
+
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem, $idFechamentoCaixaAnexo);
+
+
+    }
+}
 
     $sql = ("SELECT TOP 50 u.id, u.loginName, f.id_requisicao, f.tipo, f.cnpj, f.nomeCliente, f.status, f.obs, f.valor, f.valorJuros, f.id_cliente, f.dataEmissao, f.dataVencimento, f.id_med,
             f.endereco, f.estado, f.cidade, f.bairro, f.numero, f.cep, f.dataNascimento
@@ -237,10 +345,12 @@ if($action == 'baixarRequisicao'){
 
         $x++;
     }
-    
-       include 'view/modal/serasa/serasaCancelarRequisicao.view.php';   
-       include 'view/modal/serasa/serasaCriarPfin.view.php';   
+       include 'view/modal/serasa/serasaAcoesRequisicao.view.php'; 
+       include 'view/modal/serasa/serasaCancelarRequisicao.view.php'; 
        include 'view/modal/serasa/serasaBaixarRequisicao.view.php';  
+       include 'view/modal/serasa/serasaPagouRequisicao.view.php';
+       include 'view/modal/serasa/serasaPfinRequisicao.view.php';
+       include 'view/modal/serasa/serasaCriarPfin.view.php';   
        include 'view/modal/serasa/serasaIncluirObservacao.view.php';   
        include 'view/modal/serasa/serasaIncluirAnexo.view.php';   
        
