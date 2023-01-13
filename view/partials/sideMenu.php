@@ -21,4 +21,4 @@
 <main class="app-content">
     <div>
 
-<?php include 'preLoader.php'; ?>
+<?php //include 'preLoader.php'; ?>

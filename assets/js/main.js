@@ -2,7 +2,7 @@ async function buscaCep(cep) {
 
 	if (cep.length >= 8) {
 
-		const dados = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+		const dados = await fetch(`https://viacep.com.br/ws/const {cep}/json/`)
 		//console.log(dados)
 		const response = await dados.json()
 		console.log(response)
@@ -147,7 +147,7 @@ function incluirCheque(id_cheque) {
 }
 async function editarCaixa(id) {
 
-	const dados = await fetch(`controller/caixaDiario.php?action=editarModal&id=${id}`)
+	const dados = await fetch(`controller/caixaDiario.php?action=editarModal&id=const {id}`)
 	const response = await dados.json()
 	const editForm = new bootstrap.Modal(document.getElementById("editarInformacoesModal"))
 	editForm.show()
@@ -173,8 +173,8 @@ function soNumeros(evento) {
 	var theEvent = evento || window.event;
 	var key = theEvent.keyCode || theEvent.which;
 	key = String.fromCharCode(key);
-	//var regex = /^[0-9.,]+$/;
-	var regex = /^[0-9,]+$/;
+	//var regex = /^[0-9.,]+const /;
+	var regex = /^[0-9,]+const /;
 	if (!regex.test(key)) {
 		theEvent.returnValue = false;
 		if (theEvent.preventDefault) theEvent.preventDefault();
@@ -187,4 +187,3 @@ $(window).on('load', function () {
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
-
