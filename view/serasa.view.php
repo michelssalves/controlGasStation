@@ -8,6 +8,7 @@ include('controller/serasa.php');
         <div class="row justify-content-md-center">
             <div class="col-md-auto mt-4">
                 <input type='hidden' name='p' value='5'>
+                <input type='hidden' name='page' value='1'>
                 <button type="submit" name="action" value="filtrar-serasa" class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" name="action" value="limpar" class='btn btn-danger btn-sm'>Limpar</button>
                 <button type="button" data-bs-toggle='modal' data-bs-target='#criaNovoPfin' style='cursor:pointer' class='btn btn-secondary btn-sm'>PFIN</button>

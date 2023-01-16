@@ -169,10 +169,10 @@ if ($action == 'filtrar-serasa') {
     } else {
         $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusPefin . "','" . $statusPago . "','" . $statusBaixado . "','" . $statusCancelado . "')";
     }
-    $Fstatus;
+
     $txtTable = filtrarSerasa($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $page);
 }
-if ($action <> 'filtrar') {
+if ($action <> 'filtrar-serasa') {
 
     $page =  $_REQUEST['page'];
 
@@ -184,92 +184,10 @@ if ($action <> 'filtrar') {
 
     $txtTable = filtrarSerasa($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $page);
 }
+
 include 'view/modal/serasa/serasaAcoesRequisicao.view.php';
 include 'view/modal/serasa/serasaCriarPfin.view.php';
 include 'view/modal/serasa/serasaIncluirObservacao.view.php';
 include 'view/modal/serasa/serasaIncluirAnexo.view.php';
 
-function filtrarSerasa($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $page)
-{
 
-    include 'controller/controllerAux/chavesBD.php';
-    include '../controller/controllerAux/chavesBD.php';
-    include '../controller/controllerAux/functionsAuxiliar.php';
-
-    $resultadoPorPagina = 50;
-    if ($page == '') {
-        $page = 1;
-    }
-    $start = ($page * $resultadoPorPagina) - $resultadoPorPagina;
-    if ($start == '0') {
-        $start = 1;
-    }
-
-
-    $sql = ("SELECT TOP $resultadoPorPagina START AT $start u.id, u.loginName, f.id_requisicao, f.tipo, f.cnpj, f.nomeCliente, f.status, f.obs, f.valor, f.valorJuros, f.id_cliente, f.dataEmissao, f.dataVencimento, f.id_med,
-            f.endereco, f.estado, f.cidade, f.bairro, f.numero, f.cep, f.dataNascimento
-            FROM ccp_serasa AS f
-            JOIN rh_usuario AS u ON f.id_med = u.id
-            WHERE matriz = 0 AND id_requisicao > 0  $Fstatus $Fmatriz $Fmed $Ftipo $Fcliente ORDER  BY f.id_requisicao  DESC ");
-    $qry = odbc_exec($connP, $sql);
-
-    $sql1 = ("SELECT count(f.id_requisicao) as resultados
-    FROM ccp_serasa AS f
-    JOIN rh_usuario AS u ON f.id_med = u.id
-    WHERE matriz = 0 AND id_requisicao > 0  $Fstatus $Fmatriz $Fmed $Ftipo $Fcliente");
-    $qry1 = odbc_exec($connP, $sql1);
-    $row1 = odbc_fetch_array($qry1);
-    $resultados =  $row1['resultados'];
-
-    $x = 0;
-
-    while ($row = odbc_fetch_array($qry)) {
-
-        extract($row);
-
-        $modalVisualizar = "modalVisualizar$x";
-
-        $linkModalVisualizar = "data-bs-toggle='modal' data-bs-target='#$modalVisualizar' style='cursor:pointer'";
-
-        $txtTable .= "<tr $linkModalVisualizar>
-             <td>" . $id_requisicao . "</td>
-            <td>" . $loginName . "</td>
-            <td>" . $tipo . "</td>
-            <td>" . limpaObservacao($nomeCliente) . "</td>
-            <td>" . v2($valor) . "</td>
-            <td>" . dma($dataEmissao) . "</td>
-            <td>" . dma($dataVencimento) . "</td>
-            <td>" . limpaObservacao($matriz == 1 ? 'SIM' : 'NÃO') . "</td>
-        </tr>
-        ";
-
-        include 'view/modal/serasa/serasaVisualizar.view.php';
-
-        $x++;
-    }
-    $txtTable .= '</tbody></table>';
-
-    $number_pages = ceil($resultados / $resultadoPorPagina);
-    $max_link = 2;
-
-    $txtTable .= '<nav aria-label="Page navigation example"><ul class="pagination pagination-sm justify-content-center mt-2">';
-
-    $txtTable .= "<li class='page-item'><a class='page-link' href='https://www.rdppetroleo.com.br/medwebnovo/?p=5&page=1'>First Page</a></li>";
-
-    for ($previous_page = $page - $max_link; $previous_page <= $page - 1; $previous_page++) {
-        if ($previous_page >= 1) {
-            $txtTable .= "<li class='page-item'><a class='page-link' href='https://www.rdppetroleo.com.br/medwebnovo/?p=5&page=$previous_page'>$previous_page</a></li>";
-        }
-    }
-    $txtTable .= "<li class='page-item active' ><a class='page-link' href='#'>$page</a></li>";
-
-    for ($next_page = $page + 1; $next_page <= $page + $max_link; $next_page++) {
-        if ($next_page <= $number_pages) {
-            $txtTable .= "<li class='page-item'><a class='page-link' href='https://www.rdppetroleo.com.br/medwebnovo/?p=5&page=$next_page' >$next_page</a></li>";
-        }
-    }
-    $txtTable .= "<li class='page-item'><a class='page-link' href='https://www.rdppetroleo.com.br/medwebnovo/?p=5&page=$number_pages'>Last Page</a></li>";
-    $txtTable .= '</ul></nav>';
-
-    return  $txtTable;
-}
