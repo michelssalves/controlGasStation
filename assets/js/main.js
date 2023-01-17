@@ -187,3 +187,30 @@ $(window).on('load', function () {
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
+async function verRequisicaoMaterial(id) {
+
+	const tabelaRM = document.querySelector(".tabelaRM")
+	const requisicaoMaterial = new bootstrap.Modal(document.getElementById("requisicaoMaterial"))
+
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=visualizarRequisicao&id=${id}`)
+	const response = await dados.text()
+	console.log(response)
+	tabelaRM.innerHTML = response
+	requisicaoMaterial.show()
+
+
+}
+async function teste(iditem, qtde) {
+
+	if (!isNaN(qtde) && qtde != '') {
+		const id_pedido_alterar = document.getElementById('id_pedido_alterar').value
+
+		const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=atualizarQuantidades&iditem=${iditem}&qtde=${qtde}&id_pedido=${id_pedido_alterar}`)
+		/*	const response = await dados.json()
+			console.log(response)
+			console.log(dados)*/
+		verRequisicaoMaterial(id_pedido_alterar)
+	} else {
+		alert('Insira uma quantidade Valida')
+	}
+}

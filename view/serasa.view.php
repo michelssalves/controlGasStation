@@ -1,5 +1,4 @@
 <?php
-include('../view/partials/head.php');
 include('model/Serasa.php');
 include('controller/serasa.php');
 ?>

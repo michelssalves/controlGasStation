@@ -26,7 +26,7 @@
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <span class="input-group-text" id="inputGroup-sizing">Dt Emissão:</span>
-                        <input name="dataEmissao" type="date" class="form-control form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
+                        <input name="dataEmissao" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
                         <span class="input-group-text" id="inputGroup-sizing">Dt Vencimento:</span>
                         <input name="dataVencimento" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" >
                         <span class="input-group-text" id="inputGroup-sizing">Dt Nascimento:</span>
