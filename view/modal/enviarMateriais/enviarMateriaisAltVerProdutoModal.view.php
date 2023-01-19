@@ -49,8 +49,9 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-          <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal" onclick="alterarProduto()">Salvar</button>
-          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal" onclick="verEstoque()">Fechar</button>
+        <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="alterarClasse()">Alterar</button>
+          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" onclick="excluirClasse()">Excluir</button>
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="verEstoque()">Fechar</button>
         </div>
       </div>
       </form>

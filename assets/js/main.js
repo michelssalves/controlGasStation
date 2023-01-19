@@ -316,23 +316,57 @@ async function verAlterarProduto(id){
 }
 function cadastrarProduto(){
 
-
 	const cadastrarProduto= new bootstrap.Modal(document.getElementById("cadastrarProdutoEstoque"))
 	cadastrarProduto.show()
 
 }
-async function cadastrarClasse(){
-
+async function visualizarClasses(){
+	
 	const tabelaClasses = document.querySelector(".tabelaClasses")
 	const cadastrarClasseEstoque = new bootstrap.Modal(document.getElementById("cadastrarClasseEstoque"))
 	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verClasses`)
 	const response = await dados.text()
 	tabelaClasses.innerHTML = response
-	
 	cadastrarClasseEstoque.show()
 
+}
+async function cadastrarClasse(classe){
+	if(classe.length > 5){
+	
+		await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=incluirClasse&classe=${classe}`)
+		visualizarClasses()
+	
+	}else{
+
+		alert('Precisa conter ao menos 5 caracteres')
+		visualizarClasses()
+	}	
+}
+async function AltExcClasse(id){
+	
+    const AltExcClasse = new bootstrap.Modal(document.getElementById("AltExcClasse"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=buscarClasse&idClasse=${id}`)
+	const response = await dados.json()
+	AltExcClasse.show()
+
+	document.getElementById("idClasseAltExc").value = id
+	document.getElementById("classeAltExc").value = response['dados']
 
 }
+async function alterarClasse(){
+
+	const idClasse = document.getElementById("idClasseAltExc").value 
+	const classe = document.getElementById("classeAltExc").value 
+	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarClasse&idClasse=${idClasse}&classe=${classe}`)
+	visualizarClasses()
+}
+async function excluirClasse(){
+
+	const idClasse = document.getElementById("idClasseAltExc").value 
+	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=excluirClasse&idClasse=${idClasse}`)
+	visualizarClasses()
+}
+
  $(function(){
 
   $('.hidden').hide();

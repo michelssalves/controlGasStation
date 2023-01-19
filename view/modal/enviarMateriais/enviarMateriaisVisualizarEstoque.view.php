@@ -14,7 +14,7 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" onclick="cadastrarClasse()">Classes</button>
+          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal" onclick="visualizarClasses()">Classes</button>
           <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="cadastrarProduto()">Produtos</button>
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
         </div>

@@ -1,7 +1,7 @@
 <?php
 $action = $_REQUEST['action'];
 
-if ($action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
+if ($action <> 'excluirClasse' && $action <> 'alterarClasse' && $action <> 'buscarClasse' && $action <> 'incluirClasse' && $action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
 
   $page =  $_REQUEST['page'];
   $statusNovo =  $_REQUEST['statusNovo'];
@@ -69,6 +69,7 @@ if ($action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoqu
   include 'view/modal/enviarMateriais/enviarMateriaisAltVerProdutoModal.view.php';
   include 'view/modal/enviarMateriais/enviarMateriaisCriarProdutoModal.view.php';
   include 'view/modal/enviarMateriais/enviarMateriaisCriarClasseModal.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisAltExcClasseModal.view.php';
    
 }
 if ($action == 'visualizarRequisicao') {
@@ -234,6 +235,8 @@ if ($action == 'alterarProdutoNoPedido') {
 
   $idItem = $_REQUEST['idItem'];
 
+    // falta fazer
+
   include 'controllerAux/validaLogin.php';
   include 'controllerAux/functionsAuxiliar.php';
   include '../model/EnviarMateriais.php';
@@ -316,7 +319,7 @@ if($action == 'verEstoque'){
       
       extract($row);
 
-      $txtTable .= "<tr id='$idProduto' data-bs-dismiss='modal' onclick='verAlterarProduto(this.id)'>
+      $txtTable .= "<tr id='$idProduto' data-bs-dismiss='modal' onclick='verAlterarProduto(this.id)' style='cursor:pointer'>
 			<td>$idProduto</td>
 			<td>$produto</td>
 			<td>$qtde_atual</td>
@@ -367,19 +370,18 @@ if($action == 'verClasses'){
  </thead>
 <tbody>";
 
-
 $sql = "SELECT DISTINCT c.id, c.descricao AS classe, 
 (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id ) AS total,
 (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id AND STATUS = 'ATIVO') AS ativos
-FROM REQ_ClasseProduto AS c 
+FROM REQ_ClasseProduto AS c WHERE statusClasse IS NULL
 ORDER BY classe" ;
 $qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
 
 while ($row = odbc_fetch_array($qry)) { 
 
   extract($row);
-  
-  $txtTable .="<tr>
+
+  $txtTable .="<tr id='$id' data-bs-dismiss='modal' onclick='AltExcClasse(this.id)' style='cursor:pointer'>
     <td>$id</td>
     <td>$classe</td>
     <td>$total</td>
@@ -392,5 +394,60 @@ $txtTable .="</tbody>
 </table>";
 
 echo utf8ize($txtTable);
+
+}
+if($action == 'incluirClasse'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $classe = strtoupper($_REQUEST['classe']);
+	$sql = "INSERT INTO REQ_ClasseProduto (descricao) VALUES ('$classe')";
+	odbc_exec($connP, $sql) or die('Erro:'.$sql);
+
+}
+if($action == 'buscarClasse'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idClasse = $_REQUEST['idClasse'];
+
+	$sql = "SELECT descricao FROM REQ_ClasseProduto WHERE id = $idClasse";
+	$qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
+  $row = odbc_fetch_array($qry);
+  extract($row);
+
+  $return = ['dados' => utf8ize($descricao) ];
+
+  echo json_encode($return);
+
+}
+if($action == 'alterarClasse'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idClasse = $_REQUEST['idClasse'];
+  $classe = $_REQUEST['classe'];
+
+  $sql = "UPDATE REQ_ClasseProduto SET descricao = '$classe' WHERE id = $idClasse";
+  odbc_exec($connP, $sql) or die('Erro:'.$sql);
+
+
+}
+if($action == 'excluirClasse'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idClasse = $_REQUEST['idClasse'];
+
+  $sql = "UPDATE REQ_ClasseProduto SET statusClasse = 'INATIVO' WHERE id = $idClasse";
+  odbc_exec($connP, $sql) or die('Erro:'.$sql);
 
 }
