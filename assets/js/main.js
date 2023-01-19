@@ -181,12 +181,12 @@ function soNumeros(evento) {
 	}
 }
 
-
 $(window).on('load', function () {
 	$('#preloader .inner').fadeOut();
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
+
 async function verRequisicaoMaterial(id) {
 
 	const tabelaRM = document.querySelector(".tabelaRM")
@@ -194,23 +194,147 @@ async function verRequisicaoMaterial(id) {
 
 	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=visualizarRequisicao&id=${id}`)
 	const response = await dados.text()
-	console.log(response)
 	tabelaRM.innerHTML = response
 	requisicaoMaterial.show()
 
 
 }
-async function teste(iditem, qtde) {
+async function alterarQuantideMateriais(iditem, qtde) {
 
 	if (!isNaN(qtde) && qtde != '') {
-		const id_pedido_alterar = document.getElementById('id_pedido_alterar').value
 
-		const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=atualizarQuantidades&iditem=${iditem}&qtde=${qtde}&id_pedido=${id_pedido_alterar}`)
-		/*	const response = await dados.json()
-			console.log(response)
-			console.log(dados)*/
-		verRequisicaoMaterial(id_pedido_alterar)
+		const idPedidoVisualizar = document.getElementById('idPedidoVisualizar').value
+
+		const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=atualizarQuantidades&iditem=${iditem}&qtde=${qtde}&id_pedido=${idPedidoVisualizar}`)
+		/*const response = await dados.json()
+		  console.log(response)
+		  console.log(dados)*/
+		verRequisicaoMaterial(idPedidoVisualizar)
 	} else {
 		alert('Insira uma quantidade Valida')
 	}
 }
+ function incluirItemNoPedido(){
+
+	const idPedidoIncluirItem = document.getElementById("idPedidoVisualizar").value 
+	const incluirItem= new bootstrap.Modal(document.getElementById("incluirItem"))
+	incluirItem.show()
+	document.getElementById("idPedidoIncluirItem").value = idPedidoIncluirItem
+ }
+async function salvarProdutoNoPedido(){
+
+	const idPedidoIncluirItem = document.getElementById("idPedidoIncluirItem").value 
+	const qtde = document.getElementById("qtdeIncluirItem").value 
+	const produtos = document.getElementById("produtosIncluirItem")
+	const produto = produtos.options[produtos.selectedIndex].text;
+	const idProduto = produtos.options[produtos.selectedIndex].value;
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=novoProdutoNoPedido&idProduto=${idProduto}&produto=${produto}&qtde=${qtde}&idPedido=${idPedidoIncluirItem}`)
+
+	verRequisicaoMaterial(idPedidoIncluirItem)
+ }
+ async function excluirOuAlterar(id){
+
+	const idPedidoVisualizar = document.getElementById('idPedidoVisualizar').value
+	const excluirOuAlterarItem= new bootstrap.Modal(document.getElementById("excluirOuAlterarItem"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verItemDoPedido&idItem=${id}`)
+	const response = await dados.json()
+	excluirOuAlterarItem.show()
+	console.log(response)
+	document.getElementById("idPedidoAltExc").value = idPedidoVisualizar
+	document.getElementById("idPedidoItemAltExc").value = id
+	document.getElementById("fabricanteAltExcItem").value = response['dados'].classe
+	document.getElementById("produtosAltExcItem").value = response['dados'].produto
+	document.getElementById("qtdeAltExcItem").value = response['dados'].quant
+	document.getElementById("qtdeOriginalAltExcItem").value = response['dados'].quant
+	document.getElementById("idProdutoAltExcItem").value = response['dados'].idProduto
+	
+ }
+
+ function excluirItemDoPedido(){
+
+	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
+	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
+	
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=excluirProdutoNoPedido&idItem=${idPedidoItemAltExc}`)
+
+	verRequisicaoMaterial(idPedidoAltExc)
+
+ }
+ function alterarItemDoPedido(){
+
+	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
+	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
+	
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=excluirProdutoNoPedido&idItem=${idPedidoAltExc}`)
+
+	verRequisicaoMaterial(idPedidoItemAltExc)
+
+ }
+ function confirmarEnvioItemDoPedido(){
+
+	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
+	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
+	const qtdeOriginalAltExcItem = document.getElementById('qtdeOriginalAltExcItem').value
+	const qtdeAltExcItem = document.getElementById('qtdeAltExcItem').value
+	const idProdutoAltExcItem = document.getElementById('idProdutoAltExcItem').value
+	const produtosAltExcItem = document.getElementById('produtosAltExcItem').value
+
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=confirmarEnvio&idItem=${idPedidoItemAltExc}
+	&idPedido=${idPedidoAltExc}&qtdeOriginal=${qtdeOriginalAltExcItem}&qtde=${qtdeAltExcItem}&idProduto=${idProdutoAltExcItem}&descProduto=${produtosAltExcItem}`)
+
+	verRequisicaoMaterial(idPedidoAltExc)
+
+ }
+function voltarVisualizarPedido(id){
+
+	verRequisicaoMaterial(id)
+}
+async function verEstoque(){
+
+	const tabelaEstoque = document.querySelector(".tabelaEstoque")
+	const visualizarEstoque = new bootstrap.Modal(document.getElementById("visualizarEstoque"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verEstoque`)
+	const response = await dados.text()
+	tabelaEstoque.innerHTML = response
+	visualizarEstoque.show()
+
+}
+async function verAlterarProduto(id){
+
+	const altVerProdutoEstoque= new bootstrap.Modal(document.getElementById("altVerProdutoEstoque"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verProduto&idProduto=${id}`)
+	const response = await dados.json()
+	console.log(response)
+	altVerProdutoEstoque.show()
+	
+	document.getElementById("produtoAltProd").value = response['dados'].produto
+	document.getElementById("unidadeAltProd").value = response['dados'].unidade
+	document.getElementById("classeAltProd").value = response['dados'].idClasse
+	document.getElementById("statusAltProd").value = response['dados'].status
+	document.getElementById("qtdeAtualAltProd").value = response['dados'].qtde_atual
+	document.getElementById("qtdeMinAltProd").value = response['dados'].qtde_min
+}
+function cadastrarProduto(){
+
+	const cadastrarProduto= new bootstrap.Modal(document.getElementById("cadastrarProdutoEstoque"))
+	cadastrarProduto.show()
+
+}
+ $(function(){
+
+  $('.hidden').hide();
+  
+  $('select[name=produtos]').html($('div.produtos-f1').html());
+	
+
+	$('select[name=fabricante]').change(function(){ 
+
+		var id = $('select[name=fabricante]').val();
+
+		$('select[name=produtos]').empty();
+		
+		$('select[name=produtos]').html($('div.produtos-f' + id).html());
+
+	});
+	
+});

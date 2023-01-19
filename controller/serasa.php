@@ -66,8 +66,8 @@ if ($action == 'gravarObservacao') {
 }
 if ($action == 'gravarAnexo') {
 
-    $id_requisicao  = $_REQUEST['id_requisicao'];
-    $numDoc         = $_REQUEST['numDoc'];
+    $id_requisicao = $_REQUEST['id_requisicao'];
+    $numDoc = $_REQUEST['numDoc'];
     $descricaoAnexo = "ANEXO";
     $temp = $_FILES['file']['tmp_name'];
     $localDeArmazenagem = "assets/docs/serasa/";

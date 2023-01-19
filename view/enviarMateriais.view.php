@@ -10,7 +10,7 @@ include('controller/enviarMateriais.php');
                 <input type='hidden' name='page' value='1'>
                 <button type="submit" name="action" value="filtrar-materiais" class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" name="action" value="limpar" class='btn btn-danger btn-sm'>Limpar</button>
-                <button type="button" data-bs-toggle='modal' data-bs-target='#verEstoque' style='cursor:pointer' class='btn btn-primary btn-sm'>Estoque</button>
+                <button type="button" onclick="verEstoque()" class='btn btn-primary btn-sm'>Estoque</button>
             </div>
         </div>
     </div>

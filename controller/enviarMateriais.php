@@ -1,7 +1,7 @@
 <?php
 $action = $_REQUEST['action'];
 
-if ($action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades') {
+if ($action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
 
   $page =  $_REQUEST['page'];
   $statusNovo =  $_REQUEST['statusNovo'];
@@ -46,16 +46,16 @@ if ($action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades') {
     LEFT JOIN ti_clientes AS u ON p.codcliente = u.id
     WHERE status <> 'CRIADO' AND p.id > 0  $Fstatus $Fmed $Fproduto";
   $qry = odbc_exec($connP, $sql) or die('Erro.:' . $sql);
-  var_dump($sql);
+
   while ($row = odbc_fetch_array($qry)) {
 
     extract($row);
 
     $txtTable .=  "<tr id='$id_pedido' onclick='verRequisicaoMaterial(this.id)'>
-				    <td>$id_pedido</td>
-				    <td>$loginName</td>
-				    <td>" . dma($row['data']) . "</td>
-				    <td>" . ($data_entrega <> '' ? dma($data_entrega) : '') . "</td>
+				  <td>$id_pedido</td>
+				  <td>$loginName</td>
+				  <td>" . dma($row['data']) . "</td>
+				  <td>" . ($data_entrega <> '' ? dma($data_entrega) : '') . "</td>
 					<td>" . l50($row['lista']) . "</td>
 					<td>" . l35($row['itens']) . "</td>
 					<td>$itens_parcial</td>
@@ -63,6 +63,13 @@ if ($action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades') {
 				  </tr>";
   }
   include 'view/modal/enviarMateriais/enviarMateriaisVisualizarModal.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisIncluirNoPedidoModal.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisAltExcNoPedidoModal.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisVisualizarEstoque.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisAltVerProdutoModal.view.php';
+  include 'view/modal/enviarMateriais/enviarMateriaisCriarProdutoModal.view.php';
+  
+   
 }
 if ($action == 'visualizarRequisicao') {
 
@@ -75,7 +82,7 @@ if ($action == 'visualizarRequisicao') {
 
   $sql = "SELECT i.id AS id_item, * FROM REQ_ItemPedido AS i 
     LEFT JOIN REQ_Produto AS p ON i.id_produto = p.id
-    WHERE id_pedido = $id_pedido";
+    WHERE id_pedido = $id_pedido AND status_item IS NULL";
   $qry =  odbc_exec($connP, $sql) or die('Erro.:' . $sql);
 
 
@@ -97,36 +104,46 @@ if ($action == 'visualizarRequisicao') {
     </thead>
     <tbody>";
 
-
   while ($row = odbc_fetch_array($qry)) {
 
     extract($row);
 
-    $saldo = $quant - $parcial;
+    $sqlSaldo = "SELECT sum(qtde_baixada)AS baixas, 
+    (SELECT TOP 1 data_da_baixa FROM REQ_BaixarProduto ORDER BY  data_da_baixa DESC) as dataDaBaixa 
+    FROM REQ_BaixarProduto WHERE id_item = $id_item
+    GROUP BY dataDaBaixa";
+    $qrySaldo =  odbc_exec($connP, $sqlSaldo);
+    $rowSaldo = odbc_fetch_array($qrySaldo);
+    extract($rowSaldo);
 
-    $txtTable .= "<tr >
-                <form>
-                <input type='hidden' id='id_pedido_alterar' name='id_pedido' value='$id_pedido'>
-                <input type='hidden' name='id_produto' value='$id_produto'>
-                <input type='hidden' name='id_item' value='$id_item'>
-                <input type='hidden' name='desc_produto' value='$desc_produto'>
-                <input type='hidden' name='quant_ant' value='$quant'>
+    $saldo = $quant - $baixas;
 
-                <td>$desc_produto</td>
-                <td><center>$quant</td>
-                <td><center>$parcial</td>
-                <td><center>$saldo</td>
-                <td><center>$qtde_atual</td>
-                <td><center>$data_envio</td>
-                <td><center>$data_recebido</td>
-                <td><center>
-                <input id='$id_item' onkeyup='teste(this.id, this.value)' type='text' class='form-control-sm' name='quantidade' value='$quant' style='width:60px'></td>
-                </form>
+    $linkAlterarProduto = "data-bs-dismiss='modal' onclick='excluirOuAlterar(this.id)'";
+    $linkAlteraSaldo = "onkeyup='alterarQuantideMateriais(this.id, this.value)'";
+
+    if ($saldo == 0) {
+
+      $linkAlterarProduto = "";
+      $linkAlteraSaldo = "readonly";
+    }
+
+    $txtTable .= "<tr>
+                <input type='hidden' id='idPedidoVisualizar'value='$id_pedido'>
+                <td id='$id_item' $linkAlterarProduto >$desc_produto</td>
+                <td id='$id_item' $linkAlterarProduto >$quant</td>
+                <td id='$id_item' $linkAlterarProduto >" . ($baixas) . "</td>
+                <td id='$id_item' $linkAlterarProduto >$saldo</td>
+                <td id='$id_item' $linkAlterarProduto >$qtde_atual</td>
+                <td id='$id_item' $linkAlterarProduto >" . dma($dataDaBaixa) . "</td>
+                <td id='$id_item' $linkAlterarProduto >$data_recebido</td>
+                <td>
+                <input id='$id_item' $linkAlteraSaldo type='text' class='form-control-sm' name='quantidade' value='$quant' style='width:60px'></td>
                 </tr>";
   }
   $txtTable .= "
     </tbody>
-  </table>";
+  </table>
+  ";
 
   $txtTable .= " <hr><br><table class='table table-sm table-bordered border-dark'>
   <thead class='header-tabela'>
@@ -143,17 +160,13 @@ if ($action == 'visualizarRequisicao') {
     extract($rowObs);
 
     $txtTable .= "<tr >
-            <td>".dma($data_hora)."</td>
+            <td>" . dma($data_hora) . "</td>
             <td>$usuario</td>
             <td>$obs</td>
             </tr>";
   }
 
-  $txtTable .= "
-  </tbody>
-</table>";
-
-  echo utf8ize($txtTable);
+  $txtTable .= "</tbody></table>"; echo utf8ize($txtTable);
 }
 if ($action == 'atualizarQuantidades') {
 
@@ -178,11 +191,163 @@ if ($action == 'atualizarQuantidades') {
   $qry = odbc_exec($connP, $sql);
   if ($quant_ant <> $qtde) {
     $obsNova = 'Alterada a quantidade do item "' . $desc_produto . '" de ' . $quant_ant . ' para ' . $qtde;
-    $sql1 = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) values ('$id_pedido', '$usuarioLogado', '" . date('Y-m-d H:i') . "', '$obsNova')";
+    $sql1 = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) VALUES ('$id_pedido', '$usuarioLogado', '" . date('Y-m-d H:i') . "', '$obsNova')";
     odbc_exec($connP, $sql1);
   }
 
   /*$return = ['dados' =>  ($sql0)];
 
     echo json_encode($return);*/
+}
+if ($action == 'novoProdutoNoPedido') {
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idProduto = $_REQUEST['idProduto'];
+  $produto = $_REQUEST['produto'];
+  $qtde = $_REQUEST['qtde'];
+  $idPedido = $_REQUEST['idPedido'];
+
+  $sql = "INSERT INTO REQ_ItemPedido (id_pedido, id_produto, desc_produto, quant) 
+  VALUES ($idPedido, $idProduto, '$produto', $qtde)";
+  $qry = odbc_exec($connP, $sql);
+
+  $obsNova = 'Ítem Incluido (' . $produto . ') em ' . date('Y-m-d');
+  $sqlObs = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) 
+  VALUES ('$idPedido', '$usuarioLogado', '" . date('Y-m-d Hi') . "', '$obsNova')";
+  $qryObs = odbc_exec($connP, $sqlObs);
+}
+if ($action == 'excluirProdutoNoPedido') {
+
+  $idItem = $_REQUEST['idItem'];
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $sql = "UPDATE REQ_ItemPedido SET status_item = 'EXCLUIDO' WHERE id = $idItem";
+  odbc_exec($connP, $sql);
+}
+if ($action == 'alterarProdutoNoPedido') {
+
+  $idItem = $_REQUEST['idItem'];
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+}
+if ($action == 'confirmarEnvio') {
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idPedido = $_REQUEST['idPedido'];
+  $descProduto = $_REQUEST['descProduto'];
+  $idProduto = $_REQUEST['idProduto'];
+  $idItem = $_REQUEST['idItem'];
+  $qtdeOriginal = $_REQUEST['qtdeOriginal'];
+  $qtde = $_REQUEST['qtde'];
+
+  $sql = ("INSERT INTO REQ_BaixarProduto (id_pedido, id_item, id_produto, qtde_baixada, data_da_baixa) 
+  VALUES('$idPedido', '$idItem', '$idProduto', '$qtde', '" . date('Y-m-d') . "')");
+  odbc_exec($connP, $sql);
+
+  $obsNova = "Enviado $qtde $descProduto em " . date('Y-m-d') . " ";
+  $sqlObs = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) values ('$idPedido', '$usuarioLogado', '" . date('Y-m-d') . "', '$obsNova')";
+  odbc_exec($connP, $sqlObs);
+
+
+  // falta atualizar o saldo do estoque
+
+}
+if ($action == 'verItemDoPedido') {
+
+  $idItem = $_REQUEST['idItem'];
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $sql =  "SELECT  RP.id AS idProduto, RP.descricao AS produto, RP.classe,RC.id AS idClasse, RC.descricao AS classe, RI.quant 
+  FROM REQ_Produto AS RP
+  JOIN REQ_ClasseProduto AS RC
+  ON RP.classe = RC.id
+  JOIN REQ_ItemPedido AS RI
+  ON RP.id = RI.id_produto 
+  WHERE RI.id = $idItem";
+  $qry = odbc_exec($connP, $sql);
+  $row = odbc_fetch_array($qry);
+
+  $return = ['dados' =>  utf8ize($row)];
+
+  echo json_encode($return);
+}
+if($action == 'verEstoque'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $sql = "SELECT  p.id AS idProduto, p.descricao AS produto, c.descricao AS classe, unidade, P.qtde_atual, P.qtde_min, P.status
+  FROM REQ_Produto AS P 
+  LEFT JOIN REQ_ClasseProduto AS C ON p.classe = c.id 
+  WHERE p.descricao IS NOT NULL  AND status = 'ATIVO'
+  ORDER BY Produto";
+  $qry = odbc_exec($connP, $sql);
+
+ $txtTable .= "<table class='table table-sm table-bordered border-dark'>
+ <thead class='header-tabela'>
+    	<tr>
+        <th>Id</th>
+        <th>Produto</th>
+        <th>Saldo</th>
+        <th>Min</th>
+        <th>UN</th>
+        <th>Classe</th>
+        <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>";
+
+    while ($row = odbc_fetch_array($qry)){
+      
+      extract($row);
+
+      $txtTable .= "<tr id='$idProduto' data-bs-dismiss='modal' onclick='verAlterarProduto(this.id)'>
+			<td>$idProduto</td>
+			<td>$produto</td>
+			<td>$qtde_atual</td>
+			<td>$qtde_min</td>
+			<td>$unidade</td>
+			<td>$classe</td>
+			<td>$status</td>
+      </tr>";
+
+  }
+	
+  $txtTable .= "</tbody></table>";echo utf8ize($txtTable);
+
+}
+if($action == 'verProduto'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $idProduto = $_REQUEST['idProduto'];
+
+  $sql = "SELECT  p.id as idProduto, p.descricao AS produto, c.id as idClasse , c.descricao AS classe, unidade, P.qtde_atual, P.qtde_min, P.status
+  FROM REQ_Produto AS P 
+  LEFT JOIN REQ_ClasseProduto AS C ON p.classe = c.id 
+  WHERE p.descricao IS NOT NULL AND idProduto = $idProduto";
+  $qry = odbc_exec($connP, $sql);
+  $row = odbc_fetch_array($qry);
+
+  $return = ['dados' =>  utf8ize($row)];
+
+  echo json_encode($return);
+
 }
