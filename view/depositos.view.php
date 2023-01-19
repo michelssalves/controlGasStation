@@ -8,7 +8,7 @@ include('controller/depositos.php');
             <form method='POST' id='formulario-caixa-diario'>
                 <input type='hidden' name='p' value='3'>
                 <input type='hidden' id='action' name='action' value='filtrar-caixa-diario'>
-                <button type="submit" class='btn btn-info btn-sm'>Filtrar</button>
+                <button type="submit" name='action' value='filtrar' class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
         </div>
     </div>

@@ -8,7 +8,7 @@
       <div class="modal-body">
         <form method="POST">
           <input type="hidden" name="p" value="5" required>
-          <input type="hidden" name="idProdutoAlt" id="idProdutoAlt" required>
+          <input type="text" name="idProdutoAltProd" id="idProdutoAltProd" required>
           <div class="input-group input-group-sm mb-3">
             <div class="input-group input-group-sm mb-3 ">
               <span class="input-group-text" id="inputGroup-sizing">Produto:</span>
@@ -49,8 +49,7 @@
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-        <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="alterarClasse()">Alterar</button>
-          <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" onclick="excluirClasse()">Excluir</button>
+        <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarAlteracaoProduto()">Alterar</button>
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="verEstoque()">Fechar</button>
         </div>
       </div>

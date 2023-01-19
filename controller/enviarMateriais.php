@@ -1,7 +1,8 @@
 <?php
 $action = $_REQUEST['action'];
 
-if ($action <> 'excluirClasse' && $action <> 'alterarClasse' && $action <> 'buscarClasse' && $action <> 'incluirClasse' && $action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
+//if ($action <> 'excluirProduto' && $action <> 'cadastrarProduto' && $action <> 'excluirProduto'&&$action <> 'excluirClasse' && $action <> 'alterarClasse' && $action <> 'buscarClasse' && $action <> 'incluirClasse' && $action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
+if($action == '' || $action == 'filtrar-materiais' || $action == 'limpar'){
 
   $page =  $_REQUEST['page'];
   $statusNovo =  $_REQUEST['statusNovo'];
@@ -354,6 +355,46 @@ if($action == 'verProduto'){
   echo json_encode($return);
 
 }
+if($action == 'cadastrarProduto'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+   $unidadeCad = $_REQUEST['unidadeCad'];
+   $produtoCad = $_REQUEST['produtoCad'];
+   $idClasseCad = $_REQUEST['idClasseCad'];
+   $statusCad = $_REQUEST['statusCad'];
+   $qtdeAtualCad = $_REQUEST['qtdeAtualCad'];
+   $qtdeMinCad = $_REQUEST['qtdeMinCad'];
+
+   $sql = ("INSERT INTO REQ_Produto (unidade, descricao, classe, status, qtde_atual, qtde_min)
+   VALUES('$unidadeCad','$produtoCad','$idClasseCad','$statusCad','$qtdeAtualCad','$qtdeMinCad')");
+   odbc_exec($connP, $sql);
+
+ 
+
+}
+if($action == 'alterarProduto'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $unidadeAltProd = $_REQUEST['unidadeAltProd'];
+  $produtoAltProd = $_REQUEST['produtoAltProd'];
+  $classeAltProd = $_REQUEST['classeAltProd'];
+  $statusAltProd = $_REQUEST['statusAltProd'];
+  $qtdeAtualAltProd = $_REQUEST['qtdeAtualAltProd'];
+  $qtdeMinAltProd = $_REQUEST['qtdeMinAltProd'];
+  $idProdutoAltProd = $_REQUEST['idProdutoAltProd'];
+
+  $sql = ("UPDATE REQ_Produto SET unidade = '$unidadeAltProd', descricao = '$produtoAltProd', classe = '$classeAltProd' , 
+  status = '$statusAltProd' , qtde_atual = '$qtdeAtualAltProd', qtde_min = '$qtdeMinAltProd' WHERE id = '$idProdutoAltProd'");
+  odbc_exec($connP, $sql);
+
+  
+}
 if($action == 'verClasses'){
 
   include 'controllerAux/validaLogin.php';
@@ -368,32 +409,32 @@ if($action == 'verClasses'){
         <th><center>ITENS ATIVOS</th>
     </tr>
  </thead>
-<tbody>";
+  <tbody>";
 
-$sql = "SELECT DISTINCT c.id, c.descricao AS classe, 
-(SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id ) AS total,
-(SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id AND STATUS = 'ATIVO') AS ativos
-FROM REQ_ClasseProduto AS c WHERE statusClasse IS NULL
-ORDER BY classe" ;
-$qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
+  $sql = "SELECT DISTINCT c.id, c.descricao AS classe, 
+  (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id ) AS total,
+  (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id AND STATUS = 'ATIVO') AS ativos
+  FROM REQ_ClasseProduto AS c WHERE statusClasse IS NULL
+  ORDER BY classe" ;
+  $qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
 
-while ($row = odbc_fetch_array($qry)) { 
+    while ($row = odbc_fetch_array($qry)) { 
 
-  extract($row);
+      extract($row);
 
-  $txtTable .="<tr id='$id' data-bs-dismiss='modal' onclick='AltExcClasse(this.id)' style='cursor:pointer'>
-    <td>$id</td>
-    <td>$classe</td>
-    <td>$total</td>
-    <td>$ativos</td>
-    </tr>";
+      $txtTable .="<tr id='$id' data-bs-dismiss='modal' onclick='AltExcClasse(this.id)' style='cursor:pointer'>
+        <td>$id</td>
+        <td>$classe</td>
+        <td>$total</td>
+        <td>$ativos</td>
+        </tr>";
 
-} 
+    } 
 
-$txtTable .="</tbody>
-</table>";
+    $txtTable .="</tbody>
+    </table>";
 
-echo utf8ize($txtTable);
+    echo utf8ize($txtTable);
 
 }
 if($action == 'incluirClasse'){

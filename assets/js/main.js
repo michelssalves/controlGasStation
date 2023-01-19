@@ -249,7 +249,6 @@ async function salvarProdutoNoPedido(){
 	document.getElementById("idProdutoAltExcItem").value = response['dados'].idProduto
 	
  }
-
  function excluirItemDoPedido(){
 
 	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
@@ -304,9 +303,9 @@ async function verAlterarProduto(id){
 	const altVerProdutoEstoque= new bootstrap.Modal(document.getElementById("altVerProdutoEstoque"))
 	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verProduto&idProduto=${id}`)
 	const response = await dados.json()
-	console.log(response)
 	altVerProdutoEstoque.show()
 	
+	document.getElementById("idProdutoAltProd").value = response['dados'].idProduto
 	document.getElementById("produtoAltProd").value = response['dados'].produto
 	document.getElementById("unidadeAltProd").value = response['dados'].unidade
 	document.getElementById("classeAltProd").value = response['dados'].idClasse
@@ -318,6 +317,42 @@ function cadastrarProduto(){
 
 	const cadastrarProduto= new bootstrap.Modal(document.getElementById("cadastrarProdutoEstoque"))
 	cadastrarProduto.show()
+
+}
+async function salvarCadastroProduto(){
+
+	const produtoCad = document.getElementById("produtoCad").value
+	const idClasseCad = document.getElementById("idClasseCad").value
+	const unidadeCad = document.getElementById("unidadeCad").value
+	const statusCad = document.getElementById("statusCad").value
+	const qtdeAtualCad = document.getElementById("qtdeAtualCad").value
+	const qtdeMinCad = document.getElementById("qtdeMinCad").value
+
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?
+	action=cadastrarProduto&produtoCad=${produtoCad}&idClasseCad=${idClasseCad}&unidadeCad=${unidadeCad}
+	&statusCad=${statusCad}&qtdeAtualCad=${qtdeAtualCad}&qtdeMinCad=${qtdeMinCad}`)
+	const response = await dados.text()
+	console.log(response)
+
+	verEstoque()
+}
+async function salvarAlteracaoProduto(){
+
+	const idProdutoAltProd = document.getElementById("idProdutoAltProd").value
+	const produtoAltProd = document.getElementById("produtoAltProd").value
+	const unidadeAltProd = document.getElementById("unidadeAltProd").value
+	const classeAltProd = document.getElementById("classeAltProd").value
+	const statusAltProd = document.getElementById("statusAltProd").value
+	const qtdeAtualAltProd = document.getElementById("qtdeAtualAltProd").value
+	const qtdeMinAltProd = document.getElementById("qtdeMinAltProd").value
+
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarProduto&idProdutoAltProd=${idProdutoAltProd}
+	&produtoAltProd=${produtoAltProd}&unidadeAltProd=${unidadeAltProd}&classeAltProd=${classeAltProd}&statusAltProd=${statusAltProd}
+	&qtdeAtualAltProd=${qtdeAtualAltProd}&qtdeMinAltProd=${qtdeMinAltProd}`)
+	const response = await dados.text()
+	console.log(response)
+
+	verEstoque()
 
 }
 async function visualizarClasses(){

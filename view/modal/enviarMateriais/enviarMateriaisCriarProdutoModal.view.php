@@ -16,7 +16,7 @@
             </div>
             <div class="input-group input-group-sm mb-3">
             <span class="input-group-text" id="inputGroup-sizing">Classe:</span>
-            <select id='classeCad' name='classeCad' class='form-select' aria-label='Default select example'>
+            <select id='idClasseCad' name='idClasseCad' class='form-select' aria-label='Default select example'>
               <?= $cboClasseProdutos; ?>
             </select>
           </div>
@@ -40,12 +40,12 @@
             <span class="input-group-text" id="inputGroup-sizing">Saldo:</span>
             <input id="qtdeAtualCad" name="qtdeAtualCad" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
             <span class="input-group-text" id="inputGroup-sizing">Qtde:</span>
-            <input id="qtdeMiCad" name="qtdeMiCad" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            <input id="qtdeMinCad" name="qtdeMinCad" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
           </div>
       </div>
       <div class="modal-footer">
         <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-center">
-          <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarProduto()">Salvar</button>
+          <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarCadastroProduto()">Salvar</button>
           <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="verEstoque()">Fechar</button>
         </div>
       </div>
