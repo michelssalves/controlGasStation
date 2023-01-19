@@ -316,8 +316,21 @@ async function verAlterarProduto(id){
 }
 function cadastrarProduto(){
 
+
 	const cadastrarProduto= new bootstrap.Modal(document.getElementById("cadastrarProdutoEstoque"))
 	cadastrarProduto.show()
+
+}
+async function cadastrarClasse(){
+
+	const tabelaClasses = document.querySelector(".tabelaClasses")
+	const cadastrarClasseEstoque = new bootstrap.Modal(document.getElementById("cadastrarClasseEstoque"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verClasses`)
+	const response = await dados.text()
+	tabelaClasses.innerHTML = response
+	
+	cadastrarClasseEstoque.show()
+
 
 }
  $(function(){

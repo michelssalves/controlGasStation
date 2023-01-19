@@ -1,7 +1,7 @@
 <?php
 $action = $_REQUEST['action'];
 
-if ($action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
+if ($action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
 
   $page =  $_REQUEST['page'];
   $statusNovo =  $_REQUEST['statusNovo'];
@@ -68,7 +68,7 @@ if ($action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visuali
   include 'view/modal/enviarMateriais/enviarMateriaisVisualizarEstoque.view.php';
   include 'view/modal/enviarMateriais/enviarMateriaisAltVerProdutoModal.view.php';
   include 'view/modal/enviarMateriais/enviarMateriaisCriarProdutoModal.view.php';
-  
+  include 'view/modal/enviarMateriais/enviarMateriaisCriarClasseModal.view.php';
    
 }
 if ($action == 'visualizarRequisicao') {
@@ -294,7 +294,7 @@ if($action == 'verEstoque'){
   $sql = "SELECT  p.id AS idProduto, p.descricao AS produto, c.descricao AS classe, unidade, P.qtde_atual, P.qtde_min, P.status
   FROM REQ_Produto AS P 
   LEFT JOIN REQ_ClasseProduto AS C ON p.classe = c.id 
-  WHERE p.descricao IS NOT NULL  AND status = 'ATIVO'
+  WHERE p.descricao IS NOT NULL AND status = 'ATIVO' AND qtde_atual > 0 
   ORDER BY Produto";
   $qry = odbc_exec($connP, $sql);
 
@@ -349,5 +349,48 @@ if($action == 'verProduto'){
   $return = ['dados' =>  utf8ize($row)];
 
   echo json_encode($return);
+
+}
+if($action == 'verClasses'){
+
+  include 'controllerAux/validaLogin.php';
+  include 'controllerAux/functionsAuxiliar.php';
+  include '../model/EnviarMateriais.php';
+
+  $txtTable .="<table class='table table-sm table-bordered border-dark'>
+  <thead class='header-tabela'>
+        <th><center>ID</th>
+        <th><center>DESCRICAO</th>
+        <th><center>ITENS TOTAL</th>
+        <th><center>ITENS ATIVOS</th>
+    </tr>
+ </thead>
+<tbody>";
+
+
+$sql = "SELECT DISTINCT c.id, c.descricao AS classe, 
+(SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id ) AS total,
+(SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id AND STATUS = 'ATIVO') AS ativos
+FROM REQ_ClasseProduto AS c 
+ORDER BY classe" ;
+$qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
+
+while ($row = odbc_fetch_array($qry)) { 
+
+  extract($row);
+  
+  $txtTable .="<tr>
+    <td>$id</td>
+    <td>$classe</td>
+    <td>$total</td>
+    <td>$ativos</td>
+    </tr>";
+
+} 
+
+$txtTable .="</tbody>
+</table>";
+
+echo utf8ize($txtTable);
 
 }
