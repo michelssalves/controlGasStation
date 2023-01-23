@@ -58,15 +58,7 @@ function semSolucao(id_cheque) {
 	semSolucao.show()
 
 }
-function incluirObservacao(id) {
 
-	console.log(id)
-
-	const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
-	document.getElementById("id_observacao").value = id
-	incluirObs.show()
-
-}
 function acoesRequisicao(id, statusCliente, tipo, cliente, valor) {
 
 	const acoesRequisicao = new bootstrap.Modal(document.getElementById("acoesRequisicaoModal"))
@@ -295,6 +287,7 @@ async function verEstoque(){
 	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=verEstoque`)
 	const response = await dados.text()
 	tabelaEstoque.innerHTML = response
+	
 	visualizarEstoque.show()
 
 }
@@ -400,6 +393,36 @@ async function excluirClasse(){
 	const idClasse = document.getElementById("idClasseAltExc").value 
 	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=excluirClasse&idClasse=${idClasse}`)
 	visualizarClasses()
+}
+async function visualizarCheque(id){
+
+	const tabelaClasses = document.querySelector(".tabelaCheques")
+	const visualizarChequeModal = new bootstrap.Modal(document.getElementById("visualizarChequeModal"))
+	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action=visualizarCheque&id=${id}`)
+	const response = await dados.text()
+	tabelaClasses.innerHTML = response
+	visualizarChequeModal.show()
+
+
+}
+function incluirObservacao() {
+
+	idCheque = document.getElementById("idCheque").value
+	const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
+	incluirObs.show()
+	document.getElementById("idChequeObs").value = idCheque
+}
+function gravarObservacao() {
+
+	idCheque = document.getElementById("idChequeObs").value
+	observacao = document.getElementById("observacao").value
+	enviarEmail = document.getElementById("enviarEmail").checked
+	action = document.getElementById("action").value
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?
+	action=${action}&id=${idCheque}&obs=${observacao}&email=${enviarEmail}`)
+	
+	visualizarCheque(idCheque)
+
 }
 
  $(function(){

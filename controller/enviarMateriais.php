@@ -1,7 +1,6 @@
 <?php
 $action = $_REQUEST['action'];
 
-//if ($action <> 'excluirProduto' && $action <> 'cadastrarProduto' && $action <> 'excluirProduto'&&$action <> 'excluirClasse' && $action <> 'alterarClasse' && $action <> 'buscarClasse' && $action <> 'incluirClasse' && $action <> 'verClasses' && $action  <> 'verProduto' && $action <> 'verEstoque'  &&  $action <> 'visualizarRequisicao' && $action <> 'atualizarQuantidades' &&  $action <> 'alterarRequisicao' && $action <> 'novoProdutoNoPedido' && $action <> 'excluirProdutoNoPedido' && $action <> 'confirmarEnvio' && $action <> 'alterarProdutoNoPedido' && $action <> 'verItemDoPedido') {
 if($action == '' || $action == 'filtrar-materiais' || $action == 'limpar'){
 
   $page =  $_REQUEST['page'];
@@ -52,7 +51,7 @@ if($action == '' || $action == 'filtrar-materiais' || $action == 'limpar'){
 
     extract($row);
 
-    $txtTable .=  "<tr id='$id_pedido' onclick='verRequisicaoMaterial(this.id)'>
+    $txtTable .=  "<tr id='$id_pedido' onclick='verRequisicaoMaterial(this.id)' style='cursor:pointer'>
 				  <td>$id_pedido</td>
 				  <td>$loginName</td>
 				  <td>" . dma($row['data']) . "</td>

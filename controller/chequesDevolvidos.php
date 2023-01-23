@@ -2,155 +2,141 @@
 
 $action = $_REQUEST['action'];
 
-$data1 = $_REQUEST['data1'];
-$data2 = $_REQUEST['data2'];
-$tipoData = $_REQUEST['tipoData'];
-$id_med = $_REQUEST['id_med'];
-$cliente = $_REQUEST['cliente'];
-$id = $_REQUEST['p2'];
-$banco = $_REQUEST['banco'];
+if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '') {
+    $data1 = $_REQUEST['data1'];
+    $data2 = $_REQUEST['data2'];
+    $tipoData = $_REQUEST['tipoData'];
+    $id_med = $_REQUEST['id_med'];
+    $cliente = $_REQUEST['cliente'];
+    $id = $_REQUEST['p2'];
+    $banco = $_REQUEST['banco'];
 
-$filtroStatus = '';
+    $page =  $_REQUEST['page'];
+    $statusNovo =  $_REQUEST['statusNovo'];
+    $statusNegociando =  $_REQUEST['statusNegociando'];
+    $statusQuitado =  $_REQUEST['statusQuitado'];
+    $statusPfin =  $_REQUEST['statusPfin'];
+    $statusJuridico =  $_REQUEST['statusJuridico'];
+    $statusExecucao =  $_REQUEST['statusExecucao'];
+    $statusCaducou =  $_REQUEST['statusCaducou'];
+    $statusExtraviado =  $_REQUEST['statusExtraviado'];
+    $statusCancelado =  $_REQUEST['statusCancelado'];
+    $flagNovo = $statusNovo <> '' ? 'checked' : '';
+    $flagNegociando  = $statusNegociando <> '' ? 'checked' : '';
+    $flagQuitado = $statusQuitado <> '' ? 'checked' : '';
+    $flagPfin = $statusPfin <> '' ? 'checked' : '';
+    $flagJuridico = $statusJuridico <> '' ? 'checked' : '';
+    $flagExecucao = $statusExecucao <> '' ? 'checked' : '';
+    $flagCaducou = $statusCaducou <> '' ? 'checked' : '';
+    $flagExtraviado = $statusExtraviado <> '' ? 'checked' : '';
+    $flagCancelado = $statusCancelado <> '' ? 'checked' : '';
 
+    if ($action == 'limpar') {
 
-//COLOCA TODOS OS CHECKBOX DENTRO DO VETOR $s
-for ($st = 0; $st <= 11; $st++) {
-
-    $s[$st] = $_REQUEST['s' . $st];
-}
-
-//SE A OPÇÃO 'TODOS' ESTIVER FLEGADA ESSE FOR FARA TODOS OS REQUESTS DE 's' RECEBER CHECKED
-if ($s[0] == 'checked') {
-
-    for ($st = 0; $st <= 11; $st++) {
-        $s[$st] = 'checked';
-    }
-}
-//FILTRA STATUS
-if ($s[1] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'NOVO'";
-}
-if ($s[2] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'NEGOCIANDO'";
-}
-if ($s[3] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'QUITADO'";
-}
-if ($s[4] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'PFIN'";
-}
-if ($s[5] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'JURIDICO'";
-}
-if ($s[6] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'EXECUCAO'";
-}
-if ($s[7] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'CADUCO'";
-}
-if ($s[8] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'EXTRAVIADO'";
-}
-if ($s[9] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'CANCELADO'";
-}
-if ($s[10] == 'checked') {
-    $filtroStatus = $filtroStatus . ",'SEM SOLUCAO'";
-}
-
-if ($filtroStatus == '') {
-    $filtroStatus = "AND status IN ('NOVO', 'NEGOCIANDO', 'PFIN')";
-    $s1 = 'checked';
-    $s2 = 'checked';
-    $s4 = 'checked';
-} else {
-    $filtroStatus = "AND status IN (''" . $filtroStatus . ")";
-}
-
-if ($id <> '') {
-    $Fid = "AND ch.id = $id";
-}
-if ($cliente <> '') {
-    $Fcliente = "AND nome LIKE '%$cliente%' ";
-}
-if ($banco <> '') {
-    $Fbanco = "AND bco = $banco";
-}
-if ($id_med <> '') {
-    $Fmed = "AND ch.id_med = $id_med";
-}
-if (empty($tipoData)) {
-
-    $tipoData = 'dthrInclusao';
-}
-if ($tipoData  === '0') {
-    $tipoData = 'dthrInclusao';
-}
-if ($tipoData  === '1') {
-    $tipoData = 'dtCheque';
-}
-if ($tipoData  === '2') {
-    $tipoData = 'dtDevol';
-}
-if ($tipoData  === '3') {
-    $tipoData = 'dtQuitacao';
-}
-if ($data1 == '') {
-
-    $data1 = date('1999-01-01');
-}
-if ($data2  == '') {
-
-    $hoje = date('Y-m-d');
-    $amanha = date('Y-m-d', strtotime($hoje . ' +1 day'));
-    $data2 = $amanha;
-}
-
-$FtipoData = " AND $tipoData BETWEEN '" . $data1 . "' AND '" . $data2 . "' ";
-
-$qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $filtroStatus);
-
-//var_dump($sql);
-// variaveis declaradas para apresentarem os valores totais e corrigidos ao fim da tabela
-$totalValor = 0;
-$totalValorCorrigido = 0;
-
-while ($row = odbc_fetch_array($qry)) {
-
-    //o extract faz com que nao precise escrever o row['alguma coisa'] posso colocar a varivel direto
-    extract($row);
-
-    $ultimaAlt = '';
-    if ($ultimaAlteracao <> '') {
-        $ultimaAlt = dma($ultimaAlteracao);
-    }
-    $dtQuita = '';
-    if ($dtQuitacao <> '') {
-        $dtQuita = dma($dtQuitacao);
+        $flagNovo = '';
+        $flagNegociando = '';
+        $flagQuitado = '';
+        $flagPfin = 'checked';
+        $flagJuridico = '';
+        $flagExecucao = '';
+        $flagCaducou = '';
+        $flagExtraviado = '';
+        $flagCancelado = '';
     }
 
-    //esses vetores estao no arquivo de conexao
-    $motivoTitle = $vetorMotivo[$motivo];
-    $bancoTitle = $vetorBanco[$bco];
-
-    if ($valorQuitacao <> '') {
-        $valorCorrigido = $valorQuitacao;
-        $tituloValCorr = 'Valor Recebido';
+    if (
+        $statusNovo == '' && $statusNegociando == '' && $statusQuitado == '' && $statusPfin == ''
+        && $statusJuridico == '' && $statusExecucao == '' && $statusCaducou == '' && $statusExtraviado == ''
+        && $statusCancelado == ''
+    ) {
+        $filtroStatus =  "AND status = 'PFIN'";
     } else {
-        $valorCorrigido = $valorCorr;
-        $tituloValCorr = 'Taxa de 0,1% por dia de atraso';
+        $filtroStatus =  "AND status IN ('" . $statusNovo . "','" . $statusNegociando . "','" . $statusQuitado . "','" . $statusPfin . "','" . $statusJuridico . "'
+  ,'" . $statusExecucao . "','" . $statusCaducou . "','" . $statusExtraviado . "','" . $statusCancelado . "')";
     }
-    if ($subclasse == 'OUTRO') {
-        $obs = '(' . l50($obs) . ')';
-    } else {
-        $obs = '';
-    }
-    //atribui um id a todos os modais gerados no loop
-    $modal = "modal$id";
-    //gatilho para ativação do modal
-    $link = "data-bs-toggle='modal' data-bs-target='#$modal' style='cursor:pointer'";
 
-    $txtTab .= "<tr $link>
+    if ($id <> '') {
+        $Fid = "AND ch.id = $id";
+    }
+    if ($cliente <> '') {
+        $Fcliente = "AND nome LIKE '%$cliente%' ";
+    }
+    if ($banco <> '') {
+        $Fbanco = "AND bco = $banco";
+    }
+    if ($id_med <> '') {
+        $Fmed = "AND ch.id_med = $id_med";
+    }
+    if (empty($tipoData)) {
+
+        $tipoData = 'dthrInclusao';
+    }
+    if ($tipoData  === '0') {
+        $tipoData = 'dthrInclusao';
+    }
+    if ($tipoData  === '1') {
+        $tipoData = 'dtCheque';
+    }
+    if ($tipoData  === '2') {
+        $tipoData = 'dtDevol';
+    }
+    if ($tipoData  === '3') {
+        $tipoData = 'dtQuitacao';
+    }
+    if ($data1 == '') {
+
+        $data1 = date('1999-01-01');
+    }
+    if ($data2  == '') {
+
+        $hoje = date('Y-m-d');
+        $amanha = date('Y-m-d', strtotime($hoje . ' +1 day'));
+        $data2 = $amanha;
+    }
+
+    $FtipoData = " AND $tipoData BETWEEN '" . $data1 . "' AND '" . $data2 . "' ";
+
+    $qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $filtroStatus);
+
+    //var_dump($sql);
+    // variaveis declaradas para apresentarem os valores totais e corrigidos ao fim da tabela
+    $totalValor = 0;
+    $totalValorCorrigido = 0;
+
+    while ($row = odbc_fetch_array($qry)) {
+
+        //o extract faz com que nao precise escrever o row['alguma coisa'] posso colocar a varivel direto
+        extract($row);
+
+        $ultimaAlt = '';
+        if ($ultimaAlteracao <> '') {
+            $ultimaAlt = dma($ultimaAlteracao);
+        }
+        $dtQuita = '';
+        if ($dtQuitacao <> '') {
+            $dtQuita = dma($dtQuitacao);
+        }
+
+        //esses vetores estao no arquivo de conexao
+        $motivoTitle = $vetorMotivo[$motivo];
+        $bancoTitle = $vetorBanco[$bco];
+
+        if ($valorQuitacao <> '') {
+            $valorCorrigido = $valorQuitacao;
+            $tituloValCorr = 'Valor Recebido';
+        } else {
+            $valorCorrigido = $valorCorr;
+            $tituloValCorr = 'Taxa de 0,1% por dia de atraso';
+        }
+        if ($subclasse == 'OUTRO') {
+            $obs = '(' . l50($obs) . ')';
+        } else {
+            $obs = '';
+        }
+
+        $link = " id='$id' onclick='visualizarCheque(this.id)' style='cursor:pointer'";
+
+        $txtTab .= "<tr $link>
                 <td>$id</td>
                 <td>" . dma($dthrInclusao) . "</td>
                 <td title='$bancoTitle'>$bco</td>
@@ -167,26 +153,25 @@ while ($row = odbc_fetch_array($qry)) {
                 <td>" . l5($status) . "</td>
                 <td>$ultimaAlt</td>
             </tr>";
-    $totalValor += $valor;
-    $totalValorCorrigido += $valorCorr;
-
-    include 'view/modal/chequesDevolvidos/chequesDevolvidosVisualizarModal.view.php';
-}
+        $totalValor += $valor;
+        $totalValorCorrigido += $valorCorr;
+    }
 
     $txtTab .= "</tbody>
             <tr class='w3-yellow'>
                 <td colspan='7'><center>Total</td><td><center>
-                <a>".v2($totalValor)."</a></td><td colspan='2'></td>
-                <td><center><a>".v2($totalValorCorrigido)."</a></td><td colspan='4'></td>
+                <a>" . v2($totalValor) . "</a></td><td colspan='2'></td>
+                <td><center><a>" . v2($totalValorCorrigido) . "</a></td><td colspan='4'></td>
             </tr>";
-            
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluirCheque.view.php';
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosCancelarCheque.view.php';
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosConfirmarQuitacaoModal.view.php';
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluirAnexo.view.php';
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluirObservacao.view.php';
-            include 'view/modal/chequesDevolvidos/chequesDevolvidosSemSolucao.view.php';        
-           
+}
+include 'view/modal/chequesDevolvidos/chequesDevolvidosVisualizar.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluir.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosCancelar.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosQuitacao.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosAnexo.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosObservacao.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosSemSolucao.view.php';
+
 //INCLUIR NOVO CHEQUE
 if ($action == 'incluir-cheque') {
 
@@ -336,32 +321,180 @@ if ($action == 'gravarAnexo') {
 //GRAVAR OBS E NOTIFICAR POR EMAIL             
 if ($action == 'gravarObservacao') {
 
-    $idCheque = $_REQUEST['idCheque'];
-    $observacao = $_REQUEST['observacao'];
-    $evento = 'Incluiu Observação';
+    include './controllerAux/validaLogin.php';
+    include './controllerAux/functionsAuxiliar.php';
+    include './controllerAux/vetoresAuxiliares.php';
+    include '../model/ChequesDevolvidos.php';
 
+    $idCheque = $_REQUEST['id'];
+    $observacao = limpaObservacao($_REQUEST['obs']);
+    $evento = 'Incluiu Observação';
+    $email =  $_REQUEST['email'];
+   
     insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
 
     insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
 
-    if ($_REQUEST['enviarEmail'] == 'on') {
+    if ($email == 'true') {
 
         $assunto = 'Atualização no Cheque Devolvido Nº ' . $idCheque;
-        $mensagemHTML = ' 
-        <table align="center" width="100%">
-                    <tr>
-                        <td align="center">
-                         <table id="table-1" width="760" >
-                            <tr align="left" bgcolor="#006633">
-                              <td height="20" align="right" bgcolor="#FFFFFF"><div align="center"><img src="assets/img/logos/topo-rdp-petroleo.png" alt="RDP"><p></div>
-                      </td>
-                    </tr>
-                    <tr align="center"><td><h2>UM REGISTRO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . ' DE SUA UNIDADE RECEBEU ATUALIZAÇÃO<br>
-                    <tr align="center"><td ><h2><hr></td></tr>	
-                       <tr><td><h3>Detalhe: ' . $observacao . '<h3></td></tr>
-                    <tr align="center"><td ><hr><a href="https://www.rdppetroleo.com.br">Clique aqui e acesse o site da RDP para maiores detalhes </a><hr></td></tr>
-                    </table>';
+            $mensagemHTML = ' 
+            <table align="center" width="100%">
+                        <tr>
+                            <td align="center">
+                            <table id="table-1" width="760" >
+                                <tr align="left" bgcolor="#006633">
+                                <td height="20" align="right" bgcolor="#FFFFFF"><div align="center"><img src="https://www.rdppetroleo.com.br/medwebnovo/assets/img/logos/topo-rdp-petroleo.png" alt="RDP"><p></div>
+                            </td>
+                        </tr>
+                        <tr align="center"><td><h2>UM REGISTRO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . ' DE SUA UNIDADE RECEBEU ATUALIZAÇÃO<br>
+                        <tr align="center"><td ><h2><hr></td></tr>	
+                        <tr><td><h3>Detalhe: ' . $observacao . '<h3></td></tr>
+                        <tr align="center"><td ><hr><a href="https://www.rdppetroleo.com.br">Clique aqui e acesse o site da RDP para maiores detalhes </a><hr></td></tr>
+                        </table>';
 
         enviarEmail($assunto, $mensagemHTML);
     }
+}
+if ($action == 'visualizarCheque') {
+
+    include 'controllerAux/validaLogin.php';
+    include 'controllerAux/functionsAuxiliar.php';
+    include 'controllerAux/vetoresAuxiliares.php';
+    include '../model/ChequesDevolvidos.php';
+
+    $idCheque = $_REQUEST['id'];
+
+    $row = selectChequeDevolvidosById($idCheque);
+    extract($row);
+    $txtTable .= "<table class='table table-sm table-bordered border-dark'>
+    <input type='hidden' id='idCheque' value='$idCheque'>
+    <tr>
+      <th colspan='2'>STATUS</th>
+      <td colspan='3'>$status</td>
+    </tr>
+    <tr>
+      <th colspan='2'>DT INC</th>
+      <td colspan='3'>" . dma($dthrInclusao) . "</td>
+    </tr>
+    <tr>
+      <th colspan='2'>MED</th>
+      <td colspan='3'>$usuarioLogado</td>
+    </tr>
+    <tr>
+      <th colspan='2'>BANCO</th>
+      <td colspan='3'>$bco - $vetorBanco[$bco]</td>
+    </tr>
+    <tr>
+      <th colspan='2'>CORRENTISTA</th>
+      <td colspan='3'>$nome</td>
+    </tr>
+    <tr>
+      <th colspan='2'>CLIENTE</th>
+      <td colspan='3'>$nomeCliente</td>
+    </tr>
+    <tr>
+      <th colspan='2'>CPF/CNPJ</th>
+      <td colspan='3'>$cpfcnpj</td>
+    </tr>
+    <tr>
+      <th colspan='2'>TELEFONE</th>
+      <td colspan='3'>$telefone</td>
+    </tr>
+    <tr>
+      <th colspan='2'>VALOR</th>
+      <td colspan='3'>" . v2($valor) . "</td>
+    </tr>
+    <tr>
+      <th colspan='2'>Nº CHEQUE</th>
+      <td colspan='3'>$nrcheque</td>
+    </tr>
+    <tr>
+      <th colspan='2'>MOTIVO</th>
+      <td colspan='3'>$motivo - $vetorMotivo[$motivo]</td>
+    </tr>
+    <tr>
+      <th colspan='2'>DT CHEQUE</th>
+      <td colspan='3'>" . dma($dtCheque) . "</td>
+    </tr>
+    <tr>
+      <th colspan='2'>DT DEV</th>
+      <td colspan='3'>" . dma($dtDevol) . "</td>
+    </tr>
+    <tr>
+      <th colspan='2'>DT QUIT</th>
+      <td colspan='3'>" . dma($dtQuitacao) . "</td>
+    </tr>
+    <tr>
+      <th colspan='2'>PDV</th>
+      <td colspan='3'>$pdv</td>
+    </tr>
+    </table>
+    <table class='table table-sm table-bordered border-dark'>
+    <tr>
+      <th colspan='2'>Data Hora</th>
+      <th>Usuário</th>
+      <th colspan='2'>Observação</th>
+    </tr>";
+
+    $qryObs = selectChequeObsById($idCheque);
+    while ($rowObs = odbc_fetch_array($qryObs)) {
+        extract($rowObs);
+
+        $txtTable .= "<tr>
+            <td colspan='2'>" . dmaH($datahora) . "</td>
+            <td>$usuario</td>
+            <td colspan='2'>$obs</td>
+        </tr>";
+    }
+
+    $txtTable .= "
+    </table>
+    <table class='table table-sm table-bordered border-dark'>
+      <tr>
+        <th colspan='2'>Data Hora</th>
+        <th>Usuário</td>
+        <th>Descrição/Nome</th>
+        <th>Tipo</th>
+      </tr>";
+
+    $qryAnexo = selectChequeAnexoById($idCheque);
+
+    while ($rowAnexo = odbc_fetch_array($qryAnexo)) {
+
+        extract($rowAnexo);
+
+        $link2 = "'https://www.rdppetroleo.com.br/medwebnovo/view/modal/visualizarDocumentosModal.view.php?doc=$id.$tipo&pasta=chequesDevolvidos'";
+
+        $txtTable .= "<tr>
+            <td colspan='2'>" . dmaH($datahora) . "</td>
+            <td>$usuario</td>
+            <td><a style='cursor:pointer' onclick='abriNovaJanela($link2)'>$descricao</td>
+            <td>$tipo</td>
+        </tr>";
+    }
+
+    $txtTable .= "</table>
+    <table class='table table-sm table-bordered border-dark'>
+    <tr>
+    <th colspan='2'>Data Hora</th>
+    <th>Usuário</th>
+    <th colspan='2'>Descrição</th>
+    </tr>";
+
+    $qryEventos = selectChequeEventos($idCheque);
+    while ($rowEventos = odbc_fetch_array($qryEventos)) {
+
+        extract($rowEventos);
+
+        $txtTable .= "<tr>
+            <td colspan='2'>" . dmaH($dthrEvento) . "</td>
+            <td>$usuario</td>
+            <td colspan='2'>$evento</td>
+        </tr>";
+    }
+
+    $txtTable .= "</table>";
+
+    echo utf8ize($txtTable);
 }

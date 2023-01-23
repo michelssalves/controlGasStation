@@ -29,12 +29,12 @@ include('controller/enviarMateriais.php');
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><input class="ml-3" <?= $flagNovo ?> type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input class="ml-3" <?= $flagParcial ?> type="checkbox" id="statusParcial" name="statusParcial" value="PARCIAL" /> PARCIAL</label></li>
-                            <li><input class="ml-3" <?= $flagEnviado ?> type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
-                            <li><input class="ml-3" <?= $flagFinalizado ?> type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
-                            <li><input class="ml-3" <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                        <ul class="dropdown-menu p-3">
+                            <li><input <?= $flagNovo ?> type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input <?= $flagParcial ?> type="checkbox" id="statusParcial" name="statusParcial" value="PARCIAL" /> PARCIAL</label></li>
+                            <li><input <?= $flagEnviado ?> type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
+                            <li><input <?= $flagFinalizado ?> type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
+                            <li><input <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
                 </td>

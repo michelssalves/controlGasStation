@@ -13,7 +13,7 @@ include('controller/caixaDiario.php');
         </div>
     </div>
 </div>
-<div class='table-responsive'>
+
     <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
         <thead>
             <tr>
@@ -24,9 +24,19 @@ include('controller/caixaDiario.php');
         </thead>
         <tbody>
             <tr>
-                <?= $checkBox ?>
-            </tr>
-            <tr>
+                <td>
+                    <div class="dropdown">
+                        <button class="form-select " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Status
+                        </button>
+                        <ul class="dropdown-menu p-3">
+                            <li><input <?= $flagNovo ?> type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input <?= $flagFechado ?> type="checkbox" id="statusFechado" name="statusFechado" value="FECHADO" /> FECHADO</label></li>
+                            <li><input <?= $flagFechadoDefinitivo ?> type="checkbox" id="statusFechadoDefinitivo" name="statusFechadoDefinitov" value="DEFINITIVO" /> DEFINITIVO</label></li>
+                            <li><input <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                        </ul>
+                    </div>
+                </td>
                 <td>
                     <select id='controleMed' name='controleMed' class='form-select' aria-label='Default select example'>
                         <option><?php echo ($controleMed ? $controleMed : 'Controle'); ?></option>
@@ -66,7 +76,7 @@ include('controller/caixaDiario.php');
         </tbody>
     </table>
     </form>
-</div>
+
 <div class="table-responsive">
     <div class="tabela-ver-todos-os-cheques">
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover  fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>

@@ -10,11 +10,10 @@ include('controller/chequesDevolvidos.php');
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()">Incluir</button>
                 <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
+                <button type="submit" name='action' value='limpar' class='btn btn-danger btn-sm'>Limpar</button>
         </div>
     </div>
 </div>
-<div class='table-responsive'>
     <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
         <thead class="header-tabela">
             <tr>
@@ -26,88 +25,23 @@ include('controller/chequesDevolvidos.php');
         <tbody>
             <tr>
                 <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s0" value="checked" <?= $s[0]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Todos
-                        </label>
+                    <div class="dropdown">
+                        <button class="form-select " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Status
+                        </button>
+                        <ul class="dropdown-menu p-3">
+                            <li><input <?= $flagNovo ?> type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input <?= $flagNegociando ?> type="checkbox" id="statusNegociando" name="statusNegociando" value="NEGOCIANDO" /> NEGOCIANDO</label></li>
+                            <li><input <?= $flagQuitado ?> type="checkbox" id="statusQuitado" name="statusQuitado" value="QUITADO" /> QUITADO</label></li>
+                            <li><input <?= $flagPfin ?> type="checkbox" id="statusPfin" name="statusPfin" value="PFIN" /> PFIN</label></li>
+                            <li><input <?= $flagJuridico ?> type="checkbox" id="statusJuridico" name="statusJuridico" value="JURIDICO" /> JURIDICO</label></li>
+                            <li><input <?= $flagExecucao ?> type="checkbox" id="statusExecucao" name="statusExecucao" value="EXECUÇÃO" /> EXECUÇÃO</label></li>
+                            <li><input <?= $flagCaducou ?> type="checkbox" id="statusCaducou" name="statusCaducou" value="CADUCOU" /> CADUCOU</label></li>
+                            <li><input <?= $flagExtraviado ?> type="checkbox" id="statusExtraviado" name="statusExtraviado" value="EXTRAVIADO" /> EXTRAVIADO</label></li>
+                            <li><input <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                        </ul>
                     </div>
                 </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s1" value="checked" <?= $s[1]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Novo
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s2" value="checked" <?= $s[2]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Negociando
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s3" value="checked" <?= $s[3]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Quitado
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s4" value="checked" <?= $s[4]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            PFIN
-                        </label>
-                    </div>
-                </td>
-
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s5" value="checked" <?= $s[5]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Juridico
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s6" value="checked" <?= $s[6]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Execução
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s7" value="checked" <?= $s[7]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Caduco
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s8" value="checked" <?= $s[8]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Extraviado
-                        </label>
-                    </div>
-                </td>
-                <td>
-                    <div class='form-check'>
-                        <input class='form-check-input' type="checkbox" name="s9" value="checked" <?= $s[9]; ?>>
-                        <label class='form-check-label' for='flexCheckChecked'>
-                            Cancelado
-                        </label>
-                    </div>
-                </td>
-            </tr>
-            <tr>
                 <td colspan='2'>
                     <select id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
                         <option selected value='0'>Data Inclusão</option>
@@ -144,7 +78,6 @@ include('controller/chequesDevolvidos.php');
         </tbody>
     </table>
     </form>
-</div>
 <div class="table-responsive">
     <div class="tabela-ver-todos-os-cheques">
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
