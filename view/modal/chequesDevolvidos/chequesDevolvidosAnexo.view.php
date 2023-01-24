@@ -7,23 +7,22 @@
             </div>
             <div class="modal-body">
                 <form method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="p" value="2" required>
-                    <input type="hidden" id="id_anexo" name="idCheque" value="" required>
-                    <input type="hidden" value="gravarAnexo" name="action" required>
-                    <div class="mb-3">
-                        <p class="texto-de-advertencia">AQUI SERÁ INCLUIDO TODA A DOCUMENTAÇÃO REFERENTE A ESTE CLIENTE</p>
-                        <label for="descricao" class="col-form-label">Descrição:</label>
-                        <input type="text" name="descricao" class="form-control" id="descricao" placeholder="Titulo para o arquivo" required>
-                        <label for="descricao" class="col-form-label">Comprovante:</label>
-                        <input type="file" name="file" class="form-control">
+                    <input type="hidden" id="idChequeAnexo" name="idChequeAnexo" required>
+                    <input type="hidden" value="gravarAnexo" name="actionAnexo" id="actionAnexo" required>
+                    <div class="input-group input-group-sm mb-3 ">
+                        <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
+                        <input type="text" name="descricao" id="descricao" class="form-control" placeholder="Titulo para o arquivo" required>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Incluir Anexo</button>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-
+                    <div class="input-group input-group-sm mb-3 ">
+                        <span class="input-group-text" id="inputGroup-sizing">Comprovante:</span>
+                        <input id="arquivoAnexo" type="file" name="arquivoAnexo" class="form-control" required />
                     </div>
-                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarAnexo()">Anexar</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="fecharModal(this.form.idChequeAnexo.value)">Fechar</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

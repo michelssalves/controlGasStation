@@ -1,17 +1,22 @@
 <?php
+session_start();
+include './controllerAux/validaLogin.php';
+include './controllerAux/vetoresAuxiliares.php';
+include './controllerAux/functionsAuxiliar.php';
+include '../model/ChequesDevolvidos.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '') {
+if ($action == 'filtrar-cheques-devolvidos' || $action == 'limpar-cheques-devolvidos' || $action == '') {
+
     $data1 = $_REQUEST['data1'];
     $data2 = $_REQUEST['data2'];
     $tipoData = $_REQUEST['tipoData'];
     $id_med = $_REQUEST['id_med'];
     $cliente = $_REQUEST['cliente'];
-    $id = $_REQUEST['p2'];
+    $idChq = $_REQUEST['idChq'];
     $banco = $_REQUEST['banco'];
 
-    $page =  $_REQUEST['page'];
     $statusNovo =  $_REQUEST['statusNovo'];
     $statusNegociando =  $_REQUEST['statusNegociando'];
     $statusQuitado =  $_REQUEST['statusQuitado'];
@@ -31,8 +36,14 @@ if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '
     $flagExtraviado = $statusExtraviado <> '' ? 'checked' : '';
     $flagCancelado = $statusCancelado <> '' ? 'checked' : '';
 
-    if ($action == 'limpar') {
+    if ($action == 'limpar-cheques-devolvidos') {
 
+        $data1  = date('1999-01-01');
+        $data2  = date('Y-m-d');
+        $id_med = '';
+        $banco = '';
+        $idChq = '';
+        $cliente = '';
         $flagNovo = '';
         $flagNegociando = '';
         $flagQuitado = '';
@@ -43,20 +54,20 @@ if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '
         $flagExtraviado = '';
         $flagCancelado = '';
     }
-
     if (
         $statusNovo == '' && $statusNegociando == '' && $statusQuitado == '' && $statusPfin == ''
         && $statusJuridico == '' && $statusExecucao == '' && $statusCaducou == '' && $statusExtraviado == ''
         && $statusCancelado == ''
     ) {
-        $filtroStatus =  "AND status = 'PFIN'";
+        $Fstatus =  "AND status = 'PFIN'";
     } else {
-        $filtroStatus =  "AND status IN ('" . $statusNovo . "','" . $statusNegociando . "','" . $statusQuitado . "','" . $statusPfin . "','" . $statusJuridico . "'
-  ,'" . $statusExecucao . "','" . $statusCaducou . "','" . $statusExtraviado . "','" . $statusCancelado . "')";
+        $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusNegociando . "','" . $statusQuitado . "','" . $statusPfin . "',
+        '" . $statusJuridico . "','" . $statusExecucao . "','" . $statusCaducou . "','" . $statusExtraviado . "','" . $statusCancelado . "')";
     }
 
-    if ($id <> '') {
-        $Fid = "AND ch.id = $id";
+    if ($idChq <> '') {
+
+        $Fid = "AND ch.id = $idChq";
     }
     if ($cliente <> '') {
         $Fcliente = "AND nome LIKE '%$cliente%' ";
@@ -96,16 +107,14 @@ if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '
 
     $FtipoData = " AND $tipoData BETWEEN '" . $data1 . "' AND '" . $data2 . "' ";
 
-    $qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $filtroStatus);
+    $qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $Fstatus);
 
-    //var_dump($sql);
-    // variaveis declaradas para apresentarem os valores totais e corrigidos ao fim da tabela
     $totalValor = 0;
     $totalValorCorrigido = 0;
 
     while ($row = odbc_fetch_array($qry)) {
 
-        //o extract faz com que nao precise escrever o row['alguma coisa'] posso colocar a varivel direto
+
         extract($row);
 
         $ultimaAlt = '';
@@ -117,7 +126,6 @@ if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '
             $dtQuita = dma($dtQuitacao);
         }
 
-        //esses vetores estao no arquivo de conexao
         $motivoTitle = $vetorMotivo[$motivo];
         $bancoTitle = $vetorBanco[$bco];
 
@@ -164,13 +172,13 @@ if ($action == 'filtrar-cheques' || $action == 'filtrar-cheques' || $action == '
                 <td><center><a>" . v2($totalValorCorrigido) . "</a></td><td colspan='4'></td>
             </tr>";
 }
+include 'view/modal/chequesDevolvidos/chequesDevolvidosAnexo.view.php';
 include 'view/modal/chequesDevolvidos/chequesDevolvidosVisualizar.view.php';
 include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluir.view.php';
 include 'view/modal/chequesDevolvidos/chequesDevolvidosCancelar.view.php';
 include 'view/modal/chequesDevolvidos/chequesDevolvidosQuitacao.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosAnexo.view.php';
 include 'view/modal/chequesDevolvidos/chequesDevolvidosObservacao.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosSemSolucao.view.php';
+include 'view/modal/chequesDevolvidos/chequesDevolvidosPendenciaFinanceira.view.php';
 
 //INCLUIR NOVO CHEQUE
 if ($action == 'incluir-cheque') {
@@ -242,69 +250,63 @@ if ($action == 'incluir-cheque') {
     }
 }
 //QUITACAO DO CHEQUE OU PFIN-> NÃO FOI CRIADO FORM PARA PFIN POR NAO COMPREENDER O ESCOPO, POREM O BACKEND É O MESMO DO QUITAÇÃO
-if ($action == 'quitacao' || $action == 'pfin' || $action == 'cancelar-cheque') {
+if ($action == 'quitacao' || $action == 'pendenciaFinanceira' || $action == 'cancelar-cheque') {
 
-    $idCheque = $_REQUEST['idCheque'];
+    $idCheque = $_REQUEST['id'];
 
     if ($action == 'quitacao') {
         $status = "status = 'QUITADO',";
         $evento = 'Confirmada Quitação';
     }
-    if ($action == 'pfin') {
+    if ($action == 'pendenciaFinanceira') {
+
         $status = "status = 'PFIN',";
         $evento = 'Incluido em PFIN (Serasa/SPC)';
     }
     if ($action == 'cancelar-cheque') {
+
         $status = "status = 'CANCELADO',";
         $evento = 'CANCELADO';
     }
 
-    updateChequeDevolvidoById($status, $idCheque);
-    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    if ($status <> '' && $evento <> '') {
 
-    if ($_REQUEST['motivoCancelamento'] <> '') {
+        updateChequeDevolvidoById($status, $idCheque);
+        insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    }
+    if ($_REQUEST['motivo'] <> '') {
 
-        $observacao = $_REQUEST['motivoCancelamento'];
+        $observacao = limpaObservacao($_REQUEST['motivo']);
         insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
     }
+
     if ($_FILES['file']['name'] <> '') {
 
-        $action = 'gravarAnexo';
-    }
-}
-//OPCAO SEM SOLUCAO
-if ($action == 'semsolucao') {
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+        $temp = $_FILES['file']['tmp_name'];
+        $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
+        $tabela = "ccp_chequeDevAnexo";
 
-    $observacao = $_REQUEST['observacao'];
-    $idCheque = $_REQUEST['idCheque'];
-    $status = "status = 'SEM SOLUCAO',";
-    $evento = 'CHEQUE SEM SOLUCAO';
-
-    updateChequeDevolvidoById($status, $idCheque);
-    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
-
-    if ($observacao <> '') {
-
-        insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
     }
 }
 //GRAVAR ANEXO
 if ($action == 'gravarAnexo') {
 
-    $idCheque = $_REQUEST['idCheque'];
-    $descricao = $_REQUEST['descricao'];
-    $file = $_REQUEST['file'];
+    $idCheque = $_REQUEST['id'];
+    $descricao = limpaObservacao($_REQUEST['descricao']);
     $evento = 'Incluiu Anexo';
 
-    if ($_FILES['file']['name'] <> "") {
+    if ($_FILES['file']['name'] <> '') {
 
         if ($descricao == '') {
+
             $descricao = $_FILES['file']['name'];
         }
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
         $temp = $_FILES['file']['tmp_name'];
-        $localDeArmazenagem = "assets/docs/chequesDevolvidos/";
+        $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
         $tabela = "ccp_chequeDevAnexo";
 
         insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
@@ -315,22 +317,17 @@ if ($action == 'gravarAnexo') {
 
         insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
     } else {
-        echo "<script>alert('Houve algum erro, tente refazer o processo')</script>";
+        echo 'Houve algum erro, tente refazer o processo';
     }
 }
 //GRAVAR OBS E NOTIFICAR POR EMAIL             
 if ($action == 'gravarObservacao') {
 
-    include './controllerAux/validaLogin.php';
-    include './controllerAux/functionsAuxiliar.php';
-    include './controllerAux/vetoresAuxiliares.php';
-    include '../model/ChequesDevolvidos.php';
-
     $idCheque = $_REQUEST['id'];
     $observacao = limpaObservacao($_REQUEST['obs']);
     $evento = 'Incluiu Observação';
     $email =  $_REQUEST['email'];
-   
+
     insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
 
     insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
@@ -338,7 +335,7 @@ if ($action == 'gravarObservacao') {
     if ($email == 'true') {
 
         $assunto = 'Atualização no Cheque Devolvido Nº ' . $idCheque;
-            $mensagemHTML = ' 
+        $mensagemHTML = ' 
             <table align="center" width="100%">
                         <tr>
                             <td align="center">
@@ -357,11 +354,6 @@ if ($action == 'gravarObservacao') {
     }
 }
 if ($action == 'visualizarCheque') {
-
-    include 'controllerAux/validaLogin.php';
-    include 'controllerAux/functionsAuxiliar.php';
-    include 'controllerAux/vetoresAuxiliares.php';
-    include '../model/ChequesDevolvidos.php';
 
     $idCheque = $_REQUEST['id'];
 

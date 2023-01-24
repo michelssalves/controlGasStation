@@ -7,20 +7,19 @@
             </div>
             <div class="modal-body">
                 <form id="confirmarQuitacaoForm" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" name="p" value="2" required>
-                    <input type="hidden" value="quitacao" name="action">
-                    <input type="hidden" id="id_cheque_quitacao" name="idCheque" value="" required>
-                    <div class="mb-3">
-                        <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p>
-                        <label for="file" class="col-form-label">Comprovante:</label>
-                        <input type="file" name="file" class="form-control" id="file" required>
+                    <input type="hidden" id="idChequeQuitacao" name="idChequeQuitacao" required>
+                    <input type="hidden" value="quitacao" name="actionQuitar" id="actionQuitar">
+                    <p class="texto-de-alerta">É OBRIGATÓRIO ANEXAR O DOCUMENTO COMPROVATÓRIO DA EXCLUSÃO NO SPC</p>
+                    <div class="input-group input-group-sm mb-3 ">
+                        <span class="input-group-text" id="inputGroup-sizing">Comprovante:</span>
+                        <input id="arquivoQuitacao" type="file" name="arquivoQuitacao" class="form-control" required />
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Confirmar Quitação?</button>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-                    </div>
-                </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarConfirmarQuitacao()">Quitar?</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="fecharModal(this.form.idChequeQuitacao.value)">Fechar</button>
+            </div>
+            </form>
         </div>
     </div>
 </div>

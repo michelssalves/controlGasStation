@@ -74,7 +74,7 @@
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-danger btn-sm" onclick="this.form(submit)">Salvar</button>
-            <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
           </div>
         </form>
       </div>

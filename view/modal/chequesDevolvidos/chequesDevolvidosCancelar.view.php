@@ -3,21 +3,23 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="fundo-cabecalho">
-                <h1>CANCELAR</h1>
+                <h1>CANCELAR?</h1>
             </div>
             <div class="modal-body">
                 <form method="POST" enctype="multipart/form-data">
                     <input type="hidden" name="p" value="2" required>
-                    <input type="hidden" value="cancelar-cheque" name="action" required>
-                    <div class="mb-3">
-                        <label for="descricao" class="col-form-label">Id do Cheque:</label>
-                        <input type="text" name="idCheque" class="form-control" id="id_cheque_cancelar" placeholder="Id" readonly required>
-                        <label for="motivoCancelamento" class="col-form-label">Motivo:</label>
-                        <input type="text" name="motivoCancelamento" class="form-control" id="motivoCancelamento" placeholder="Motivo" required>
+                    <input type="hidden" value="cancelar-cheque" id="actionCancelar" required>
+                    <div class="input-group input-group-sm mb-3 ">
+                        <span class="input-group-text" id="inputGroup-sizing">Id do Cheque:</span>
+                        <input type="text" id="idChequeCancelar" name="idChequeCancelar" class="form-control" placeholder="Id" readonly required>
+                    </div> 
+                    <div class="input-group input-group-sm mb-3 ">
+                        <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
+                        <textarea name="motivoCancelamento" id="motivoCancelamento" cols="60" rows="10" style="white-space: pre;" placeholder="Escreva o motivo" required></textarea>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
-                        <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal" onclick="salvarCancelamento()">Cancelar</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="fecharModal(this.form.idChequeCancelar.value)">Fechar</button>
                     </div>
                 </form>
             </div>

@@ -1,3 +1,21 @@
+$(function(){
+
+	$('.hidden').hide();
+	
+	$('select[name=produtos]').html($('div.produtos-f1').html());
+	  
+  
+	  $('select[name=fabricante]').change(function(){ 
+  
+		  var id = $('select[name=fabricante]').val();
+  
+		  $('select[name=produtos]').empty();
+		  
+		  $('select[name=produtos]').html($('div.produtos-f' + id).html());
+  
+	  });
+	  
+  });
 async function buscaCep(cep) {
 
 	if (cep.length >= 8) {
@@ -44,21 +62,6 @@ function abriNovaJanela(url) {
 	window.open(url, 'visualizar', 'top=100,width=500,height=650');
 
 }
-function confirmarQuitacao(id_cheque) {
-
-	const confirmQuitacao = new bootstrap.Modal(document.getElementById("comfirmarQuitacaoModal"))
-	document.getElementById("id_cheque_quitacao").value = id_cheque
-	confirmQuitacao.show()
-
-}
-function semSolucao(id_cheque) {
-
-	const semSolucao = new bootstrap.Modal(document.getElementById("semSolucaoModal"))
-	document.getElementById("id_cheque_solucao").value = id_cheque
-	semSolucao.show()
-
-}
-
 function acoesRequisicao(id, statusCliente, tipo, cliente, valor) {
 
 	const acoesRequisicao = new bootstrap.Modal(document.getElementById("acoesRequisicaoModal"))
@@ -114,29 +117,6 @@ function pagarRequisicao(id, statusCliente, tipo, cliente, valor) {
 	pagouRequisicao.show()
 
 }
-function incluirAnexo(id) {
-
-	const incluirAnexo = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
-	document.getElementById("id_anexo").value = id
-	incluirAnexo.show()
-
-}
-function cancelarCheque(id_cheque) {
-
-	console.log(id_cheque)
-
-	const cancelarCheque = new bootstrap.Modal(document.getElementById("cancelarChequeModal"))
-	document.getElementById("id_cheque_cancelar").value = id_cheque
-	cancelarCheque.show()
-
-}
-function incluirCheque(id_cheque) {
-
-	console.log(id_cheque)
-	const incluirCheque = new bootstrap.Modal(document.getElementById("incluirChequeModal"))
-	incluirCheque.show()
-
-}
 async function editarCaixa(id) {
 
 	const dados = await fetch(`controller/caixaDiario.php?action=editarModal&id=const {id}`)
@@ -172,13 +152,11 @@ function soNumeros(evento) {
 		if (theEvent.preventDefault) theEvent.preventDefault();
 	}
 }
-
 $(window).on('load', function () {
 	$('#preloader .inner').fadeOut();
 	$('#preloader').delay(10).fadeOut('slow');
 	$('body').delay(10).css({ 'overflow': 'visible' });
 })
-
 async function verRequisicaoMaterial(id) {
 
 	const tabelaRM = document.querySelector(".tabelaRM")
@@ -212,7 +190,7 @@ async function alterarQuantideMateriais(iditem, qtde) {
 	const incluirItem= new bootstrap.Modal(document.getElementById("incluirItem"))
 	incluirItem.show()
 	document.getElementById("idPedidoIncluirItem").value = idPedidoIncluirItem
- }
+}
 async function salvarProdutoNoPedido(){
 
 	const idPedidoIncluirItem = document.getElementById("idPedidoIncluirItem").value 
@@ -223,8 +201,8 @@ async function salvarProdutoNoPedido(){
 	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=novoProdutoNoPedido&idProduto=${idProduto}&produto=${produto}&qtde=${qtde}&idPedido=${idPedidoIncluirItem}`)
 
 	verRequisicaoMaterial(idPedidoIncluirItem)
- }
- async function excluirOuAlterar(id){
+}
+async function excluirOuAlterar(id){
 
 	const idPedidoVisualizar = document.getElementById('idPedidoVisualizar').value
 	const excluirOuAlterarItem= new bootstrap.Modal(document.getElementById("excluirOuAlterarItem"))
@@ -240,8 +218,8 @@ async function salvarProdutoNoPedido(){
 	document.getElementById("qtdeOriginalAltExcItem").value = response['dados'].quant
 	document.getElementById("idProdutoAltExcItem").value = response['dados'].idProduto
 	
- }
- function excluirItemDoPedido(){
+}
+function excluirItemDoPedido(){
 
 	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
 	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
@@ -250,8 +228,8 @@ async function salvarProdutoNoPedido(){
 
 	verRequisicaoMaterial(idPedidoAltExc)
 
- }
- function alterarItemDoPedido(){
+}
+function alterarItemDoPedido(){
 
 	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
 	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
@@ -260,8 +238,8 @@ async function salvarProdutoNoPedido(){
 
 	verRequisicaoMaterial(idPedidoItemAltExc)
 
- }
- function confirmarEnvioItemDoPedido(){
+}
+function confirmarEnvioItemDoPedido(){
 
 	const idPedidoAltExc = document.getElementById('idPedidoAltExc').value
 	const idPedidoItemAltExc = document.getElementById('idPedidoItemAltExc').value
@@ -275,7 +253,7 @@ async function salvarProdutoNoPedido(){
 
 	verRequisicaoMaterial(idPedidoAltExc)
 
- }
+}
 function voltarVisualizarPedido(id){
 
 	verRequisicaoMaterial(id)
@@ -394,8 +372,12 @@ async function excluirClasse(){
 	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=excluirClasse&idClasse=${idClasse}`)
 	visualizarClasses()
 }
-async function visualizarCheque(id){
+function fecharModal(idCheque){
 
+	visualizarCheque(idCheque)
+}
+async function visualizarCheque(id){
+	
 	const tabelaClasses = document.querySelector(".tabelaCheques")
 	const visualizarChequeModal = new bootstrap.Modal(document.getElementById("visualizarChequeModal"))
 	const dados = await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action=visualizarCheque&id=${id}`)
@@ -403,43 +385,142 @@ async function visualizarCheque(id){
 	tabelaClasses.innerHTML = response
 	visualizarChequeModal.show()
 
-
 }
 function incluirObservacao() {
 
-	idCheque = document.getElementById("idCheque").value
+	idChequeObs = document.getElementById("idCheque").value
 	const incluirObs = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
 	incluirObs.show()
-	document.getElementById("idChequeObs").value = idCheque
+	document.getElementById("idChequeObs").value = idChequeObs
 }
 function gravarObservacao() {
 
-	idCheque = document.getElementById("idChequeObs").value
-	observacao = document.getElementById("observacao").value
-	enviarEmail = document.getElementById("enviarEmail").checked
-	action = document.getElementById("action").value
+	const idCheque = document.getElementById("idChequeObs").value
+	const observacao = document.getElementById("observacao").value
+	const enviarEmail = document.getElementById("enviarEmail").checked
+	const actionObs = document.getElementById("actionObs").value
 	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?
-	action=${action}&id=${idCheque}&obs=${observacao}&email=${enviarEmail}`)
+	action=${actionObs}&id=${idCheque}&obs=${observacao}&email=${enviarEmail}`)
 	
 	visualizarCheque(idCheque)
 
 }
+function cancelarCheque(){
 
- $(function(){
+	const idCheque = document.getElementById("idCheque").value
+	const cancelarCheque = new bootstrap.Modal(document.getElementById("cancelarChequeModal"))
+	cancelarCheque.show()
+	document.getElementById("idChequeCancelar").value = idCheque
 
-  $('.hidden').hide();
-  
-  $('select[name=produtos]').html($('div.produtos-f1').html());
-	
+}
+function salvarCancelamento(){
 
-	$('select[name=fabricante]').change(function(){ 
+	const idCheque = document.getElementById("idChequeCancelar").value
+	const motivo = document.getElementById("motivoCancelamento").value
+	const actionCancelar = document.getElementById("actionCancelar").value
 
-		var id = $('select[name=fabricante]').val();
+	fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?
+	action=${actionCancelar}&id=${idCheque}&motivo=${motivo}`)
 
-		$('select[name=produtos]').empty();
-		
-		$('select[name=produtos]').html($('div.produtos-f' + id).html());
+	visualizarCheque(idCheque)
 
+}
+function anexarArquivo() {
+
+	const idChequeAnexo = document.getElementById("idCheque").value
+	const incluirAnexoModal = new bootstrap.Modal(document.getElementById("incluirAnexoModal"))
+	incluirAnexoModal.show()
+	document.getElementById("idChequeAnexo").value = idChequeAnexo
+
+}
+async function salvarAnexo(){
+
+	const idCheque = document.getElementById("idChequeAnexo").value
+	const action = document.getElementById("actionAnexo").value
+	const descricao = document.getElementById("descricao").value
+	const arquivoAnexo = document.getElementById("arquivoAnexo").files[0]
+	let formData = new FormData(); 
+	formData.append("file", arquivoAnexo); 
+	formData.append("id", idCheque)
+	formData.append("descricao", descricao) 
+
+	const dados = await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action='+action, {method: "POST", body: formData});
+	const response = dados.text()
+	console.log(response)
+	console.log(dados)
+/*
+/*
+	const formData = new FormData();
+	formData.append("file", fileupload.files[0])
+	formData.append("id", idCheque)
+	formData.append("descricao", descricao)
+
+	await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/teste.php?action='+action, {
+	  method: "POST", 
+	  body: formData
+	}); 
+	*/
+	visualizarCheque(idCheque)	
+
+}
+function confirmarQuitacao() {
+
+	const idChequeQuitacao = document.getElementById("idCheque").value
+	const confirmQuitacao = new bootstrap.Modal(document.getElementById("comfirmarQuitacaoModal"))
+	confirmQuitacao.show()
+	document.getElementById("idChequeQuitacao").value = idChequeQuitacao
+
+}
+async function salvarConfirmarQuitacao() {
+
+	const idCheque = document.getElementById("idChequeQuitacao").value
+	const action = document.getElementById("actionQuitar").value
+	const arquivoQuitacao = document.getElementById("arquivoQuitacao").files[0]
+	let formData = new FormData(); 
+
+	formData.append("file", arquivoQuitacao)
+	formData.append("id", idCheque) 
+
+	await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action='+action, {
+		method: "POST", 
+		body: formData
 	});
+
+	/*const formData = new FormData();
+	formData.append("file", fileupload.files[0])
+	formData.append("id", idCheque)
+
+
+	await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action='+action, {
+		method: "POST", 
+		body: formData
+	}); */
+
+	visualizarCheque(idCheque)
+}
+function confirmarPfin() {
+
+	idChequePfin = document.getElementById("idCheque").value
+	const pendenciaFinanceira = new bootstrap.Modal(document.getElementById("pendenciaFinanceira"))
+	pendenciaFinanceira.show()
+	document.getElementById("idChequePfin").value = idChequePfin
+
+}
+async function salvarConfirmarPfin(){
+
+	const idCheque = document.getElementById("idChequePfin").value
+	const action = document.getElementById("actionPfin").value
+	const motivo = document.getElementById("motivo").value
+
+	let formData = new FormData();
+	formData.append("id", idCheque)
+	formData.append("motivo", motivo)
+	await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php?action='+action, {
+	  method: "POST", 
+	  body: formData
+	}); 
 	
-});
+	visualizarCheque(idCheque)	
+
+}
+

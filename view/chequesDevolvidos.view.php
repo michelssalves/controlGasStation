@@ -9,8 +9,8 @@ include('controller/chequesDevolvidos.php');
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
                 <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()">Incluir</button>
-                <button name='filtrar-cheques' class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" name='action' value='limpar' class='btn btn-danger btn-sm'>Limpar</button>
+                <button type="submit" name='action' value='filtrar-cheques-devolvidos'  class='btn btn-info btn-sm'>Filtrar</button>
+                <button type="submit" name='action' value='limpar-cheques-devolvidos' class='btn btn-danger btn-sm'>Limpar</button>
         </div>
     </div>
 </div>
@@ -58,18 +58,18 @@ include('controller/chequesDevolvidos.php');
                 </td>
                 <td colspan='2'>
                     <div class='input-group input-group mb-3'>
-                        <input type='text' name='cliente' id='cliente' placeholder='Cliente' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
+                        <input type='text' name='cliente' id='cliente' value="<?= $cliente ?>" placeholder='Cliente' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
                     </div>
                 </td colspan='2'>
 
                 <td>
                     <div class='input-group input-group mb-3'>
-                        <input type='text' name='id' id='id' placeholder='Id' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
+                        <input type='text' name='idChq' id='idChq' value="<?= $idChq ?>" placeholder='Id' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
                     </div>
                 </td>
                 <td>
                     <div class='input-group input-group mb-3'>
-                        <input type='text' ame='banco' id='banco' placeholder='Banco' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
+                        <input type='text' name='banco' id='banco' value="<?= $banco ?>" placeholder='Banco' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
                     </div>
                 </td>
                 <td><input class='form-control' type='date' name='data1' id='data1' value='<?= $data1 ?>'></td>
