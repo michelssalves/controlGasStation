@@ -14,6 +14,12 @@ if (!$p){  $p = 1; }
 
 $active[$p] = 'active';
 
+$regex = '/\/(.*?)\./';
+preg_match_all($regex, $pag[$p], $resultado);
+foreach($resultado[1] as $texto){}
+
+include "view/partials/head/$texto.head.php";
+
 include 'view/partials/sideMenu.php';
 
 include "$pag[$p]"; 

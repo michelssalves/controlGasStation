@@ -1,6 +1,9 @@
 <?php 
 include('model/ChequesDevolvidos.php'); 
-include('controller/chequesDevolvidos.php'); 
+include('controller/chequesDevolvidos.php');
+
+
+ 
 ?>
 <div class="container">
     <div class="row justify-content-md-center">
@@ -8,7 +11,7 @@ include('controller/chequesDevolvidos.php');
             <form method='POST' id='formulario-cheques'>
                 <input type='hidden' name='p' value='2'>
                 <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
-                <button type="button" class='btn btn-warning btn-sm' onclick="incluirCheque()">Incluir</button>
+                <button type="button"  onclick="incluirCheque()" class='btn btn-warning btn-sm'>Incluir</button>
                 <button type="submit" name='action' value='filtrar-cheques-devolvidos'  class='btn btn-info btn-sm'>Filtrar</button>
                 <button type="submit" name='action' value='limpar-cheques-devolvidos' class='btn btn-danger btn-sm'>Limpar</button>
         </div>
@@ -17,7 +20,7 @@ include('controller/chequesDevolvidos.php');
     <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
         <thead class="header-tabela">
             <tr>
-                <th colspan='10'>
+                <th colspan='11'>
                     <center>FILTROS</center>
                 </th>
             </tr>

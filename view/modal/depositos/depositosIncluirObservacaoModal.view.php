@@ -3,20 +3,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="fundo-cabecalho">
-                <h1>INCLUIR OBSERVAÇÃO</h1>
+                <h1>OBSERVAÇÃO</h1>
             </div>
             <div class="modal-body">
-                <form method="POST">
-                    <input type="hidden" name="p" value="3" required>
-                    <input type="hidden" id="id_observacao" name="id_reg" required>
-                    <div class="input-group input-group-sm mb-3">
+                <form id="obsDeposito" method="POST">
+                    <input type="hidden" id="actionaObs" name="actionaObs" value="observacaoDeposito">
+                    <input type="hidden" id="idDepositoObs" name="idDepositoObs" required>
+                    <div class="input-group input-group-sm mb-3 ">
                         <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
-                        <textarea required rows="4" cols="50" class="form-control" name="textoObs" placeholder="Inclua aqui as informações e clique em gravar"></textarea>
+                        <textarea name="observacao" id="observacao" cols="60" rows="10" style="white-space: pre;" placeholder="Escreva..." required></textarea>
                     </div>
+
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Fechar</button>
-                <button type="submit" value="observacaoDeposito" name="action" class="btn btn-outline-danger btn-sm">Gravar</button>
+                <button type="button" class="btn btn-success btn-sm" data-bs-dismiss="modal" onclick="salvarObservacao(this.form)">Gravar</button>
+                <button type="submit" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" onclick="fecharModal(this.form.idDepositoObs.value)">Fechar</button>
             </div>
             </form>
         </div>

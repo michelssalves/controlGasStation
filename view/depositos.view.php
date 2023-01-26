@@ -1,15 +1,14 @@
-<?php 
-include('model/Depositos.php'); 
-include('controller/depositos.php'); 
+<?php
+include('model/Depositos.php');
+include('controller/depositos.php');
 ?>
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col-md-auto mt-4">
             <form method='POST' id='formulario-caixa-diario'>
                 <input type='hidden' name='p' value='3'>
-                <input type='hidden' id='action' name='action' value='filtrar-caixa-diario'>
-                <button type="submit" name='action' value='filtrar' class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" class='btn btn-danger btn-sm'>Limpar</button>
+                <button type="submit" name='action' value='filtrar-depositos' class='btn btn-info btn-sm'>Filtrar</button>
+                <button type="submit" name='action' value='limpar-filtrar-depositos' class='btn btn-danger btn-sm'>Limpar</button>
         </div>
     </div>
 </div>
@@ -25,7 +24,7 @@ include('controller/depositos.php');
                 <div class="container">
                     <div class="row justify-content-md-center">
                         <div class="col-md-auto">
-                            <select required id='id_med' name='id_med' class='form-select-sm' aria-label='Default select example'>
+                            <select id='id_med' name='id_med' class='form-select-sm' aria-label='Default select example'>
                                 <option selected value="<?= ($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
                                 <?= $cboMed ?>
                                 <option="-1">PERIODO</option>
@@ -55,6 +54,7 @@ include('controller/depositos.php');
         <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
             <thead class="header-tabela">
                 <tr>
+                <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEM</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
