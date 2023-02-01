@@ -258,16 +258,7 @@ body {
 
 }
 
-.fundo-cabecalho h3 {
 
-  text-align: center;
-  font-family: 'Courier New', Courier, monospace;
-  font-weight: bold;
-  text-justify: auto;
-  color: #FFFFFF;
-  font-size: 50px;
-
-}
 
 .texto-de-advertencia {
 
@@ -335,6 +326,87 @@ body {
 .header-tabela {
   background-color: #009688;
   border-bottom: 3px solid black;
+}
+input[type="file"]{
+  opacity: 0;
+  width: 100%;
+  height: 200px;
+  position: absolute;
+  cursor: pointer;
+}
+.filezone {
+  outline: 2px dashed grey;
+  outline-offset: -10px;
+  background: #ccc;
+  color: dimgray;
+  padding: 10px 10px;
+  min-height: 200px;
+  position: relative;
+  cursor: pointer;
+}
+.filezone:hover {
+  background: #c0c0c0;
+}
+
+.filezone p {
+  font-size: 1.2em;
+  text-align: center;
+  padding: 50px 50px 50px 50px;
+}
+div.file-listing img{
+  max-width: 90%;
+}
+
+div.file-listing{
+  margin: auto;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+div.file-listing img{
+  height: 50px;
+}
+div.success-container{
+  text-align: center;
+  color: green;
+}
+
+div.remove-container{
+  text-align: right;
+}
+
+div.remove-container a{
+  color: grey;
+  cursor: pointer;
+  text-decoration: none
+
+}
+
+a.submit-button{
+  display: block;
+  margin: auto;
+  text-align: center;
+  width: 200px;
+  padding: 10px;
+  text-transform: uppercase;
+  background-color: #CCC;
+  color: white;
+  font-weight: bold;
+  margin-top: 20px;
+}
+#botaoFechar{
+
+  background-color: #EF4235;
+}
+
+.iconeSize{
+
+  width:32px;
+  height:32px;
+
 }
 
 @media (max-width: 1000px) {
@@ -408,7 +480,11 @@ body {
     visibility: visible;
   }
 }
+.esconderItem{
 
+  display: none;
+  
+}
 
 @media (min-width: 768px) {
   .app-content {

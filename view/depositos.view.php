@@ -46,6 +46,7 @@ include('controller/depositos.php');
                 </div>
             </td>
         </tr>
+        
     </table>
     </form>
 </div>

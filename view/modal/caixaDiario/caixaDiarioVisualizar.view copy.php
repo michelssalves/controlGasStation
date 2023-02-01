@@ -82,7 +82,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?= selectFechamentoCaixaAnexos($id_requisicao) ?>
+                  <?= selectCaixaDiarioAnexos($id_requisicao) ?>
                 </tbody>
               </table>
             </div>
@@ -99,7 +99,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?= selectFechamentoCaixaObservacao($id_requisicao) ?>
+                  <?= selectCaixaDiarioObs($id_requisicao) ?>
                 </tbody>
               </table>
             </div>
