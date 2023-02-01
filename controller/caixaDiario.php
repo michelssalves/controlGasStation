@@ -1,7 +1,9 @@
 <?php
 session_start();
-include '../model/CaixaDiario.php';
+include './controllerAux/validaLogin.php';
 include './controllerAux/functionsAuxiliar.php';
+include '../model/CaixaDiario.php';
+
 $action = $_REQUEST['action'];
 
 if ($action == 'findAll') {
@@ -57,3 +59,24 @@ if ($action == 'gravarAnexo') {
 
     echo json_encode($data);
 }
+if ($action == 'gravarObs') {
+
+    $id = $_REQUEST['id'];
+    $obs = limpaObservacao($_REQUEST['observacao']);
+
+    $model = new Model();
+
+    if($model->insertCaixaDiarioObs($id, $usuarioLogado, $obs)){
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+    
+
+    
