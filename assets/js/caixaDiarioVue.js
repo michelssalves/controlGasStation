@@ -199,12 +199,15 @@ var app = new Vue({
           )
           .then((res) => {
             if (res.data.res == "success") {
-              alert("Sucess", "Record update successfully", "default");
-              this.modalVisualizar(this.id_requisicao);
-            }
+				alert("Anexado com sucesso");
+				this.modalVisualizar(this.id_requisicao);
+            }else{
+				alert("Houve um erro ao anexar o arquivo");
+				this.modalVisualizar(this.id_requisicao);
+			}
           })
           .catch((err) => {
-            app.makeToast("Error", "Failed to update record", "default");
+            console.log(err)
           });
       }
     },

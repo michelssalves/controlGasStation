@@ -40,7 +40,7 @@ if ($action == 'gravarAnexo') {
         $model = new Model();
 
         if ($model->insertCaixaDiarioAnexo($id, $descricao, $extensao)) {
-
+           
             $temp = $_FILES['file']['tmp_name'];
             $localDeArmazenagem = "../assets/docs/fechamentoCaixa/";
             $tabela = "ccp_fechamentoCaixa_anexo";
@@ -48,13 +48,16 @@ if ($action == 'gravarAnexo') {
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
             $data = array('res' => 'success');
+
         }else {
 
             $data = array('res' => 'errorInsert');
+           
         }
     } else {
 
-        $data = array('res' => 'errorAnexo');
+       $data = array('res' => 'errorAnexo');
+       
     }
 
     echo json_encode($data);
