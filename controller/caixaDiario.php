@@ -80,6 +80,33 @@ if ($action == 'gravarObs') {
 
     echo json_encode($data);
 }
-    
+if ($action == 'alterarCaixa') {
+
+    $id = $_REQUEST['id'];
+    $dinheiro = $_REQUEST['id'];
+    $cheque = $_REQUEST['id'];
+    $brinks = $_REQUEST['id'];
+    $pix = $_REQUEST['id'];
+    $med = $_REQUEST['id'];
+    $data = $_REQUEST['id'];
+    $definitivo = $_REQUEST['id'];
+    $conciliacao = $_REQUEST['id'];
+    $fechamento = $_REQUEST['id'];
+    $observacao = $_REQUEST['id'];
+    $model = new Model();
+
+    //if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
+    if($id ){
+        
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+
 
     
