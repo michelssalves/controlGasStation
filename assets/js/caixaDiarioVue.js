@@ -1,5 +1,4 @@
 import Vue from "https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.esm.browser.js";
-//import Anexo from 'https://www.rdppetroleo.com.br/medwebnovo/Anexo.Vue'
 
 var app = new Vue({
   el: "#app",
@@ -21,9 +20,11 @@ var app = new Vue({
       files: [],
       descricaoAnexo: "",
       readonly: true,
+      disabled: true,
       title: true,
       aplicarIcon: true,
       observacao: "",
+      motivoCancelamento: "",
       iconSave:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
       iconEdit:
@@ -55,6 +56,28 @@ var app = new Vue({
   },
 
   methods: {
+    salvarAlteracoes(id) {
+      const formCxDiario = document.getElementById("formCaixaDiario");
+      const formData = new FormData(formCxDiario);
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=alterarCaixa",
+          formData
+        )
+        .then((res) => {
+          if (res.data.res == "success") {
+            alert("Alterado com sucesso");
+            this.modalVisualizar(this.id_requisicao);
+          } else {
+            alert("Houve um erro ao Alterar");
+            this.modalVisualizar(this.id_requisicao);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getCaixas() {
       axios({
         url: "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAll",
@@ -70,10 +93,35 @@ var app = new Vue({
           console.log(err);
         });
     },
-    modalVisualizar(id) {
-      const fd = new FormData();
-      fd.append("id", id);
+    modalCancelar(id) {
+      const modalCancelarCaixa = new bootstrap.Modal(
+        document.getElementById("modalCancelarCaixa")
+      );
+      modalCancelarCaixa.show();
+    },
+    salvarCancelamento() {
+      const formCancelamento = document.getElementById("formCancelamento");
+      const formData = new FormData(formCancelamento);
 
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=cancelarCaixa",
+          formData
+        )
+        .then((res) => {
+          if (res.data.res == "success") {
+            alert("Cancelado com sucesso");
+            this.modalVisualizar(this.id_requisicao);
+          } else {
+            alert("Houve um erro ao Cancelar");
+            this.modalVisualizar(this.id_requisicao);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    modalVisualizar(id) {
       axios({
         url: `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findById&id=${id}`,
         method: "POST",
@@ -81,10 +129,10 @@ var app = new Vue({
       })
         .then((res) => {
           this.id_requisicao = res.data.rows.id_requisicao;
-          this.dep_brinks = res.data.rows.dep_brinks;
-          this.dep_cheque = res.data.rows.dep_cheque;
-          this.dep_dinheiro = res.data.rows.dep_dinheiro;
-          this.pix = res.data.rows.pix;
+          this.dep_brinks = Number(res.data.rows.dep_brinks).toFixed(2);
+          this.dep_cheque = Number(res.data.rows.dep_cheque).toFixed(2);
+          this.dep_dinheiro = Number(res.data.rows.dep_dinheiro).toFixed(2);
+          this.pix = Number(res.data.rows.pix).toFixed(2);
           this.data_caixa = res.data.rows.data_caixa;
           this.loginName = res.data.rows.loginName;
           this.turnos_definitivo = res.data.rows.turnos_definitivo;
@@ -109,7 +157,6 @@ var app = new Vue({
       incluirObservacaoModal.show();
     },
     salvarObs() {
-   
       const formData = new FormData();
 
       formData.append("observacao", this.observacao);
@@ -121,8 +168,7 @@ var app = new Vue({
           formData
         )
         .then((res) => {
-
-			console.log(res.data.res)
+          console.log(res.data.res);
           if (res.data.res == "success") {
             alert("Registrado com sucesso");
             this.modalVisualizar(this.id_requisicao);
@@ -132,8 +178,8 @@ var app = new Vue({
           }
         })
         .catch((err) => {
-			console.log(err);
-		});
+          console.log(err);
+        });
     },
     modalAnexar() {
       const incluirAnexoModal = new bootstrap.Modal(
@@ -199,15 +245,15 @@ var app = new Vue({
           )
           .then((res) => {
             if (res.data.res == "success") {
-				alert("Anexado com sucesso");
-				this.modalVisualizar(this.id_requisicao);
-            }else{
-				alert("Houve um erro ao anexar o arquivo");
-				this.modalVisualizar(this.id_requisicao);
-			}
+              alert("Anexado com sucesso");
+              this.modalVisualizar(this.id_requisicao);
+            } else {
+              alert("Houve um erro ao anexar o arquivo");
+              this.modalVisualizar(this.id_requisicao);
+            }
           })
           .catch((err) => {
-            console.log(err)
+            console.log(err);
           });
       }
     },

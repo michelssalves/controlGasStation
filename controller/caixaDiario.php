@@ -39,13 +39,15 @@ if ($action == 'gravarAnexo') {
 
         $model = new Model();
 
-        if ($model->insertCaixaDiarioAnexo($id, $descricao, $extensao)) {
+       // if ($model->insertCaixaDiarioAnexo($id, $descricao, $extensao)) {
+
+        if($id){   
            
             $temp = $_FILES['file']['tmp_name'];
             $localDeArmazenagem = "../assets/docs/fechamentoCaixa/";
             $tabela = "ccp_fechamentoCaixa_anexo";
 
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+          //  uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
             $data = array('res' => 'success');
 
@@ -69,7 +71,9 @@ if ($action == 'gravarObs') {
 
     $model = new Model();
 
-    if($model->insertCaixaDiarioObs($id, $usuarioLogado, $obs)){
+    //if($model->insertCaixaDiarioObs($id, $usuarioLogado, $obs)){
+
+    if($id){    
 
         $data = array('res' => 'success');
 
@@ -82,21 +86,21 @@ if ($action == 'gravarObs') {
 }
 if ($action == 'alterarCaixa') {
 
-    $id = $_REQUEST['id'];
-    $dinheiro = $_REQUEST['id'];
-    $cheque = $_REQUEST['id'];
-    $brinks = $_REQUEST['id'];
-    $pix = $_REQUEST['id'];
-    $med = $_REQUEST['id'];
-    $data = $_REQUEST['id'];
-    $definitivo = $_REQUEST['id'];
-    $conciliacao = $_REQUEST['id'];
-    $fechamento = $_REQUEST['id'];
-    $observacao = $_REQUEST['id'];
+    $id = $_REQUEST['id_requisicao'];
+    $dinheiro = $_REQUEST['dinheiro'];
+    $cheque = $_REQUEST['cheque'];
+    $brinks = $_REQUEST['brinks'];
+    $pix = $_REQUEST['pix'];
+    $med = $_REQUEST['med'];
+    $data = $_REQUEST['data'];
+    $definitivo = $_REQUEST['definitivo'];
+    $conciliacao = $_REQUEST['conciliacao'];
+    $fechamento = $_REQUEST['fechamento'];
+    $observacao = $_REQUEST['observacao'];
     $model = new Model();
 
     //if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
-    if($id ){
+    if($id){
         
         $data = array('res' => 'success');
 
@@ -107,6 +111,78 @@ if ($action == 'alterarCaixa') {
 
     echo json_encode($data);
 }
+if($action == 'cancelarCaixa'){
 
+    $id = $_REQUEST['id_requisicao'];
+    $motivoCancelamento = limpaObservacao($_REQUEST['motivoCancelamento']);
+    $observacao = 'ALTEROU O STATUS PARA CANCELADO';
+    $status = 'CANCELADO';
+  
+    $model = new Model();
+
+    if($id){
+        
+       // $model->updateCancelarCaixa($id, $status, $observacao);
+
+       // $model->insertCaixaDiarioObs($id, $usuarioLogado, $motivoCancelamento);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+
+}
+if($action == 'abrirCaixa'){
+
+    $status = 'ABERTO';
+    $id = $_REQUEST['id_requisicao'];
+    $observacao = 'ALTEROU O STATUS PARA ABERTO';
+  
+    $model = new Model();
+
+    if($id){
+        
+       // $model->updateCancelarCaixa($id, $status, $observacao);
+
+       // $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+    
+}
+if($action == 'fecharCaixa'){
+
+    $id = $_REQUEST['id_requisicao'];
+    $observacao = 'ALTEROU O STATUS PARA FECHADO';
+    $status = 'FECHADO';
+  
+    $model = new Model();
+
+    if($id){
+        
+       // $model->updateCancelarCaixa($id, $status, $observacao);
+
+       // $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+    
+}
 
     

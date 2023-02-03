@@ -116,49 +116,60 @@ include('controller/caixaDiario.php');
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header fundo-cabecalho">
+                    <div class="d-flex flex-row">
                     <div class="d-none d-md-block">
                         <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ title ? 'Visualizando' : 'Editando' }}</h2>
                     </div>
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
+                        
+                    </div>
                     <div class="d-flex flex-row">
-                        <div class="p-1"><button type="button" title="Fechar Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconCxFechado"></button></div>
-                        <div class="p-1"><button type="button" title="Abrir Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconCx"></button></div>
-                        <div class="p-1"><button type="button" :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm"><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
+                        <div v-if="status == 'ABERTO'" class="p-1"><button type="button" title="Fechar Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconCxFechado"></button></div>
+                        <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Abrir Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconCx"></button></div>
+                        <div class="p-1"><button type="button" @click="aplicarIcon ? salvarAlteracoes(id_requisicao) : '' ":title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm"><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title"  :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
                         <div class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
                         <div class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
-                        <div class="p-1"><button type="button" title="Cancelar Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconExc"></button></div>
+                        <div class="p-1"><button type="button" title="Cancelar Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
                         <div class="p-1"><button type="button" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                     </div>
                 </div>
                 <div class="modal-body">
-                    <form id="visualizarCaixaDiario" method="POST">
+                    <form id="formCaixaDiario" method="POST">
                         <div class="input-group input-group-sm mb-3">
-                            <input id="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="id_requisicao" name="id_requisicao"  type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Dinheiro:</span>
-                            <input :readonly="readonly" id="depDinheiroVisualizar" type="text" v-model="dep_dinheiro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="dinheiro" name="dinheiro"  type="text" v-model="dep_dinheiro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Cheque:</span>
-                            <input :readonly="readonly" id="depChequeVisualizar" type="text" v-model="dep_cheque" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="cheque" name="cheque"  type="text" v-model="dep_cheque" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Brinks:</span>
-                            <input :readonly="readonly" id="depBrinksVisualizar" type="text" v-model="dep_brinks" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="brinks" name="brinks"  type="text" v-model="dep_brinks" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Pix:</span>
-                            <input :readonly="readonly" id="pixVisualizar" type="text" v-model="pix" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="pix" name="pix"  type="text" v-model="pix" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class=" input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">MED:</span>
-                            <input :readonly="readonly" id="turnosDefinitivoVisualizar" type="text" v-model="loginName" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="med" name="med" type="text" v-model="loginName" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Data</span>
-                            <input :readonly="readonly" id="dataCaixaVisualizar" type="date" v-model="data_caixa " class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="dataCaixa" name="dataCaixa"  type="date" v-model="data_caixa " class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Definitivo:</span>
-                            <input :readonly="readonly" id="turnosDefinitivoVisualizar" type="text" v-model="turnos_definitivo" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="definitivo" name="definitivo"  type="text" v-model="turnos_definitivo" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Conciliação:</span>
-                            <input :readonly="readonly" id="concVisualizar" name="conc" type="text" v-model="conc" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <select :disabled="disabled" v-model="conc" id="conc" name="conc" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <option>SIM</option>
+                                <option>NÃO</option>
+                            </select>
                             <span class="input-group-text" id="inputGroup-sizing">Fechamento:</span>
-                            <input :readonly="readonly" id="caixaVisualizar" name="caixa" type="text" v-model="caixa" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <select :disabled="disabled" v-model="caixa" id="caixa" name="caixa" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                <option>SIM</option>
+                                <option>NÃO</option>
+                            </select>
+                            
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
-                            <textarea :readonly="readonly" id="obsVisualizar" cols="60" rows="7" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
+                            <textarea :readonly="readonly" id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
                         </div>
                 </div>
                 <div class="table-responsive">
@@ -188,7 +199,7 @@ include('controller/caixaDiario.php');
                 <div class="modal-header fundo-cabecalho">
                     <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
                     <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                        <button type="button" title="Fechar" @click="modalEditar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                        <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
                     </div>
                 </div>
                 <div class="modal-body">
@@ -253,7 +264,7 @@ include('controller/caixaDiario.php');
                 <div class="modal-header fundo-cabecalho">
                     <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Observação</h2>
                     <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                        <button type="button" title="Fechar" @click="modalEditar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                        <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
                     </div>
                 </div>
                 <div class="modal-body">
@@ -275,3 +286,32 @@ include('controller/caixaDiario.php');
         </div>
     </div>
     <!--/MODAL INCLUIR OBSERVAÇÃO-->
+        <!--MODAL CANCELAR-->
+        <div class="modal fade" id="modalCancelarCaixa" tabindex="-1" aria-labelledby="cancelarCaixaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header fundo-cabecalho">
+                    <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Cancelamento</h2>
+                    <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                        <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="formCancelamento" method="POST">
+                        <input id="id_requisicao" name="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+
+                        <p class="texto-de-advertencia">REGISTRE AQUI O MOTIVO DO CANCELAMENTO</p>
+
+                        <div class="input-group input-group-sm mb-3 ">
+                            <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
+                            <textarea name="motivoCancelamento" id="motivoCancelamento" v-model="motivoCancelamento" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" v-show="motivoCancelamento.length > 10" @click="salvarCancelamento()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  <!--MODAL CANCELAR-->
