@@ -1,15 +1,20 @@
-import Vue from "https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.esm.browser.js";
 
-var app = new Vue({
+
+import Vue from "https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.esm.browser.js";
+const app = new Vue({
   el: "#app",
   data() {
     return {
+      meds: [],
       caixas: [],
+      anexosCaixa:[],
+      eventosCaixa:[],
       id_requisicao: "",
       dep_brinks: "",
       dep_cheque: "",
       dep_dinheiro: "",
       pix: "",
+      idMed: "",
       loginName: "",
       data_caixa: "",
       turnos_definitivo: "",
@@ -25,6 +30,10 @@ var app = new Vue({
       aplicarIcon: true,
       observacao: "",
       motivoCancelamento: "",
+      filtroData1: '2017-01-08',
+      filtroData2: new Date().toLocaleDateString('en-CA'),
+      caixaPix:'',
+  
       iconSave:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
       iconEdit:
@@ -48,14 +57,19 @@ var app = new Vue({
       return value.toUpperCase();
     },
     dataFormatada: function (value) {
+
       return value.split("-").reverse().join("/");
+
     },
     duasCasasDecimais: function (value) {
       return Number(value).toFixed(2);
     },
   },
-
   methods: {
+    newTab(id){
+
+        window.open(`https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=fechamentoCaixa`,"", "width=820, height=820");
+    },
     salvarAlteracoes(id) {
       const formCxDiario = document.getElementById("formCaixaDiario");
       const formData = new FormData(formCxDiario);
@@ -79,15 +93,37 @@ var app = new Vue({
         });
     },
     getCaixas() {
+    
+      const filtroCaixaDiario = document.getElementById('filtroCaixaDiario')
+      const formData = new FormData(filtroCaixaDiario)
+
+        axios
+        .post(
+
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAll`,
+          formData
+    
+        )
+        .then((res) => {
+    
+           this.caixas = res.data.rows;
+           console.log(this.caixas)
+           
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getAllMeds() {
       axios({
-        url: "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAll",
+        url: "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAllMeds",
         method: "POST",
         responseEncoding: "iso-8859-1",
       })
         .then((res) => {
-          ///console.log(res.data);
-          this.caixas = res.data.rows;
-          //console.log(this.records);
+          
+          this.meds = res.data.rows;
+        
         })
         .catch((err) => {
           console.log(err);
@@ -106,7 +142,7 @@ var app = new Vue({
       axios
         .post(
           "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=cancelarCaixa",
-          formData
+          formData,
         )
         .then((res) => {
           if (res.data.res == "success") {
@@ -122,12 +158,14 @@ var app = new Vue({
         });
     },
     modalVisualizar(id) {
+    
       axios({
         url: `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findById&id=${id}`,
         method: "POST",
         responseEncoding: "iso-8859-1",
       })
         .then((res) => {
+  
           this.id_requisicao = res.data.rows.id_requisicao;
           this.dep_brinks = Number(res.data.rows.dep_brinks).toFixed(2);
           this.dep_cheque = Number(res.data.rows.dep_cheque).toFixed(2);
@@ -140,6 +178,10 @@ var app = new Vue({
           this.caixa = res.data.rows.caixa;
           this.obs = res.data.rows.obs;
           this.status = res.data.rows.status;
+          this.idMed = res.data.rows.id_med;
+
+          this.modalTabelaAnexos(id)
+          this.modalEventos(id)
 
           const visualizarCaixaDiario = new bootstrap.Modal(
             document.getElementById("visualizarCaixaDiario")
@@ -149,6 +191,38 @@ var app = new Vue({
         .catch((err) => {
           console.log(err);
         });
+    },
+    modalTabelaAnexos(id){
+
+      axios({
+        url: `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAnexosById&id=${id}`,
+        method: "POST",
+        responseEncoding: "iso-8859-1",
+      })
+        .then((res) => {
+          console.log(res.data.rows)
+          this.anexosCaixa = res.data.rows;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },
+    modalEventos(id){
+
+      axios({
+        url: `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findEventosById&id=${id}`,
+        method: "POST",
+        responseEncoding: "iso-8859-1",
+      })
+        .then((res) => {
+          console.log(res.data.rows)
+          this.eventosCaixa = res.data.rows;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
     modalObservacao() {
       const incluirObservacaoModal = new bootstrap.Modal(
@@ -258,8 +332,28 @@ var app = new Vue({
       }
     },
   },
-  computed: {},
+  computed: {
+    total: function(){
+
+      return this.caixa.pix  +  this.caixa.dep_brinks 
+     
+    }
+    /*aqui consigo manipular os valres do data()
+    multiplicar: function(){
+
+      return this.pix * 100
+    }
+    now: function () {
+      return Date.now()
+    },
+    fullName: function () {
+      return this.firstName + ' ' + this.lastName
+    }*/
+  },
   mounted: function () {
+
     this.getCaixas();
+
+    this.getAllMeds();
   },
 });
