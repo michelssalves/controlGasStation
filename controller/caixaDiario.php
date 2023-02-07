@@ -125,10 +125,10 @@ if ($action == 'alterarCaixa') {
     $conciliacao = $_REQUEST['conciliacao'];
     $fechamento = $_REQUEST['fechamento'];
     $observacao = $_REQUEST['observacao'];
-    $model = new Model();
+   // $model = new Model();
 
-    if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
-
+   // if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
+    if($id){
         $data = array('res' => 'success');
 
     }else {
@@ -163,21 +163,21 @@ if($action == 'cancelarCaixa'){
 }
 if($action == 'abrirCaixa'){
 
+    $id = $_REQUEST['id'];
     $status = 'ABERTO';
-    $id = $_REQUEST['id_requisicao'];
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
   
-    $model = new Model();
+//    $model = new Model();
 
-    if($model->updateCancelarCaixa($id, $status, $observacao)){
-        
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+   // if($model->updateCancelarCaixa($id, $status, $observacao)){
+        if($id){
+      //  $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
 
     }else {
 
-        $data = array('res' => 'errorObs');
+        $data = array('res' => 'error');
     }
 
     echo json_encode($data);
@@ -188,23 +188,27 @@ if($action == 'fecharCaixa'){
     $id = $_REQUEST['id_requisicao'];
     $observacao = 'ALTEROU O STATUS PARA FECHADO';
     $status = 'FECHADO';
+    $conc = $_REQUEST['conc'];
+    $caixa = $_REQUEST['caixa'];
   
-    $model = new Model();
-
-    if($model->updateCancelarCaixa($id, $status, $observacao)){
+    //$model = new Model();
+   
+    if($conc == 'SIM' && $caixa == 'SIM'){
         
-
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+       // $model->updateCancelarCaixa($id, $status, $observacao);
+        //$model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
-
+    
+    
     }else {
 
-        $data = array('res' => 'errorObs');
+        $data = array('res' => 'error');
+        
     }
 
     echo json_encode($data);
-    
+   
 }
 if($action == 'findAnexosById'){
 
