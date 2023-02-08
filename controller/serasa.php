@@ -1,193 +1,326 @@
 <?php
+session_start();
+include './controllerAux/validaLogin.php';
+include './controllerAux/functionsAuxiliar.php';
+include '../model/Serasa.php';
+
 $action = $_REQUEST['action'];
 
-if ($action == 'solicitarPfin') {
+if ($action == 'findAllMeds'){
 
-    $descricaoAnexo = "FATURAS";
-    $status = "NOVO";
-    $tipoDoc = $_REQUEST['tipoDoc'];
-    $cnpj = $_REQUEST['cnpj'];
-    $valor = virgulaParaPonto($_REQUEST['valor']);
-    $valorJuros = $valor * 1.03;
-    $id_med = $_REQUEST['id_med'];
-    $nomeCliente = limpaObservacao($_REQUEST['nomeCliente']);
-    $endereco = $_REQUEST['endereco'];
-    $estado = $_REQUEST['estado'];
-    $cidade = $_REQUEST['cidade'];
-    $bairro = $_REQUEST['bairro'];
-    $numero = $_REQUEST['numero'];
-    $cep = $_REQUEST['cep'];
-    $obs = limpaObservacao($_REQUEST['obs']);
-    $dataEmissao = ($_REQUEST['dataEmissao'] <> '' ? $_REQUEST['dataEmissao'] : '2000-01-01');
-    $dataVencimento = ($_REQUEST['dataVencimento'] <> '' ? $_REQUEST['dataVencimento'] : '2000-01-01');
-    $dataNascimento = ($_REQUEST['dataNascimento'] <> '' ? $_REQUEST['dataNascimento'] : '2000-01-01');
-    $matriz = '1';
+    $model = new Model();
 
-    if ($_SESSION['login'] == "SUPORTE") {
+    $rows = $model->selectAllMeds();
 
-        insertSerasaGerencia($cnpj, $tipoDoc, $nomeCliente, $status, $valor, $obs, $valorJuros, $dataEmissao, $dataVencimento, $id_med, $dataNascimento, $endereco, $matriz, $estado, $cidade, $bairro, $numero, $cep);
-    } else {
+    $data = array('rows' => utf8ize($rows));
 
-        insertSerasaOperacional($cnpj, $tipoDoc, $nomeCliente, $status, $valor, $obs, $valorJuros, $dataEmissao, $dataVencimento, $id_med, $dataNascimento, $endereco, $estado, $cidade, $bairro, $numero, $cep);
-    }
-
-    $idFechamentoCaixaAnexo = 1500;
-    for ($i = 1; $i <= 5; $i++) {
-
-        if ($_FILES["arquivo$i"]['name'] <> '') {
-
-            $numDoc = $_REQUEST["numDoc$i"];
-
-            $tabela = 'ccp_serasa';
-            $campo = 'id_requisicao';
-            $id_requisicao =  selectUltimoId($tabela, $campo);
-
-            $extensao = strtolower(end(explode('.', $_FILES["arquivo$i"]['name'])));
-
-            insertSerasaAnexo($id_requisicao, $numDoc, $descricaoAnexo, $extensao);
-
-            $temp = $_FILES["arquivo$i"]['tmp_name'];
-            $localDeArmazenagem = "assets/docs/serasa/";
-            $tabela = 'ccp_serasa_anexo';
-
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-        }
-    }
-    $evento = "SOLICITAÇÃO DE PEFIN";
-
-    insertSerasaEventos($id_requisicao, $evento, $usuarioLogado);
+    echo json_encode($data);
 }
-if ($action == 'gravarObservacao') {
+if ($action == 'findAll'){
 
-    $id_requisicao = $_REQUEST['id_requisicao'];
-    $observacao = limpaObservacao($_REQUEST['observacao']);
-
-    insertSerasaObs($id_requisicao, $usuarioLogado, $observacao);
-}
-if ($action == 'gravarAnexo') {
-
-    $id_requisicao = $_REQUEST['id_requisicao'];
-    $numDoc = $_REQUEST['numDoc'];
-    $descricaoAnexo = "ANEXO";
-    $temp = $_FILES['file']['tmp_name'];
-    $localDeArmazenagem = "assets/docs/serasa/";
-    $tabela = 'ccp_serasa_anexo';
-    $evento = "ADICIONOU UM ANEXO";
-
-    insertSerasaEventos($id_requisicao, $evento, $usuarioLogado);
-
-    if ($_FILES['file']['name'] <> '') {
-
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-
-        insertSerasaAnexo($id_requisicao, $numDoc, $descricaoAnexo, $extensao);
-
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-    }
-}
-if ($action == 'alterarStatus') {
-
-    if ($_FILES['file']['name'] <> '') {
-
-        if ($_REQUEST['statusAcao'] == '1') {
-
-            $numDoc = 'EXCLUSÃO DO SPC';
-            $status = 'PAGO';
-            $descricaoAnexo = "COMPROVANTE DE PAGAMENTO";
-            $evento = "ALTEROU O STATUS PARA PAGO";
-        }
-        if ($_REQUEST['statusAcao'] == '2') {
-
-            $numDoc = 'INCLUSÃO NO SPC';
-            $status = 'PEFIN';
-            $descricaoAnexo = "DOC. BAIXA";
-            $evento = "ALTEROU O STATUS PARA PEFIN";
-        }
-
-        $id_requisicao = $_REQUEST['id_requisicao'];
-
-        if ($_REQUEST['statusAcao'] == '3') {
-
-            $numDoc = 'BAIXADO';
-            $status = 'BAIXADO';
-            $descricaoAnexo = "DOC. BAIXA";
-            $evento = "ALTEROU O STATUS PARA BAIXADO";
-        }
-        if ($_REQUEST['statusAcao'] == '4') {
-
-            $numDoc = 'CANCELADO';
-            $status = 'CANCELADO';
-            $descricaoAnexo = "DOC. CANCELAMENTO";
-            $evento = "CANCELOU A REQUISIÇÃO";
-        }
-
-        updateSerasa($status, $id_requisicao);
-
-        insertSerasaEventos($id_requisicao, $evento, $usuarioLogado);
-
-        $temp = $_FILES['file']['tmp_name'];
-        $localDeArmazenagem = "assets/docs/serasa/";
-        $tabela = 'ccp_serasa_anexo';
-
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-
-        insertSerasaAnexo($id_requisicao, $numDoc, $descricaoAnexo, $extensao);
-
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem, $idFechamentoCaixaAnexo);
-    }
-}
-if ($action == 'filtrar-serasa') {
-
-    $page =  $_REQUEST['page'];
-    $statusPefin =  $_REQUEST['statusPefin'];
-    $statusNovo =  $_REQUEST['statusNovo'];
-    $statusPago =  $_REQUEST['statusPago'];
-    $statusBaixado =  $_REQUEST['statusBaixado'];
-    $statusCancelado =  $_REQUEST['statusCancelado'];
-    $med =  $_REQUEST['med'];
+    $status1 = $_REQUEST['statusNovo'];
+    $status2 = $_REQUEST['statusPefin'];
+    $status3 = $_REQUEST['statusBaixado'];
+    $status4 = $_REQUEST['statusCancelado'];
+    $med = $_REQUEST['idMed'];
     $matriz =  $_REQUEST['matriz'];
     $tipo =  $_REQUEST['tipo'];
     $cliente =  $_REQUEST['nomeCliente'];
+    $paginaAtual = $_REQUEST['paginaAtual'];
+    $resultadoPorPagina = 50;
 
-    if ($matriz == 'Matriz') {
+    $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
+
+    if ($matriz == 1) {
         $Fmatriz = " AND matriz = 1 ";
-    }
-    if ($matriz == 'Meds') {
+    }else{
         $Fmatriz = " AND matriz = 0 ";
     }
     if (isset($med) && $med <> '0') {
         $Fmed = "AND id_med = '$med' ";
     }
-    if (isset($tipo) && $tipo <> 'Tipo') {
+    if (isset($tipo) && $tipo <> '0') {
         $Ftipo = " AND tipo LIKE '%$tipo%' ";
     }
     if (isset($cliente) && $cliente <> '') {
         $Fcliente = " AND nomeCliente LIKE '%$cliente%' ";
     }
-    if ($statusPefin == '' && $statusNovo == '' && $statusPago == '' && $statusBaixado == '' && $statusCancelado == '') {
+    if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '') {
         $Fstatus =  "AND status = 'PEFIN'";
     } else {
-        $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusPefin . "','" . $statusPago . "','" . $statusBaixado . "','" . $statusCancelado . "')";
+        $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "')";
     }
 
-    $txtTable = filtrarSerasa($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $page);
+    $model = new Model();
+
+    $rows = $model->findAll($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $start, $resultadoPorPagina);
+
+    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+
+    echo json_encode($data);
 }
-if ($action <> 'filtrar-serasa') {
+if ($action == 'findById'){
 
-    $page =  $_REQUEST['page'];
+    $id = $_REQUEST['id'];
 
-    if ($statusPefin == '' && $statusNovo == '' && $statusPago == '' && $statusBaixado == '' && $statusCancelado == '') {
-        $Fstatus =  "AND status = 'PEFIN'";
-    } else {
-        $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusPefin . "','" . $statusPago . "','" . $statusBaixado . "','" . $statusCancelado . "')";
+    $model = new Model();
+
+    $rows = $model->findById($id);
+
+    $data = array('rows' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'gravarAnexo'){
+
+    $id = $_REQUEST['id'];
+    $descricao = limpaObservacao($_REQUEST['descricao']);
+    $descricaoAnexo = "ANEXO";
+    $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "../assets/docs/serasa/";
+    $tabela = 'ccp_serasa_anexo';
+    $evento = "ADICIONOU UM ANEXO";
+
+    if ($_FILES['file']['name'] <> ''){
+
+        $model = new Model();
+
+        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+
+        $data = array('res' => 'success');
+
+        }else {
+
+            $data = array('res' => 'error');
+           
+        }
+    }else{
+
+       $data = array('res' => 'error');
+       
     }
 
-    $txtTable = filtrarSerasa($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $page);
+    echo json_encode($data);
 }
+if ($action == 'gravarObs'){
 
-include 'view/modal/serasa/serasaAcoesRequisicao.view.php';
-include 'view/modal/serasa/serasaCriarPfin.view.php';
-include 'view/modal/serasa/serasaIncluirObservacao.view.php';
-include 'view/modal/serasa/serasaIncluirAnexo.view.php';
+    $id = $_REQUEST['id'];
+    $observacao = limpaObservacao($_REQUEST['observacao']);
 
+    $model = new Model();
 
+    if($model->insertSerasaObs($id, $usuarioLogado, $observacao)){
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+}
+if($action == 'findAnexosById'){
+
+    $id = $_REQUEST['id'];
+
+    $model = new Model();
+
+    $rows = $model->selectSerasaAnexos($id);
+
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
+}
+if($action == 'findEventosById'){
+
+    $id = $_REQUEST['id'];
+
+    $model = new Model();
+
+    $rows = $model->selectSerasaEventos($id);
+    
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
+}
+if($action == 'findObservacoesById'){
+
+    $id = $_REQUEST['id'];
+
+    $model = new Model();
+
+    $rows = $model->selectSerasaObservacoes($id);
+    
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
+}
+/*if ($action == 'alterarCaixa') {
+
+    $id = $_REQUEST['id_requisicao'];
+    $dinheiro = $_REQUEST['dinheiro'];
+    $cheque = $_REQUEST['cheque'];
+    $brinks = $_REQUEST['brinks'];
+    $pix = $_REQUEST['pix'];
+    $med = $_REQUEST['med'];
+    $data = $_REQUEST['data'];
+    $definitivo = $_REQUEST['definitivo'];
+    $conciliacao = $_REQUEST['conciliacao'];
+    $fechamento = $_REQUEST['fechamento'];
+    $observacao = $_REQUEST['observacao'];
+   // $model = new Model();
+
+   // if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
+    if($id){
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+if($action == 'cancelarCaixa'){
+
+    $id = $_REQUEST['id_requisicao'];
+    $motivoCancelamento = limpaObservacao($_REQUEST['motivoCancelamento']);
+    $observacao = 'ALTEROU O STATUS PARA CANCELADO';
+    $status = 'CANCELADO';
+  
+    $model = new Model();
+
+    if($model->updateCancelarCaixa($id, $status, $observacao)){
+        
+        $model->insertCaixaDiarioObs($id, $usuarioLogado, $motivoCancelamento);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+
+}
+if($action == 'abrirCaixa'){
+
+    $id = $_REQUEST['id'];
+    $status = 'ABERTO';
+    $observacao = 'ALTEROU O STATUS PARA ABERTO';
+  
+//    $model = new Model();
+
+   // if($model->updateCancelarCaixa($id, $status, $observacao)){
+        if($id){
+      //  $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
+}
+if($action == 'fecharCaixa'){
+
+    $id = $_REQUEST['id_requisicao'];
+    $observacao = 'ALTEROU O STATUS PARA FECHADO';
+    $status = 'FECHADO';
+    $conc = $_REQUEST['conc'];
+    $caixa = $_REQUEST['caixa'];
+  
+    //$model = new Model();
+   
+    if($conc == 'SIM' && $caixa == 'SIM'){
+        
+       // $model->updateCancelarCaixa($id, $status, $observacao);
+        //$model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+
+        $data = array('res' => 'success');
+    
+    
+    }else {
+
+        $data = array('res' => 'error');
+        
+    }
+
+    echo json_encode($data);
+   
+}
+if($action == 'findAnexosById'){
+
+    $id = $_REQUEST['id'];
+
+    $model = new Model();
+
+    $rows = $model->selectCaixaDiarioAnexos($id);
+
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'errorAnexos');
+    }
+
+    echo json_encode($data);
+    
+}
+if($action == 'findEventosById'){
+
+    $id = $_REQUEST['id'];
+
+    $model = new Model();
+
+    $rows = $model->selectCaixaDiarioEventos($id);
+    
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'errorAnexos');
+    }
+
+    echo json_encode($data);
+    
+}

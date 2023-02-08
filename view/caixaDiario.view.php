@@ -206,7 +206,6 @@ include('controller/caixaDiario.php');
             </form>
         </div>
     </div>
-</div>
 <!--/MODAL VISUALIZAR CX DIÁRIO-->
 <!--MODAL INCLUIR ANEXO OK-->
 <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
@@ -291,11 +290,12 @@ include('controller/caixaDiario.php');
 
                     <div class="input-group input-group-sm mb-3 ">
                         <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
-                        <textarea name="observacao" id="observacao" v-model="observacao" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
+                        <textarea name="observacao" id="observacao" v-model="descricaoObservacao" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
                     </div>
+                    {{descricaoObservacao}}
             </div>
             <div class="modal-footer">
-                <button data-bs-dismiss="modal" v-show="observacao.length > 10" @click="salvarObs()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
+                <button data-bs-dismiss="modal" v-show="descricaoObservacao.length > 10" @click="salvarObs()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
             </div>
             </form>
         </div>
