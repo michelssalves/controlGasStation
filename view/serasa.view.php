@@ -70,7 +70,7 @@ include('controller/serasa.php');
                 </tr>
             </thead>
             <tbody>
-                <tr @click="visualizarPendencia(pfin.id_requisicao)" v-for="(pfin, i) in pendencias" style="cursor:pointer">
+                <tr @click="visualizarSerasa(pfin.id_requisicao)" v-for="(pfin, i) in pendencias" style="cursor:pointer">
                     <td>{{pfin.id_requisicao}}</td>
                     <td>{{pfin.id}}</td>
                     <td>{{pfin.loginName}}</td>
@@ -117,15 +117,20 @@ include('controller/serasa.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
-                            <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" :data-bs-dismiss="readonly ? modal : ''" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
-                            <div v-if="status == 'PEFIN'" class="p-1"><button type="button" title="Quitar" class="btn btn-light btn-sm" :disabled="disabled" :data-bs-dismiss="readonly ? modal : ''" @click="modalQuitar(id_requisicao)"><img class="iconeSize" :src="iconQuitar"></button></div>
-                            <div class="p-1"><button type="button" :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm" @click="aplicarIcon ? salvarAlteracoes(id_requisicao, 'alterarCaixa') : '' "><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
-                            <div class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
-                            <div class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
-                            <div class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
+                            <div v-if="status == 'CANCELADO' || status == 'BAIXADO'" class="p-1"><button type="button" title="PFIN" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
+                            <div class="d-flex flex-row" v-if="status != 'BAIXADO'">
+                                <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" :data-bs-dismiss="readonly ? modal : ''" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
+                                <div v-if="status == 'PEFIN'" class="p-1"><button type="button" title="Quitar" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalBaixado(id_requisicao)"><img class="iconeSize" :src="iconQuitar"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm" @click="aplicarIcon ? salvarAlteracoes(id_requisicao, 'alterarCaixa') : '' "><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
+                                
+                            </div>
                             <div class="p-1"><button type="submit" title="Fechar" id="botaoFechar" class="btn btn-sm" :disabled="!disabled"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
+                  
                     <div class="d-flex justify-content-center mt-1">
                         <div v-show="message.length > 0" class="bg-success rounded-circle text-dark fs-6 p-3">
                             <h2>{{message}}</h2>
@@ -234,8 +239,8 @@ include('controller/serasa.php');
                             </div>
                         </div>
                     </div>
-                        <div class="modal-footer">
-                        </div>
+                    <div class="modal-footer">
+                    </div>
                 </div>
             </div>
         </form>
@@ -249,7 +254,7 @@ include('controller/serasa.php');
                 <div class="modal-header fundo-cabecalho">
                     <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
                     <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                        <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                        <button type="button" title="Fechar" @click="visualizarSerasa(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
                     </div>
                 </div>
                 <div class="modal-body">
@@ -314,7 +319,7 @@ include('controller/serasa.php');
                 <div class="modal-header fundo-cabecalho">
                     <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Observação</h2>
                     <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                        <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                        <button type="button" title="Fechar" @click="visualizarSerasa(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
                     </div>
                 </div>
                 <div class="modal-body">
@@ -336,7 +341,82 @@ include('controller/serasa.php');
         </div>
     </div>
     <!--/MODAL INCLUIR OBSERVAÇÃO-->
+    <!--MODAL CANCELAR-->
+    <div class="modal fade" id="modalCancelarSerasa" tabindex="-1" aria-labelledby="cancelarSerasaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header fundo-cabecalho">
+                    <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Cancelamento</h2>
+                    <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                        <button type="button" title="Fechar" @click="visualizarSerasa(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="formCancelamento" method="POST">
+                        <input id="id_requisicao" name="id" type="text" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="status" name="status" type="text" value="CANCELADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="evento" name="evento" type="text" value="PENDENCIA CANCELADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <p class="texto-de-advertencia">REGISTRE AQUI O MOTIVO DO CANCELAMENTO</p>
+                        <div class="input-group input-group-sm mb-3 ">
+                            <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
+                            <textarea name="observacaoStatus" id="observacaoStatus" v-model="observacaoStatus" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" v-show="observacaoStatus.length > 10" @click="salvarCancelamento()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--MODAL CANCELAR-->
+    <!--/MODAL BAIXAR SERASA-->
+    <div class="modal fade" id="baixarSerasaModal" tabindex="-1" aria-labelledby="baixarSerasaModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header fundo-cabecalho">
+                    <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
+                    <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                        <button type="button" title="Fechar" @click="visualizarSerasa(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <form id="formBaixarSerasa" method="POST" enctype="multipart/form-data">
+                        <input id="id_requisicao" name="id" type="text" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="status" name="status" type="text" value="BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="evento" name="evento" type="text" value="PENDENCIA BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="observacaoStatus" name="observacaoStatus" type="text" value="ALTERADO PARA BAIXADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="descricao" name="descricao" type="text" value="COMPROVANTE DE PAGAMENTO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="mb-3">
+                            <div class="container">
+                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                    <p>
+                                        Arraste aqui <br>ou clique para procurar
+                                    </p>
+                                </div>
 
+                                <div v-for="(file, key) in files" class="file-listing">
+                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                    {{ file.name }}
+                                    <div class="success-container" v-if="file.id > 0">
+
+                                    </div>
+                                    <div class="remove-container" v-else>
+                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarBaixa()" v-show="files.length > 0">Salvar</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--/MODAL BAIXAR SERASA-->
 
 
 

@@ -309,11 +309,11 @@ include('controller/caixaDiario.php');
             <div class="modal-header fundo-cabecalho">
                 <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Cancelamento</h2>
                 <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                    <button type="button" title="Fechar" @click="modalVisualizar(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
+                    <button type="button" title="Fechar" @click="visualizarPendencia(id_requisicao)" id="botaoFechar" class="btn" data-bs-dismiss="modal"><img :src="iconClose"></button>
                 </div>
             </div>
             <div class="modal-body">
-                <form id="formCancelamento" style="width: 50px;" method="POST">
+                <form id="formCancelamento" method="POST">
                     <input id="id_requisicao" name="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                     <p class="texto-de-advertencia">REGISTRE AQUI O MOTIVO DO CANCELAMENTO</p>
                     <div class="input-group input-group-sm mb-3 ">

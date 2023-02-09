@@ -17,6 +17,7 @@ const app = new Vue({
       paginaAtual: 1,
       paginaDpsAtual: 0,
       totalResults: 0,
+      observacaoStatus:'',
       id_requisicao: '',
       status: '',
       tipo: '',
@@ -129,7 +130,7 @@ const app = new Vue({
         });
 
     },
-    visualizarPendencia(id){
+    visualizarSerasa(id){
 
         axios
           .post(
@@ -183,52 +184,136 @@ const app = new Vue({
           if (res.data.res == "success") {
             if (action == "abrirCaixa") {
               this.message = "Caixa Aberto";
-              this.visualizarPendencia(id);
+              this.visualizarSerasa(id);
             }
             if (action == "fecharCaixa") {
               this.message = "Caixa Fechado";
-              this.visualizarPendencia(id);
+              this.visualizarSerasa(id);
             }
             if (action == "alterarCaixa") {
               this.message = "Salvo com sucesso";
-              this.visualizarPendencia(id);
+              this.visualizarSerasa(id);
             }
           } else {
             this.message = "Houve um erro ao Alterar";
-            this.visualizarPendencia(id);
+            this.visualizarSerasa(id);
           }
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    modalCancelar(id) {
-      const modalCancelarCaixa = new bootstrap.Modal(
-        document.getElementById("modalCancelarSerasa")
-      );
+    modalCancelar() {
+      const modalCancelarCaixa = new bootstrap.Modal(document.getElementById("modalCancelarSerasa"));
       modalCancelarCaixa.show();
     },
     salvarCancelamento() {
-      const formCancelamentoSerasa = document.getElementById("formCancelamentoSerasa");
-      const formData = new FormData(formCancelamentoSerasa);
+      
+      const formCancelamento = document.getElementById("formCancelamento");
+      const formData = new FormData(formCancelamento);
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=cancelarSerasa",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=alterarStatus",
           formData
         )
         .then((res) => {
           if (res.data.res == "success") {
+            this.aplicarIcon = true;
+            this.title = true;
+            this.disabled = true;
+            this.readonly = true;
             this.message = "Cancelado com sucesso";
-            this.visualizarPendencia(this.id_requisicao);
+            this.visualizarSerasa(this.id_requisicao);
           } else {
             this.message = "Houve um erro ao Cancelar";
-            this.visualizarPendencia(this.id_requisicao);
+            this.visualizarSerasa(this.id_requisicao);
           }
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    modalBaixado(){
+
+      const baixarSerasaModal = new bootstrap.Modal(
+        document.getElementById("baixarSerasaModal")
+      );
+      baixarSerasaModal.show();
+    },
+    salvarBaixa(){ 
+      
+      const formBaixarSerasa = document.getElementById("formBaixarSerasa");
+      const formData = new FormData(formBaixarSerasa);
+      formData.append("file", this.files[0]);
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=baixarSerasa",
+          formData,
+          {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+        )
+        .then((res) => {
+          if(res.data.res == "semAnexo"){
+            this.message = "Não foi Anexado Comprovante";
+            this.visualizarSerasa(this.id_requisicao);
+          }
+          if (res.data.res == "success") {
+            this.aplicarIcon = true;
+            this.title = true;
+            this.disabled = true;
+            this.readonly = true;
+            this.message = "Alterado para BAIXADO";
+            this.visualizarSerasa(this.id_requisicao);
+          } else {
+            this.message = "Não foi alterado!";
+            this.visualizarSerasa(this.id_requisicao);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+
+    },
+    modalParaPfin(id){
+
+      const status = 'PEFIN'
+      const observacaoStatus = 'ALTERADO STATUS PARA PEFIN'
+      const evento = 'ALTERADO STATUS PARA PEFIN'
+
+      const formData = new FormData();
+      formData.append('id', id)
+      formData.append('status', status)
+      formData.append('observacaoStatus', observacaoStatus )
+      formData.append('evento', evento)
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=alterarStatus",
+          formData
+        )
+        .then((res) => {
+          if (res.data.res == "success") {
+            this.aplicarIcon = true;
+            this.title = true;
+            this.disabled = true;
+            this.readonly = true;
+            this.message = "Alterado para PFIN";
+            this.visualizarSerasa(this.id_requisicao);
+          } else {
+            this.message = "Não foi alterado!";
+            this.visualizarSerasa(this.id_requisicao);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
     },
     modalTabelaAnexos(id) {
       axios
@@ -293,10 +378,10 @@ const app = new Vue({
           console.log(res.data.res);
           if (res.data.res == "success") {
             this.message = "Registrado com sucesso";
-            this.visualizarPendencia(this.id_requisicao);
+            this.visualizarSerasa(this.id_requisicao);
           } else {
             this.message = "Houve um erro ao registrar";
-            this.visualizarPendencia(this.id_requisicao);
+            this.visualizarSerasa(this.id_requisicao);
           }
         })
         .catch((err) => {
@@ -350,7 +435,7 @@ const app = new Vue({
         if (this.files[i].id) {
           continue;
         }
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("file", this.files[i]);
         formData.append("descricao", this.descricaoAnexo);
         formData.append("id", this.id_requisicao);
@@ -368,10 +453,10 @@ const app = new Vue({
           .then((res) => {
             if (res.data.res == "success") {
               this.message = "Anexado com sucesso";
-              this.visualizarPendencia(this.id_requisicao);
+              this.visualizarSerasa(this.id_requisicao);
             } else {
               this.message = "Houve um erro ao anexar o arquivo";
-              this.visualizarPendencia(this.id_requisicao);
+              this.visualizarSerasa(this.id_requisicao);
             }
           })
           .catch((err) => {

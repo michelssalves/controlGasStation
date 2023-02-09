@@ -186,6 +186,73 @@ if($action == 'findObservacoesById'){
     echo json_encode($data);
     
 }
+if($action == 'alterarStatus'){
+
+    $id = $_REQUEST['id'];
+    $status = $_REQUEST['status'];
+    $observacaoStatus = $_REQUEST['observacaoStatus'];
+    $evento = $_REQUEST['evento']; 
+    
+    
+    $model = new Model();
+
+    if($model->alterarStatus($id, $status)){
+
+        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+        $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
+
+        $data = array('res' => 'success');
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
+}
+if ($action == 'baixarSerasa'){
+
+    
+    $id = $_REQUEST['id'];
+    $status = $_REQUEST['status'];
+    $observacaoStatus = $_REQUEST['observacaoStatus'];
+    $evento = $_REQUEST['evento']; 
+    $descricao = $_REQUEST['descricao']; 
+    $descricaoAnexo = "ANEXO";
+    $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "../assets/docs/serasa/";
+    $tabela = 'ccp_serasa_anexo';
+    $evento = "ADICIONOU UM COMPROVANTE DE PGTO";
+
+    if ($_FILES['file']['name'] <> ''){
+
+        $model = new Model();
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+
+            $model->alterarStatus($id, $status);
+            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+            $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
+            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+
+            $data = array('res' => 'success');
+
+        }else {
+
+            $data = array('res' => 'error');
+           
+        }
+    }else{
+
+       $data = array('res' => 'semAnexo');
+       
+    }
+
+    echo json_encode($data);
+}
 /*if ($action == 'alterarCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
