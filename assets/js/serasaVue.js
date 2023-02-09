@@ -56,9 +56,6 @@ const app = new Vue({
     iconClose:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
 
-  
-
-
     }
 	},
   filters: {
@@ -73,6 +70,13 @@ const app = new Vue({
     },
   },
   methods: {
+    newTab(id) {
+      window.open(
+        `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=serasa`,
+        "",
+        "width=820, height=820"
+      );
+    },
     nextPage(){
 
       this.paginaAtual = this.paginaAtual + 1

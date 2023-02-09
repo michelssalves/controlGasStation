@@ -205,7 +205,7 @@ include('controller/serasa.php');
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr v-for="anexo in anexoSerasa">
+                                            <tr @click="newTab(anexo.id)" style="cursor:pointer" v-for="anexo in anexoSerasa">
                                                 <td>{{anexo.descricao}}</td>
                                                 <td>{{anexo.numDoc}}</td>
                                                 <td>{{anexo.extensao}}</td>

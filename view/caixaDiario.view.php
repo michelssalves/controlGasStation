@@ -313,11 +313,9 @@ include('controller/caixaDiario.php');
                 </div>
             </div>
             <div class="modal-body">
-                <form id="formCancelamento" method="POST">
+                <form id="formCancelamento" style="width: 50px;" method="POST">
                     <input id="id_requisicao" name="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-
                     <p class="texto-de-advertencia">REGISTRE AQUI O MOTIVO DO CANCELAMENTO</p>
-
                     <div class="input-group input-group-sm mb-3 ">
                         <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
                         <textarea name="motivoCancelamento" id="motivoCancelamento" v-model="motivoCancelamento" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
