@@ -13,6 +13,7 @@ const app = new Vue({
       eventoSerasa:[],
       observacoeSerasa:[],
       files: [],
+      filesBaixar: [],
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
@@ -71,6 +72,25 @@ const app = new Vue({
     },
   },
   methods: {
+    bloquearCampos(){
+      this.aplicarIcon = true;
+      this.title = true;
+      this.disabled = true;
+      this.readonly = true;
+    },
+    fecharModal(){
+
+        this.bloquearCampos()
+
+        this.getPendencias()
+
+    },
+    onlyNumber($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 é ponto e 44 é virgula
+         $event.preventDefault();
+      }
+    },
     newTab(id) {
       window.open(
         `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=serasa`,
@@ -130,6 +150,10 @@ const app = new Vue({
         });
 
     },
+    modalSerasaVisualizar(){
+      const visualizarSerasa = new bootstrap.Modal( document.getElementById("visualizarSerasa"))
+      visualizarSerasa.show()
+    },
     visualizarSerasa(id){
 
         axios
@@ -151,15 +175,13 @@ const app = new Vue({
             this.numero = this.verPendencias[0]['numero'];
             this.dtNascimento = this.verPendencias[0]['dataNascimento'];
             this.cnpj = this.verPendencias[0]['cnpj'];
-            this.valorInicial = Number(this.verPendencias[0]['valor']).toFixed(2);
-            this.valorJuros = Number(this.verPendencias[0]['valorjuros']).toFixed(2);
+            this.valorInicial = Number(this.verPendencias[0]['valor']).toFixed(3);
+            this.valorJuros = Number(this.verPendencias[0]['valorjuros']).toFixed(3);
             this.dtEmissao = this.verPendencias[0]['dataEmissao'];
             this.dtVencimento = this.verPendencias[0]['dataVencimento'];
             this.observacao = this.verPendencias[0]['obs'];
 
-            const visualizarSerasa = new bootstrap.Modal( document.getElementById("visualizarSerasa"))
-            visualizarSerasa.show()
-
+            this.modalSerasaVisualizar()
             this.modalTabelaAnexos(id)
             this.modalTabelaEventos(id)
             this.modalTabelaObservacao(id)
@@ -171,7 +193,7 @@ const app = new Vue({
 
    
     },
-    salvarAlteracoes(id, action) {
+    salvarAlteracoes(id) {
       const formVerSerasa = document.getElementById("formVerSerasa");
       const formData = new FormData(formVerSerasa);
 
@@ -182,21 +204,10 @@ const app = new Vue({
         )
         .then((res) => {
           if (res.data.res == "success") {
-            if (action == "abrirCaixa") {
-              this.message = "Caixa Aberto";
-              this.visualizarSerasa(id);
-            }
-            if (action == "fecharCaixa") {
-              this.message = "Caixa Fechado";
-              this.visualizarSerasa(id);
-            }
-            if (action == "alterarCaixa") {
-              this.message = "Salvo com sucesso";
-              this.visualizarSerasa(id);
-            }
+            this.message = "Alterado com Sucesso";
+           
           } else {
             this.message = "Houve um erro ao Alterar";
-            this.visualizarSerasa(id);
           }
         })
         .catch((err) => {
@@ -403,6 +414,37 @@ const app = new Vue({
       }
       this.getImagePreviews();
     },
+    handleFilesB() {
+      //armazena os arquivos recebidos no vetor
+     console.log(this.$refs.filesBaixar.filesBaixar)
+      let uploadedFiles = this.$refs.files.files;
+
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.filesBaixar.push(uploadedFiles[i]);
+      }
+      this.getImagePreviewsB();
+    },
+    getImagePreviewsB() {
+      //exibe os arquivos armazenadas dentro do vetor
+      for (let i = 0; i < this.filesBaixar.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.filesBaixar[i].name)) {
+          let reader = new FileReader();
+          reader.addEventListener(
+            "load",
+            function () {
+              this.$refs["preview" + parseInt(i)][0].src = reader.result;
+            }.bind(this),
+            false
+          );
+          reader.readAsDataURL(this.FilesB[i]);
+        } else {
+          this.$nextTick(function () {
+            this.$refs["preview" + parseInt(i)][0].src =
+              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
+          });
+        }
+      }
+    },
     getImagePreviews() {
       //exibe os arquivos armazenadas dentro do vetor
       for (let i = 0; i < this.files.length; i++) {
@@ -463,8 +505,7 @@ const app = new Vue({
             console.log(err);
           });
       }
-    },
-    
+    }, 
   },
   computed:{
 

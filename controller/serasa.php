@@ -213,7 +213,6 @@ if($action == 'alterarStatus'){
 }
 if ($action == 'baixarSerasa'){
 
-    
     $id = $_REQUEST['id'];
     $status = $_REQUEST['status'];
     $observacaoStatus = $_REQUEST['observacaoStatus'];
@@ -243,7 +242,7 @@ if ($action == 'baixarSerasa'){
         }else {
 
             $data = array('res' => 'error');
-           
+
         }
     }else{
 
@@ -253,141 +252,30 @@ if ($action == 'baixarSerasa'){
 
     echo json_encode($data);
 }
-/*if ($action == 'alterarCaixa') {
+if ($action == 'alterarSerasa'){
 
-    $id = $_REQUEST['id_requisicao'];
-    $dinheiro = $_REQUEST['dinheiro'];
-    $cheque = $_REQUEST['cheque'];
-    $brinks = $_REQUEST['brinks'];
-    $pix = $_REQUEST['pix'];
-    $med = $_REQUEST['med'];
-    $data = $_REQUEST['data'];
-    $definitivo = $_REQUEST['definitivo'];
-    $conciliacao = $_REQUEST['conciliacao'];
-    $fechamento = $_REQUEST['fechamento'];
-    $observacao = $_REQUEST['observacao'];
-   // $model = new Model();
+    $id = intval($_REQUEST['id_requisicao']);
+    $dtNascimento = $_REQUEST['dtNascimento']; 
+    $dtEmissao = $_REQUEST['dtEmissao']; 
+    $dtVencimento = $_REQUEST['dtVencimento']; 
+    $tipo = $_REQUEST['tipo']; 
+    $valorInicial = $_REQUEST['valorInicial']; 
+    $valorJuros = $_REQUEST['valorJuros']; 
+    $evento = "ALTEROU O REGISTRO";
 
-   // if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
-    if($id){
-        $data = array('res' => 'success');
+        $model = new Model();
 
-    }else {
+        if($model->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
 
-        $data = array('res' => 'errorObs');
-    }
+            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+            $data = array('res' =>  'success');
+       
+        }else {
 
+            $data = array('res' => 'error');
+
+        }
+ 
     echo json_encode($data);
 }
-if($action == 'cancelarCaixa'){
 
-    $id = $_REQUEST['id_requisicao'];
-    $motivoCancelamento = limpaObservacao($_REQUEST['motivoCancelamento']);
-    $observacao = 'ALTEROU O STATUS PARA CANCELADO';
-    $status = 'CANCELADO';
-  
-    $model = new Model();
-
-    if($model->updateCancelarCaixa($id, $status, $observacao)){
-        
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $motivoCancelamento);
-
-        $data = array('res' => 'success');
-
-    }else {
-
-        $data = array('res' => 'errorObs');
-    }
-
-    echo json_encode($data);
-
-}
-if($action == 'abrirCaixa'){
-
-    $id = $_REQUEST['id'];
-    $status = 'ABERTO';
-    $observacao = 'ALTEROU O STATUS PARA ABERTO';
-  
-//    $model = new Model();
-
-   // if($model->updateCancelarCaixa($id, $status, $observacao)){
-        if($id){
-      //  $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
-
-        $data = array('res' => 'success');
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-    
-}
-if($action == 'fecharCaixa'){
-
-    $id = $_REQUEST['id_requisicao'];
-    $observacao = 'ALTEROU O STATUS PARA FECHADO';
-    $status = 'FECHADO';
-    $conc = $_REQUEST['conc'];
-    $caixa = $_REQUEST['caixa'];
-  
-    //$model = new Model();
-   
-    if($conc == 'SIM' && $caixa == 'SIM'){
-        
-       // $model->updateCancelarCaixa($id, $status, $observacao);
-        //$model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
-
-        $data = array('res' => 'success');
-    
-    
-    }else {
-
-        $data = array('res' => 'error');
-        
-    }
-
-    echo json_encode($data);
-   
-}
-if($action == 'findAnexosById'){
-
-    $id = $_REQUEST['id'];
-
-    $model = new Model();
-
-    $rows = $model->selectCaixaDiarioAnexos($id);
-
-    if(!empty($rows)){
-
-        $data = array('rows' => utf8ize($rows));
-
-    }else {
-
-        $data = array('res' => 'errorAnexos');
-    }
-
-    echo json_encode($data);
-    
-}
-if($action == 'findEventosById'){
-
-    $id = $_REQUEST['id'];
-
-    $model = new Model();
-
-    $rows = $model->selectCaixaDiarioEventos($id);
-    
-    if(!empty($rows)){
-
-        $data = array('rows' => utf8ize($rows));
-
-    }else {
-
-        $data = array('res' => 'errorAnexos');
-    }
-
-    echo json_encode($data);
-    
-}

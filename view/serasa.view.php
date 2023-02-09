@@ -44,8 +44,8 @@ include('controller/serasa.php');
                 <div class="col">
                     <select id="tipoFiltro" name="tipo" class='form-select' aria-label='Default select example'>
                         <option value='0'>Tipo</option>
-                        <option value='Cheque'>Cheque</option>
-                        <option value='Nota'>Nota</option>
+                        <option value='CHEQUE'>CHEQUE</option>
+                        <option value='NOTA'>NOTA</option>
                     </select>
                 </div>
                 <div class="col">
@@ -117,17 +117,18 @@ include('controller/serasa.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
+        
                             <div v-if="status == 'CANCELADO' || status == 'BAIXADO'" class="p-1"><button type="button" title="PFIN" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
                             <div class="d-flex flex-row" v-if="status != 'BAIXADO'">
-                                <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" :data-bs-dismiss="readonly ? modal : ''" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
+                                <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
                                 <div v-if="status == 'PEFIN'" class="p-1"><button type="button" title="Quitar" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalBaixado(id_requisicao)"><img class="iconeSize" :src="iconQuitar"></button></div>
-                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm" @click="aplicarIcon ? salvarAlteracoes(id_requisicao, 'alterarCaixa') : '' "><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm" @click="aplicarIcon ? salvarAlteracoes(id_requisicao) : '' "><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
                                 
                             </div>
-                            <div class="p-1"><button type="submit" title="Fechar" id="botaoFechar" class="btn btn-sm" :disabled="!disabled"><img class="iconeSize" :src="iconClose"></button></div>
+                            <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
                   
@@ -140,23 +141,23 @@ include('controller/serasa.php');
                         <div class="input-group input-group-sm mb-3">
                             <input id="id_requisicao" name="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">CPF/CNPJ:</span>
-                            <input :readonly="readonly" id="cnpj" name="cnpj" type="text" v-model="cnpj" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="cnpj" name="cnpj" type="text" v-model="cnpj" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Cliente:</span>
-                            <input :readonly="readonly" id="cliente" name="cliente" type="text" v-model="cliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="cliente" name="cliente" type="text" v-model="cliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Cidade:</span>
-                            <input :readonly="readonly" id="cidade" name="cidade" type="text" v-model="cidade" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="cidade" name="cidade" type="text" v-model="cidade" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Bairro:</span>
-                            <input :readonly="readonly" id="bairro" name="bairro" type="text" v-model="bairro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="bairro" name="bairro" type="text" v-model="bairro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">CEP:</span>
-                            <input :readonly="readonly" id="cep" name="cep" type="text" v-model="cep" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="cep" name="cep" type="text" v-model="cep" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Rua:</span>
-                            <input :readonly="readonly" id="rua" name="rua" type="text" v-model="rua" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                            <span class="input-group-text" id="inputGroup-sizing">Rua:</span>
-                            <input :readonly="readonly" id="numero" name="numero" type="text" v-model="numero" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input disabled id="rua" name="rua" type="text" v-model="rua" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Nº:</span>
+                            <input disabled id="numero" name="numero" type="text" v-model="numero" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Dt Nascimento:</span>
@@ -168,15 +169,19 @@ include('controller/serasa.php');
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Documento:</span>
-                            <input :readonly="readonly" id="tipo" name="tipo" type="text" v-model="tipo" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <select id="tipo" name="tipo" v-model="tipo" class='form-select' aria-label='Default select example'>
+                                <option :value="tipo">{{tipo}}</option>
+                                <option value='CHEQUE'>CHEQUE</option>
+                                <option value='NOTA'>NOTA</option>
+                            </select>
                             <span class="input-group-text" id="inputGroup-sizing">Valor(Inicial):</span>
-                            <input :readonly="readonly" id="valorInicial" name="valorInicial" type="text" v-model="valorInicial" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="valorInicial" name="valorInicial" @keypress="onlyNumber" type="number" v-model="valorInicial" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Valor(Juros):</span>
-                            <input :readonly="readonly" id="valorJuros" name="valorJuros" type="text" v-model="valorJuros" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input :readonly="readonly" id="valorJuros" name="valorJuros" @keypress="onlyNumber" type="number" v-model="valorJuros" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
-                            <textarea :readonly="readonly" id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="observacao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
+                            <textarea disabled id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="observacao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
                         </div>
                         <div class="container">
                             <div class="table-responsive">
@@ -389,34 +394,34 @@ include('controller/serasa.php');
                         <input id="descricao" name="descricao" type="text" value="COMPROVANTE DE PAGAMENTO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="mb-3">
                             <div class="container">
-                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
-                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                <div v-if="filesBaixar.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file" id="filesBaixar" ref="filesBaixar" multiple v-on:change="handleFilesB()" />
                                     <p>
                                         Arraste aqui <br>ou clique para procurar
                                     </p>
                                 </div>
 
-                                <div v-for="(file, key) in files" class="file-listing">
+                                <div v-for="(fileB, key) in filesBaixar" class="file-listing">
                                     <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
-                                    {{ file.name }}
-                                    <div class="success-container" v-if="file.id > 0">
+                                    {{ fileB.name }}
+                                    <div class="success-container" v-if="fileB.id > 0">
 
                                     </div>
                                     <div class="remove-container" v-else>
-                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                        <a class="remove" ><i class="fa-regular fa-trash-can"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarBaixa()" v-show="files.length > 0">Salvar</button>
+                    <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarBaixa()" v-show="filesBaixar.length > 0">Salvar</button>
                 </div>
                 </form>
             </div>
         </div>
     </div>
-    <!--/MODAL BAIXAR SERASA-->
+   <!-- /MODAL BAIXAR SERASA-->
 
 
 

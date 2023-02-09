@@ -153,7 +153,7 @@ include('controller/caixaDiario.php');
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
-                                <textarea :readonly="readonly" id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
+                                <textarea disabled id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
                             </div>
                         </div>
                         <div class="container">
