@@ -322,10 +322,14 @@ body {
   border: 1px solid black;
 
 }
-
+.fundo-header-tabelas {
+  background-color: #009688;
+ 
+}
 .header-tabela {
   background-color: #009688;
   border-bottom: 3px solid black;
+ 
 }
 input[type="file"]{
   opacity: 0;

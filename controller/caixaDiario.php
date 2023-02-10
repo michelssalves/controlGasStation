@@ -7,24 +7,27 @@ include '../model/CaixaDiario.php';
 $action = $_REQUEST['action'];
 
 if ($action == 'findAll') {
-
+    
     $status1 = $_REQUEST['statusNovo'];
     $status2 = $_REQUEST['statusFechado'];
-    $status3 = $_REQUEST['statusDefinitivo'];
-    $status4 = $_REQUEST['statusCancelado'];
-    $status5 = $_REQUEST['statusAberto'];
+    $status3 = $_REQUEST['statusCancelado'];
+    $status4 = $_REQUEST['statusAberto'];
     $med = $_REQUEST['idMed'];
     $data1 = $_REQUEST['data1'];
     $data2 = $_REQUEST['data2'];
     $turnoDefinitivo = $_REQUEST['turnoDefinitivo'];
     $concBancaria = $_REQUEST['concBancaria'];
+    $paginaAtual = $_REQUEST['paginaAtual'];
+    $resultadoPorPagina = 20;
+
+    $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
     $filtroData = "AND data_caixa BETWEEN '$data1' AND '$data2'";
 
-    if($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '' && $status5 == ''){
+    if($status1 == '' && $status2 == '' && $status3 == '' && $status4 == ''){
         $filtroStatus = "AND status IN ('NOVO', 'ABERTO')";
     }else{
-        $filtroStatus = "AND status IN ('$status1', '$status2', '$status3', '$status4', '$status5')";
+        $filtroStatus = "AND status IN ('$status1', '$status2', '$status3', '$status4')";
     }
     if($med <> ''){ $filtroFilial = "AND id_med = $med ";  }
     if($turnoDefinitivo <> '0'){ $filtroTurno = "AND turnos_definitivo = '$turnoDefinitivo' ";  }
@@ -32,9 +35,10 @@ if ($action == 'findAll') {
     
     $model = new Model();
 
-    $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao);
+    $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
 
-    $data = array('rows' => utf8ize($rows));
+    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+    //$data = array('rows' => utf8ize($rows));
 
     echo json_encode($data);
 }
@@ -167,7 +171,7 @@ if($action == 'abrirCaixa'){
     $status = 'ABERTO';
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
   
-//    $model = new Model();
+ //    $model = new Model();
 
    // if($model->updateCancelarCaixa($id, $status, $observacao)){
         if($id){

@@ -4,6 +4,7 @@ const app = new Vue({
   el: "#app",
 	data() {
 		return{
+      menu: 'Serasa',
       pendencias:[],
       meds: [],
       verPendencias: [],
@@ -40,7 +41,7 @@ const app = new Vue({
       title: true,
       aplicarIcon: true,
       modal: "modal",
-      message:'',
+      message:"",
       iconSave:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
     iconEdit:
@@ -72,6 +73,30 @@ const app = new Vue({
     },
   },
   methods: {
+    
+    limparFiltros(){
+
+      document.getElementById("matrizFiltro").value = '2'
+      document.getElementById("tipoFiltro").value =  '0'
+      document.getElementById("idMed").value =  '0'
+      document.getElementById("nomeClienteFiltro").value =  ''
+      document.getElementById("statusNovo").checked =  false
+      document.getElementById("statusPefin").checked =  false
+      document.getElementById("statusBaixado").checked =  false
+      document.getElementById("statusCancelado").checked =  false
+      this.getPendencias()
+      this.message = 'Limpado!'
+   
+    },
+    dataAtual(){
+
+      const data = new Date()
+      const dia = String(data.getDate()).padStart(2, '0')
+      const mes = String(data.getMonth()+1).padStart(2, '0')
+      const ano = data.getFullYear()
+      const dataAtual = `${ano}-${mes}-${dia}`
+      return dataAtual
+    },
     bloquearCampos(){
       this.aplicarIcon = true;
       this.title = true;
@@ -131,8 +156,8 @@ const app = new Vue({
     },
     getPendencias(){
 
-    const formSerasa = document.getElementById('filtroSerasa')
-     const formdata = new FormData(formSerasa)
+     const formFiltroSerasa = document.getElementById('formFiltroSerasa')
+     const formdata = new FormData(formFiltroSerasa)
 
       axios
         .post(
@@ -256,7 +281,7 @@ const app = new Vue({
       
       const formBaixarSerasa = document.getElementById("formBaixarSerasa");
       const formData = new FormData(formBaixarSerasa);
-      formData.append("file", this.files[0]);
+      formData.append("file", this.filesBaixar[0]);
 
       axios
         .post(
@@ -416,8 +441,8 @@ const app = new Vue({
     },
     handleFilesB() {
       //armazena os arquivos recebidos no vetor
-     console.log(this.$refs.filesBaixar.filesBaixar)
-      let uploadedFiles = this.$refs.files.files;
+     console.log(this.$refs.filesBaixar.files)
+      let uploadedFiles = this.$refs.filesBaixar.files;
 
       for (var i = 0; i < uploadedFiles.length; i++) {
         this.filesBaixar.push(uploadedFiles[i]);
@@ -471,6 +496,11 @@ const app = new Vue({
       this.files.splice(key, 1);
       this.getImagePreviews();
     },
+    removeFileB(key) {
+      //exibe os arquivos armazenadas dentro do vetor
+      this.filesBaixar.splice(key, 1);
+      this.getImagePreviews();
+    },
     salvarAnexo() {
       //envia para o backend os anexos e as info do formulario
       for (let i = 0; i < this.files.length; i++) {
@@ -515,7 +545,12 @@ const app = new Vue({
 
       this.getPendencias()
 
-    }
+    },
+    message() {
+        setTimeout(() => {
+          this.message = "";
+        }, 3000);
+      },
   },
   mounted: function () {
     this.getPendencias();

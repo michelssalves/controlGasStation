@@ -3,15 +3,23 @@ include('model/Serasa.php');
 include('controller/serasa.php');
 ?>
 <div id="app">
-    <form method='POST' id='filtroSerasa'>
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA 6 ATÉ 106-->   
+    <form method='POST' id='formFiltroSerasa'>
         <div class="container text-center">
             <div class="row mt-1">
                 <div class="col-4">
                 </div>
                 <div class="col-4 mt-1 p-1">
                     <button type='button' class='btn btn-info btn-sm' @click="getPendencias()">Filtrar</button>
-                    <button type="button" class='btn btn-danger btn-sm'>Limpar</button>
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
                     <button type="button" class='btn btn-secondary btn-sm'>PFIN</button>
+                </div>
+            </div>
+            <div class="container mt-1 mb-1">
+                <div class="fundo-header-tabelas rounded d-flex justify-content-center">
+                    <div class="text-dark fs-6 ">
+                        <h4>Filtros {{menu}}</h4>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -54,8 +62,15 @@ include('controller/serasa.php');
             </div>
         </div>
     </form>
+    <div class="container">
+        <div class="fundo-header-tabelas d-flex justify-content-center">
+            <div v-show="message.length > 0" class="text-dark fs-6 ">
+                <h4>{{message}}</h4>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive">
-        <table class="table table-striped table-hover mt-2">
+        <table class="table table-striped table-hover mt-1">
             <thead class="header-tabela">
                 <tr>
                     <th>IDR</th>
@@ -83,7 +98,6 @@ include('controller/serasa.php');
                 </tr>
             </tbody>
         </table>
-
         <nav aria-label="Page navigation example" style="cursor:pointer">
             <ul class="pagination pagination-sm justify-content-center">
                 <li class="page-item">
@@ -104,6 +118,8 @@ include('controller/serasa.php');
             </ul>
         </nav>
     </div>
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS -->   
+<!--AREA ONDE ESTÃO OS MODAIS  DA LINHA 106 ATÉ 421-->    
     <!--MODAL VISUALIZAR CX DIÁRIO-->
     <div class="modal fade" id="visualizarSerasa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizarSerasaoModalLabel" aria-hidden="true">
         <form id="formVerSerasa" method="POST">
@@ -117,7 +133,6 @@ include('controller/serasa.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
-        
                             <div v-if="status == 'CANCELADO' || status == 'BAIXADO'" class="p-1"><button type="button" title="PFIN" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
                             <div class="d-flex flex-row" v-if="status != 'BAIXADO'">
                                 <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconPfin"></button></div>
@@ -126,12 +141,10 @@ include('controller/serasa.php');
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
                                 <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
-                                
                             </div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
-                  
                     <div class="d-flex justify-content-center mt-1">
                         <div v-show="message.length > 0" class="bg-success rounded-circle text-dark fs-6 p-3">
                             <h2>{{message}}</h2>
@@ -250,7 +263,6 @@ include('controller/serasa.php');
             </div>
         </form>
     </div>
-
     <!--/MODAL VISUALIZAR CX DIÁRIO-->
     <!--MODAL INCLUIR ANEXO OK-->
     <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
@@ -358,9 +370,9 @@ include('controller/serasa.php');
                 </div>
                 <div class="modal-body">
                     <form id="formCancelamento" method="POST">
-                        <input id="id_requisicao" name="id" type="text" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="status" name="status" type="text" value="CANCELADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="evento" name="evento" type="text" value="PENDENCIA CANCELADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id_requisicao" name="id" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="status" name="status" type="hidden" value="CANCELADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="evento" name="evento" type="hidden" value="PENDENCIA CANCELADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <p class="texto-de-advertencia">REGISTRE AQUI O MOTIVO DO CANCELAMENTO</p>
                         <div class="input-group input-group-sm mb-3 ">
                             <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
@@ -387,11 +399,11 @@ include('controller/serasa.php');
                 </div>
                 <div class="modal-body">
                     <form id="formBaixarSerasa" method="POST" enctype="multipart/form-data">
-                        <input id="id_requisicao" name="id" type="text" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="status" name="status" type="text" value="BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="evento" name="evento" type="text" value="PENDENCIA BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="observacaoStatus" name="observacaoStatus" type="text" value="ALTERADO PARA BAIXADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="descricao" name="descricao" type="text" value="COMPROVANTE DE PAGAMENTO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id_requisicao" name="id" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="status" name="status" type="hidden" value="BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="evento" name="evento" type="hidden" value="PENDENCIA BAIXADO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="observacaoStatus" name="observacaoStatus" type="hidden" value="ALTERADO PARA BAIXADA" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="descricao" name="descricao" type="hidden" value="COMPROVANTE DE PAGAMENTO" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="mb-3">
                             <div class="container">
                                 <div v-if="filesBaixar.length == 0" class="large-12 medium-12 small-12 filezone">
@@ -408,7 +420,7 @@ include('controller/serasa.php');
 
                                     </div>
                                     <div class="remove-container" v-else>
-                                        <a class="remove" ><i class="fa-regular fa-trash-can"></i></a>
+                                        <a class="remove" v-on:click="removeFileB(key)"><i class="fa-regular fa-trash-can"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -421,34 +433,6 @@ include('controller/serasa.php');
             </div>
         </div>
     </div>
-   <!-- /MODAL BAIXAR SERASA-->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <!-- /MODAL BAIXAR SERASA-->
+<!--AREA ONDE ESTÃO OS MODAIS --> 
 </div>
