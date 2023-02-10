@@ -38,7 +38,6 @@ if ($action == 'findAll') {
     $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
-    //$data = array('rows' => utf8ize($rows));
 
     echo json_encode($data);
 }
@@ -129,10 +128,10 @@ if ($action == 'alterarCaixa') {
     $conciliacao = $_REQUEST['conciliacao'];
     $fechamento = $_REQUEST['fechamento'];
     $observacao = $_REQUEST['observacao'];
-   // $model = new Model();
+    $model = new Model();
 
-   // if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
-    if($id){
+    if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
+   
         $data = array('res' => 'success');
 
     }else {
@@ -171,11 +170,11 @@ if($action == 'abrirCaixa'){
     $status = 'ABERTO';
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
   
- //    $model = new Model();
+    $model = new Model();
 
-   // if($model->updateCancelarCaixa($id, $status, $observacao)){
-        if($id){
-      //  $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+    if($model->updateCancelarCaixa($id, $status, $observacao)){
+        
+        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
 
@@ -195,12 +194,12 @@ if($action == 'fecharCaixa'){
     $conc = $_REQUEST['conc'];
     $caixa = $_REQUEST['caixa'];
   
-    //$model = new Model();
+    $model = new Model();
    
     if($conc == 'SIM' && $caixa == 'SIM'){
         
-       // $model->updateCancelarCaixa($id, $status, $observacao);
-        //$model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+        $model->updateCancelarCaixa($id, $status, $observacao);
+        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
     

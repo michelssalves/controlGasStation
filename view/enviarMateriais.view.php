@@ -2,57 +2,63 @@
 include('model/EnviarMateriais.php');
 include('controller/enviarMateriais.php');
 ?>
-<form method="POST">
-    <div class="container">
-        <div class="row justify-content-md-center">
-            <div class="col-md-auto mt-4">
-                <input type='hidden' name='p' value='6'>
-                <input type='hidden' name='page' value='1'>
-                <button type="submit" name="action" value="filtrar-materiais" class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" name="action" value="limpar" class='btn btn-danger btn-sm'>Limpar</button>
-                <button type="button" onclick="verEstoque()" class='btn btn-primary btn-sm'>Estoque</button>
+<div id="app">
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->  
+<form method='POST' id='formFiltroMateriais'>
+        <div class="container text-center">
+            <div class="row mt-1">
+                <div class="col-4">
+                </div>
+                <div class="col-4 mt-1 p-1">
+                    <button type='button' class='btn btn-info btn-sm' @click="getPendencias()">Filtrar</button>
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+                    <button type="button" class='btn btn-primary btn-sm'>Estoque</button>
+                </div>
             </div>
-        </div>
-    </div>
-    <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
-        <thead>
-            <tr>
-                <th colspan='10' style='background-color:#009688'>
-                    <center>FILTROS</center>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
+            <div class="container mt-1 mb-1">
+                <div class="fundo-header-tabelas rounded d-flex justify-content-center">
+                    <div class="text-dark fs-6 ">
+                        <h4>Filtro {{menu}}</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input <?= $flagNovo ?> type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input <?= $flagParcial ?> type="checkbox" id="statusParcial" name="statusParcial" value="PARCIAL" /> PARCIAL</label></li>
-                            <li><input <?= $flagEnviado ?> type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
-                            <li><input <?= $flagFinalizado ?> type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
-                            <li><input <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input class="ml-3" type="checkbox" id="statusParcial" name="statusParcial" value="PARCIAL" /> PEFIN</label></li>
+                            <li><input class="ml-3" type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> BAIXADO</label></li>
+                            <li><input class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> CANCELADO</label></li>
+                            <li><input class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
-                </td>
-                <td>
-                    <select id="medFiltro" name="med" class='form-select' aria-label='Default select example'>
-                        <option disabled selected value="0">Med</option>
-                        <?= $cboMed ?>
+                </div>
+                <div class="col">
+                    <select id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <option value="0">Filial</option>
+                        <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
-                </td>
-                <td><input type="text" class='form-control' id="produto" name="produto" value="<?= $produto ?>"placeholder="Item do Pedido"></td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+                </div>
+                <div class="col">
+                    <input type="text" class='form-control' id="produto" name="produto" placeholder="Nome do Cliente">
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="container">
+        <div class="fundo-header-tabelas d-flex justify-content-center">
+            <div v-show="message.length > 0" class="text-dark fs-6 ">
+                <h4>{{message}}</h4>
+            </div>
+        </div>
+    </div> 
 <div class="table-responsive">
-    <div class="tabela-ver-todos-os-cheques">
-        <table data-tablesaw-sortable data-tablesaw-sortable-switch class='tablesaw table-sm table-hover  fs-6 mb-0' data-tablesaw-mode='columntoggle' data-tablesaw-minimap>
-            <thead class='header-tabela'>
+        <table data-tablesaw-sortable data-tablesaw-sortable-switch class='tablesaw table table-striped table-hover mt-1' data-tablesaw-mode='columntoggle' data-tablesaw-minimap>
+        <thead class="header-tabela">
                 <tr>
                     <th data-tablesaw-sortable-col data-tablesaw-priority='5'>ID</th>
                     <th data-tablesaw-sortable-col data-tablesaw-priority='1'>Filial</th>
@@ -65,6 +71,214 @@ include('controller/enviarMateriais.php');
                 </tr>
             </thead>
             <tbody>
-            <?= $txtTable ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>    
+            <tbody>
+        </table>
+        <nav aria-label="Page navigation example" style="cursor:pointer">
+            <ul class="pagination pagination-sm justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = 1">Primeira</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
+                    <a class="page-link">{{paginaAtual - 1}}</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">{{ paginaAtual }}</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
+                    <a class="page-link">{{paginaAtual + 1}}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>

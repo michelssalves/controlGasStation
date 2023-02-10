@@ -1,13 +1,12 @@
-//import Vue from "https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.esm.browser.js";
 import Vue from "https://www.rdppetroleo.com.br/medwebnovo/assets/js/vueJsFramework.js";
 const app = new Vue({
   el: "#app",
 	data() {
 		return{
-      menu: 'Serasa',
-      pendencias:[],
+      menu: 'Envio de Materiais',
+      materiais:[],
       meds: [],
-      verPendencias: [],
+      verMateriais: [],
       descricaoAnexo:'',
       descricaoObservacao:'',
       anexoSerasa:[],
@@ -76,15 +75,14 @@ const app = new Vue({
     
     limparFiltros(){
 
-      document.getElementById("matrizFiltro").value = '2'
-      document.getElementById("tipoFiltro").value =  '0'
-      document.getElementById("idMed").value =  '0'
-      document.getElementById("nomeClienteFiltro").value =  ''
       document.getElementById("statusNovo").checked =  false
-      document.getElementById("statusPefin").checked =  false
-      document.getElementById("statusBaixado").checked =  false
+      document.getElementById("statusParcial").checked =  false
+      document.getElementById("statusEnviado").checked =  false
+      document.getElementById("statusFinalizado").checked =  false
       document.getElementById("statusCancelado").checked =  false
-      this.getPendencias()
+      document.getElementById("idMed").value =  '0'
+      document.getElementById("produto").value = ''
+      this.getMateriais()
       this.message = 'Limpado!'
    
     },
@@ -98,6 +96,7 @@ const app = new Vue({
       return dataAtual
     },
     bloquearCampos(){
+
       this.aplicarIcon = true;
       this.title = true;
       this.disabled = true;
@@ -107,7 +106,7 @@ const app = new Vue({
 
         this.bloquearCampos()
 
-        this.getPendencias()
+        this.getMateriais()
 
     },
     onlyNumber($event) {
@@ -129,7 +128,7 @@ const app = new Vue({
       this.paginaAntAtual = this.paginaAntAtual +1
       this.paginaDpsAtual = this.paginaDpsAtual +1
 
-      this.getPendencias()
+      this.getMateriais()
       
     },
     previousPage(){
@@ -138,13 +137,13 @@ const app = new Vue({
       this.paginaAntAtual = this.paginaAntAtual -1
       this.paginaDpsAtual = this.paginaDpsAtual -1
 
-      this.getPendencias()
+      this.getMateriais()
       
     },
     getAllMeds() {
       axios
         .post(
-        "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findAllMeds",
+        "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findAllMeds",
    
       )
         .then((res) => {
@@ -154,19 +153,19 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getPendencias(){
+    getMateriais(){
 
-     const formFiltroSerasa = document.getElementById('formFiltroSerasa')
-     const formdata = new FormData(formFiltroSerasa)
+     const formFiltroMateriais = document.getElementById('formFiltroMateriais')
+     const formdata = new FormData(formFiltroMateriais)
 
       axios
         .post(
-        `https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findAll&paginaAtual=${this.paginaAtual}`,
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findAll&paginaAtual=${this.paginaAtual}`,
          formdata
       )
         .then((res) => {
 
-          this.pendencias = res.data.rows
+          this.materiais = res.data.rows
           this.totalResults = res.data.results
 
         })
@@ -183,33 +182,33 @@ const app = new Vue({
 
         axios
           .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findById&id=${id}`,
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findById&id=${id}`,
           
         )
           .then((res) => {
   
-            this.verPendencias = res.data.rows
-            this.id_requisicao = this.verPendencias[0]['id_requisicao'];
-            this.status = this.verPendencias[0]['status'];
-            this.tipo = this.verPendencias[0]['tipo'];
-            this.cliente = this.verPendencias[0]['nomeCliente'];
-            this.cidade = this.verPendencias[0]['cidade'];
-            this.bairro = this.verPendencias[0]['bairro'];
-            this.cep = this.verPendencias[0]['cep'];
-            this.rua = this.verPendencias[0]['endereco'];
-            this.numero = this.verPendencias[0]['numero'];
-            this.dtNascimento = this.verPendencias[0]['dataNascimento'];
-            this.cnpj = this.verPendencias[0]['cnpj'];
-            this.valorInicial = Number(this.verPendencias[0]['valor']).toFixed(3);
-            this.valorJuros = Number(this.verPendencias[0]['valorjuros']).toFixed(3);
-            this.dtEmissao = this.verPendencias[0]['dataEmissao'];
-            this.dtVencimento = this.verPendencias[0]['dataVencimento'];
-            this.observacao = this.verPendencias[0]['obs'];
+            this.verMateriais = res.data.rows
+            this.id_requisicao = this.verMateriais[0]['id_requisicao'];
+            this.status = this.verMateriais[0]['status'];
+            this.tipo = this.verMateriais[0]['tipo'];
+            this.cliente = this.verMateriais[0]['nomeCliente'];
+            this.cidade = this.verMateriais[0]['cidade'];
+            this.bairro = this.verMateriais[0]['bairro'];
+            this.cep = this.verMateriais[0]['cep'];
+            this.rua = this.verMateriais[0]['endereco'];
+            this.numero = this.verMateriais[0]['numero'];
+            this.dtNascimento = this.verMateriais[0]['dataNascimento'];
+            this.cnpj = this.verMateriais[0]['cnpj'];
+            this.valorInicial = Number(this.verMateriais[0]['valor']).toFixed(3);
+            this.valorJuros = Number(this.verMateriais[0]['valorjuros']).toFixed(3);
+            this.dtEmissao = this.verMateriais[0]['dataEmissao'];
+            this.dtVencimento = this.verMateriais[0]['dataVencimento'];
+            this.observacao = this.verMateriais[0]['obs'];
 
-            this.modalSerasaVisualizar()
-            this.modalTabelaAnexos(id)
-            this.modalTabelaEventos(id)
-            this.modalTabelaObservacao(id)
+          //  this.modalSerasaVisualizar()
+          //  this.modalTabelaAnexos(id)
+          //  this.modalTabelaEventos(id)
+          //  this.modalTabelaObservacao(id)
   
           })
           .catch((err) => {
@@ -219,12 +218,13 @@ const app = new Vue({
    
     },
     salvarAlteracoes(id) {
+
       const formVerSerasa = document.getElementById("formVerSerasa");
       const formData = new FormData(formVerSerasa);
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=alterarSerasa",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarSolicitacao",
           formData
         )
         .then((res) => {
@@ -240,8 +240,8 @@ const app = new Vue({
         });
     },
     modalCancelar() {
-      const modalCancelarCaixa = new bootstrap.Modal(document.getElementById("modalCancelarSerasa"));
-      modalCancelarCaixa.show();
+      const modalCancelarSolicitcao = new bootstrap.Modal(document.getElementById("modalCancelarSolicitcao"));
+      modalCancelarSolicitcao.show();
     },
     salvarCancelamento() {
       
@@ -250,15 +250,12 @@ const app = new Vue({
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=alterarStatus",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=cancelarSolicitcao",
           formData
         )
         .then((res) => {
           if (res.data.res == "success") {
-            this.aplicarIcon = true;
-            this.title = true;
-            this.disabled = true;
-            this.readonly = true;
+            this.bloquearCampos()
             this.message = "Cancelado com sucesso";
             this.visualizarSerasa(this.id_requisicao);
           } else {
@@ -285,7 +282,7 @@ const app = new Vue({
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=baixarSerasa",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=baixarSerasa",
           formData,
           {
           headers: {
@@ -330,7 +327,7 @@ const app = new Vue({
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=alterarStatus",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarStatus",
           formData
         )
         .then((res) => {
@@ -354,7 +351,7 @@ const app = new Vue({
     modalTabelaAnexos(id) {
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findAnexosById&id=${id}`
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findAnexosById&id=${id}`
         )
         .then((res) => {
         
@@ -368,7 +365,7 @@ const app = new Vue({
     modalTabelaEventos(id) {
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findEventosById&id=${id}`
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findEventosById&id=${id}`
         )
         .then((res) => {
         
@@ -382,7 +379,7 @@ const app = new Vue({
     modalTabelaObservacao(id) {
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=findObservacoesById&id=${id}`
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findObservacoesById&id=${id}`
         )
         .then((res) => {
 
@@ -407,7 +404,7 @@ const app = new Vue({
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=gravarObs",
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=gravarObs",
           formData
         )
         .then((res) => {
@@ -514,7 +511,7 @@ const app = new Vue({
 
         axios
           .post(
-            "https://www.rdppetroleo.com.br/medwebnovo/controller/serasa.php?action=gravarAnexo",
+            "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=gravarAnexo",
             formData,
             {
               headers: {
@@ -543,18 +540,18 @@ const app = new Vue({
   watch: {
     paginaAtual() {
 
-      this.getPendencias()
+      this.getMateriais()
 
     },
     message() {
         setTimeout(() => {
-          this.message = "";
+          this.message = ""
         }, 3000);
       },
   },
   mounted: function () {
-    this.getPendencias();
-    this.getAllMeds();
+    this.getMateriais()
+    this.getAllMeds()
   },
 
 });
