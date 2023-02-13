@@ -7,8 +7,7 @@
     <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/custom.css">
     <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/fontawesome.all.min.6.2.1.css">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/tablesaw.css">
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/fontawesome.all.min.js"></script>
+     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/fontawesome.all.min.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/bootstrap.bundle.min.v5.2.3.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/jquery-3.6.1.min.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/controllersAux/main.js"></script>

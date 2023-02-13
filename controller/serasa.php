@@ -27,7 +27,7 @@ if ($action == 'findAll'){
     $tipo =  $_REQUEST['tipo'];
     $cliente =  $_REQUEST['nomeCliente'];
     $paginaAtual = $_REQUEST['paginaAtual'];
-    $resultadoPorPagina = 20;
+    $resultadoPorPagina = 50;
 
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 

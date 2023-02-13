@@ -1,493 +1,347 @@
 <?php
+session_start();
+include './controllerAux/validaLogin.php';
+include './controllerAux/functionsAuxiliar.php';
+include '../model/EnviarMateriais.php';
+
 $action = $_REQUEST['action'];
 
-if($action == '' || $action == 'filtrar-materiais' || $action == 'limpar'){
+if ($action == 'findAllMeds') {
 
-  $page =  $_REQUEST['page'];
-  $statusNovo =  $_REQUEST['statusNovo'];
-  $statusParcial =  $_REQUEST['statusParcial'];
-  $statusEnviado =  $_REQUEST['statusEnviado'];
-  $statusFinalizado =  $_REQUEST['statusFinalizado'];
-  $statusCancelado =  $_REQUEST['statusCancelado'];
-  $flagNovo = $statusNovo <> '' ? 'checked' : '';
-  $flagParcial = $statusParcial <> '' ? 'checked' : '';
-  $flagEnviado = $statusEnviado <> '' ? 'checked' : '';
-  $flagFinalizado = $statusFinalizado <> '' ? 'checked' : '';
-  $flagCancelado = $statusCancelado <> '' ? 'checked' : '';
-  $med =  $_REQUEST['med'];
-  $produto = $_REQUEST['produto'];
+  $model = new Model();
 
-  if ($action == 'limpar') {
+  $rows = $model->selectAllMeds();
 
-    $cliente = '0';
-    $produto = '';
-    $flagNovo = 'checked';
-    $flagParcial = 'checked';
-    $flagEnviado = '';
-    $flagFinalizado = '';
-    $flagCancelado = '';
+  $data = array('rows' => utf8ize($rows));
+
+  echo json_encode($data);
+}
+if ($action == 'findAll') {
+
+  $status1 = $_REQUEST['statusNovo'];
+  $status2 = $_REQUEST['statusFinalizado'];
+  $status3 = $_REQUEST['statusCancelado'];
+  $med = $_REQUEST['idMed'];
+  $cliente =  $_REQUEST['nomeCliente'];
+  $paginaAtual = $_REQUEST['paginaAtual'];
+  $resultadoPorPagina = 50;
+
+  $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
+
+  if (isset($med) && $med <> '0') {
+    $Fmed = "AND p.codcliente = '$med' ";
   }
-  if ($statusNovo == '' && $statusParcial == '' && $statusEnviado == '' && $statusFinalizado == '' && $statusCancelado == '') {
+
+  if (isset($cliente) && $cliente <> '') {
+    $Fcliente = " AND nomeCliente LIKE '%$cliente%' ";
+  }
+  if ($status1 == '' && $status2 == '' && $status3 == '') {
     $Fstatus =  "AND status = 'NOVO'";
   } else {
-    $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusParcial . "','" . $statusEnviado . "','" . $statusFinalizado . "','" . $statusCancelado . "')";
-  }
-  if (isset($med) && $med <> '0') {
-    $Fmed = "AND codcliente = '$med' ";
-  }
-  if ($produto <> '') {
-    $Fproduto = "AND lista LIKE '%$produto%' ";
+    $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "')";
   }
 
-  $sql = "SELECT *, p.id AS id_pedido, 
-        (SELECT count() FROM REQ_ItemPedido WHERE id_pedido = p.id) AS itens, 
-        (SELECT list(desc_produto)FROM REQ_ItemPedido WHERE id_pedido = p.id) AS lista
-    FROM REQ_Pedido AS p 
-    LEFT JOIN ti_clientes AS u ON p.codcliente = u.id
-    WHERE status <> 'CRIADO' AND p.id > 0  $Fstatus $Fmed $Fproduto";
-  $qry = odbc_exec($connP, $sql) or die('Erro.:' . $sql);
+  $model = new Model();
 
-  while ($row = odbc_fetch_array($qry)) {
+  $rows = $model->findAll($Fstatus, $Fmed, $Fproduto, $start, $resultadoPorPagina);
 
-    extract($row);
+  $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
-    $txtTable .=  "<tr id='$id_pedido' onclick='verRequisicaoMaterial(this.id)' style='cursor:pointer'>
-				  <td>$id_pedido</td>
-				  <td>$loginName</td>
-				  <td>" . dma($row['data']) . "</td>
-				  <td>" . ($data_entrega <> '' ? dma($data_entrega) : '') . "</td>
-					<td>" . l50($row['lista']) . "</td>
-					<td>" . l35($row['itens']) . "</td>
-					<td>$itens_parcial</td>
-					<td>$status</td>
-				  </tr>";
-  }
-  include 'view/modal/enviarMateriais/enviarMateriaisVisualizarModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisIncluirNoPedidoModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisAltExcNoPedidoModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisVisualizarEstoque.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisAltVerProdutoModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisCriarProdutoModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisCriarClasseModal.view.php';
-  include 'view/modal/enviarMateriais/enviarMateriaisAltExcClasseModal.view.php';
-   
+  echo json_encode($data);
 }
-if ($action == 'visualizarRequisicao') {
+if ($action == 'findById') {
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+  $id = $_REQUEST['id'];
 
+  $model = new Model();
 
-  $id_pedido = $_REQUEST['id'];
+  $rows = $model->findById($id);
 
-  $sql = "SELECT i.id AS id_item, * FROM REQ_ItemPedido AS i 
-    LEFT JOIN REQ_Produto AS p ON i.id_produto = p.id
-    WHERE id_pedido = $id_pedido AND status_item IS NULL";
-  $qry =  odbc_exec($connP, $sql) or die('Erro.:' . $sql);
+  $rowObs = $model->selectObservacaoByIdPedido($id);
 
+  $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
 
-  $sqlObs = "SELECT TOP 15 * FROM REQ_Pedido_obs WHERE id_pedido = $id_pedido ORDER BY id DESC";
-  $qryObs = odbc_exec($connP, $sqlObs);
+  echo json_encode($data);
+}
+if ($action == 'findByIdItem') {
 
-  $txtTable .= "<table class='table table-sm table-bordered border-dark'>
-    <thead class='header-tabela'>
-      <tr>
-        <th>Material</th>
-        <th>Qtde</th>
-        <th>Entregue</th>
-        <th>Saldo</th>
-        <th>Estoque</th>
-        <th>Dt Envio</th>
-        <th>Dt Receb</th>
-        <th>Qtde</th>
-      </tr>
-    </thead>
-    <tbody>";
+  $id = $_REQUEST['id'];
 
-  while ($row = odbc_fetch_array($qry)) {
+  $model = new Model();
 
-    extract($row);
+  $rows = $model->findByIdItem($id);
 
-    $sqlSaldo = "SELECT sum(qtde_baixada)AS baixas, 
-    (SELECT TOP 1 data_da_baixa FROM REQ_BaixarProduto ORDER BY  data_da_baixa DESC) as dataDaBaixa 
-    FROM REQ_BaixarProduto WHERE id_item = $id_item
-    GROUP BY dataDaBaixa";
-    $qrySaldo =  odbc_exec($connP, $sqlSaldo);
-    $rowSaldo = odbc_fetch_array($qrySaldo);
-    extract($rowSaldo);
+  $data = array('rows' => utf8ize($rows));
 
-    $saldo = $quant - $baixas;
+  echo json_encode($data);
+}
+if ($action == 'cancelarPedido') {
 
-    $linkAlterarProduto = "data-bs-dismiss='modal' onclick='excluirOuAlterar(this.id)'";
-    $linkAlteraSaldo = "onkeyup='alterarQuantideMateriais(this.id, this.value)'";
+  $id = $_REQUEST['idPedido'];
 
-    if ($saldo == 0) {
+  //$model = new Model();
 
-      $linkAlterarProduto = "";
-      $linkAlteraSaldo = "readonly";
+  if ($id) {
+
+    $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
+  } else {
+
+    $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
+  }
+  echo json_encode($data);
+}
+if ($action == 'cancelarItem') {
+
+  $id = $_REQUEST['idItem'];
+
+  //$model = new Model();
+
+  if ($id) {
+
+    $data = array('res' => 'success', 'msg' => 'Item Cancelado');
+  } else {
+
+    $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
+  }
+  echo json_encode($data);
+}
+if ($action == 'alterarItem') {
+
+  $id = $_REQUEST['idItem'];
+
+  //$model = new Model();
+
+  if ($id) {
+
+    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+  } else {
+
+    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+  }
+  echo json_encode($data);
+}
+if ($action == 'addObservacao') {
+
+  $id = $_REQUEST['idPedido'];
+  $observacao = limpaObservacao($_REQUEST['observacao']);
+
+  $model = new Model();
+
+  if ($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+
+    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+  } else {
+
+    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+  }
+  echo json_encode($data);
+}
+
+/*if ($action == 'gravarAnexo'){
+
+    $id = $_REQUEST['id'];
+    $descricao = limpaObservacao($_REQUEST['descricao']);
+    $descricaoAnexo = "ANEXO";
+    $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "../assets/docs/serasa/";
+    $tabela = 'ccp_serasa_anexo';
+    $evento = "ADICIONOU UM ANEXO";
+
+    if ($_FILES['file']['name'] <> ''){
+
+        $model = new Model();
+
+        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+
+        $data = array('res' => 'success');
+
+        }else {
+
+            $data = array('res' => 'error');
+           
+        }
+    }else{
+
+       $data = array('res' => 'error');
+       
     }
 
-    $txtTable .= "<tr>
-                <input type='hidden' id='idPedidoVisualizar'value='$id_pedido'>
-                <td id='$id_item' $linkAlterarProduto >$desc_produto</td>
-                <td id='$id_item' $linkAlterarProduto >$quant</td>
-                <td id='$id_item' $linkAlterarProduto >" . ($baixas) . "</td>
-                <td id='$id_item' $linkAlterarProduto >$saldo</td>
-                <td id='$id_item' $linkAlterarProduto >$qtde_atual</td>
-                <td id='$id_item' $linkAlterarProduto >" . dma($dataDaBaixa) . "</td>
-                <td id='$id_item' $linkAlterarProduto >$data_recebido</td>
-                <td>
-                <input id='$id_item' $linkAlteraSaldo type='text' class='form-control-sm' name='quantidade' value='$quant' style='width:60px'></td>
-                </tr>";
-  }
-  $txtTable .= "
-    </tbody>
-  </table>
-  ";
-
-  $txtTable .= " <hr><br><table class='table table-sm table-bordered border-dark'>
-  <thead class='header-tabela'>
-    <tr>
-      <th>Data Hora</th>
-      <th>Usuario</th>
-      <th>Alteração</th>
-    </tr>
-  </thead>
-  <tbody>";
-
-  while ($rowObs = odbc_fetch_array($qryObs)) {
-
-    extract($rowObs);
-
-    $txtTable .= "<tr >
-            <td>" . dma($data_hora) . "</td>
-            <td>$usuario</td>
-            <td>$obs</td>
-            </tr>";
-  }
-
-  $txtTable .= "</tbody></table>"; echo utf8ize($txtTable);
+    echo json_encode($data);
 }
-if ($action == 'atualizarQuantidades') {
+if ($action == 'gravarObs'){
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $id = $_REQUEST['id'];
+    $observacao = limpaObservacao($_REQUEST['observacao']);
 
-  $id_pedido = $_REQUEST['id_pedido'];
-  $iditem = $_REQUEST['iditem'];
-  $qtde = $_REQUEST['qtde'];
+    $model = new Model();
 
-  $sql0 = "SELECT desc_produto, quant FROM REQ_ItemPedido AS i 
-    LEFT JOIN REQ_Produto AS p ON i.id_produto = p.id
-    WHERE i.id = $iditem";
-  $qry0 = odbc_exec($connP, $sql0);
-  $row0 = odbc_fetch_array($qry0);
+    if($model->insertSerasaObs($id, $usuarioLogado, $observacao)){
 
-  $desc_produto = $row0['desc_produto'];
-  $quant_ant = $row0['quant'];
+        $data = array('res' => 'success');
 
-  $sql = "UPDATE REQ_ItemPedido SET quant = $qtde WHERE id = $iditem";
-  $qry = odbc_exec($connP, $sql);
-  if ($quant_ant <> $qtde) {
-    $obsNova = 'Alterada a quantidade do item "' . $desc_produto . '" de ' . $quant_ant . ' para ' . $qtde;
-    $sql1 = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) VALUES ('$id_pedido', '$usuarioLogado', '" . date('Y-m-d H:i') . "', '$obsNova')";
-    odbc_exec($connP, $sql1);
-  }
+    }else {
 
-  /*$return = ['dados' =>  ($sql0)];
+        $data = array('res' => 'error');
+    }
 
-    echo json_encode($return);*/
+    echo json_encode($data);
 }
-if ($action == 'novoProdutoNoPedido') {
+if($action == 'findAnexosById'){
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $id = $_REQUEST['id'];
 
-  $idProduto = $_REQUEST['idProduto'];
-  $produto = $_REQUEST['produto'];
-  $qtde = $_REQUEST['qtde'];
-  $idPedido = $_REQUEST['idPedido'];
+    $model = new Model();
 
-  $sql = "INSERT INTO REQ_ItemPedido (id_pedido, id_produto, desc_produto, quant) 
-  VALUES ($idPedido, $idProduto, '$produto', $qtde)";
-  $qry = odbc_exec($connP, $sql);
+    $rows = $model->selectSerasaAnexos($id);
 
-  $obsNova = 'Ítem Incluido (' . $produto . ') em ' . date('Y-m-d');
-  $sqlObs = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) 
-  VALUES ('$idPedido', '$usuarioLogado', '" . date('Y-m-d Hi') . "', '$obsNova')";
-  $qryObs = odbc_exec($connP, $sqlObs);
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
 }
-if ($action == 'excluirProdutoNoPedido') {
+if($action == 'findEventosById'){
 
-  $idItem = $_REQUEST['idItem'];
+    $id = $_REQUEST['id'];
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $model = new Model();
 
-  $sql = "UPDATE REQ_ItemPedido SET status_item = 'EXCLUIDO' WHERE id = $idItem";
-  odbc_exec($connP, $sql);
+    $rows = $model->selectSerasaEventos($id);
+    
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
 }
-if ($action == 'alterarProdutoNoPedido') {
+if($action == 'findObservacoesById'){
 
-  $idItem = $_REQUEST['idItem'];
+    $id = $_REQUEST['id'];
 
-    // falta fazer
+    $model = new Model();
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $rows = $model->selectSerasaObservacoes($id);
+    
+    if(!empty($rows)){
+
+        $data = array('rows' => utf8ize($rows));
+
+    }else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+    
 }
-if ($action == 'confirmarEnvio') {
+if($action == 'alterarStatus'){
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $id = $_REQUEST['id'];
+    $status = $_REQUEST['status'];
+    $observacaoStatus = $_REQUEST['observacaoStatus'];
+    $evento = $_REQUEST['evento']; 
+    
+    
+    $model = new Model();
 
-  $idPedido = $_REQUEST['idPedido'];
-  $descProduto = $_REQUEST['descProduto'];
-  $idProduto = $_REQUEST['idProduto'];
-  $idItem = $_REQUEST['idItem'];
-  $qtdeOriginal = $_REQUEST['qtdeOriginal'];
-  $qtde = $_REQUEST['qtde'];
+    if($model->alterarStatus($id, $status)){
 
-  $sql = ("INSERT INTO REQ_BaixarProduto (id_pedido, id_item, id_produto, qtde_baixada, data_da_baixa) 
-  VALUES('$idPedido', '$idItem', '$idProduto', '$qtde', '" . date('Y-m-d') . "')");
-  odbc_exec($connP, $sql);
+        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+        $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
 
-  $obsNova = "Enviado $qtde $descProduto em " . date('Y-m-d') . " ";
-  $sqlObs = "INSERT INTO REQ_Pedido_obs (id_pedido, usuario, data_hora, obs) values ('$idPedido', '$usuarioLogado', '" . date('Y-m-d') . "', '$obsNova')";
-  odbc_exec($connP, $sqlObs);
+        $data = array('res' => 'success');
 
+    }else {
 
-  // falta atualizar o saldo do estoque
+        $data = array('res' => 'error');
+    }
 
+    echo json_encode($data);
+    
 }
-if ($action == 'verItemDoPedido') {
+if ($action == 'baixarSerasa'){
 
-  $idItem = $_REQUEST['idItem'];
+    $id = $_REQUEST['id'];
+    $status = $_REQUEST['status'];
+    $observacaoStatus = $_REQUEST['observacaoStatus'];
+    $evento = $_REQUEST['evento']; 
+    $descricao = $_REQUEST['descricao']; 
+    $descricaoAnexo = "ANEXO";
+    $temp = $_FILES['file']['tmp_name'];
+    $localDeArmazenagem = "../assets/docs/serasa/";
+    $tabela = 'ccp_serasa_anexo';
+    $evento = "ADICIONOU UM COMPROVANTE DE PGTO";
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    if ($_FILES['file']['name'] <> ''){
 
-  $sql =  "SELECT  RP.id AS idProduto, RP.descricao AS produto, RP.classe,RC.id AS idClasse, RC.descricao AS classe, RI.quant 
-  FROM REQ_Produto AS RP
-  JOIN REQ_ClasseProduto AS RC
-  ON RP.classe = RC.id
-  JOIN REQ_ItemPedido AS RI
-  ON RP.id = RI.id_produto 
-  WHERE RI.id = $idItem";
-  $qry = odbc_exec($connP, $sql);
-  $row = odbc_fetch_array($qry);
+        $model = new Model();
 
-  $return = ['dados' =>  utf8ize($row)];
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-  echo json_encode($return);
+        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+
+            $model->alterarStatus($id, $status);
+            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+            $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
+            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+
+            $data = array('res' => 'success');
+
+        }else {
+
+            $data = array('res' => 'error');
+
+        }
+    }else{
+
+       $data = array('res' => 'semAnexo');
+       
+    }
+
+    echo json_encode($data);
 }
-if($action == 'verEstoque'){
+if ($action == 'alterarSerasa'){
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
+    $id = intval($_REQUEST['id_requisicao']);
+    $dtNascimento = $_REQUEST['dtNascimento']; 
+    $dtEmissao = $_REQUEST['dtEmissao']; 
+    $dtVencimento = $_REQUEST['dtVencimento']; 
+    $tipo = $_REQUEST['tipo']; 
+    $valorInicial = $_REQUEST['valorInicial']; 
+    $valorJuros = $_REQUEST['valorJuros']; 
+    $evento = "ALTEROU O REGISTRO";
 
-  $sql = "SELECT  p.id AS idProduto, p.descricao AS produto, c.descricao AS classe, unidade, P.qtde_atual, P.qtde_min, P.status
-  FROM REQ_Produto AS P 
-  LEFT JOIN REQ_ClasseProduto AS C ON p.classe = c.id 
-  WHERE p.descricao IS NOT NULL AND status = 'ATIVO' AND qtde_atual > 0 
-  ORDER BY Produto";
-  $qry = odbc_exec($connP, $sql);
+        $model = new Model();
 
- $txtTable .= "<table class='table table-sm table-bordered border-dark'>
- <thead class='header-tabela'>
-    	<tr>
-        <th>Id</th>
-        <th>Produto</th>
-        <th>Saldo</th>
-        <th>Min</th>
-        <th>UN</th>
-        <th>Classe</th>
-        <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>";
+        if($model->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
 
-    while ($row = odbc_fetch_array($qry)){
-      
-      extract($row);
+            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+            $data = array('res' =>  'success');
+       
+        }else {
 
-      $txtTable .= "<tr id='$idProduto' data-bs-dismiss='modal' onclick='verAlterarProduto(this.id)' style='cursor:pointer'>
-			<td>$idProduto</td>
-			<td>$produto</td>
-			<td>$qtde_atual</td>
-			<td>$qtde_min</td>
-			<td>$unidade</td>
-			<td>$classe</td>
-			<td>$status</td>
-      </tr>";
+            $data = array('res' => 'error');
 
-  }
-	
-  $txtTable .= "</tbody></table>";echo utf8ize($txtTable);
-
-}
-if($action == 'verProduto'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $idProduto = $_REQUEST['idProduto'];
-
-  $sql = "SELECT  p.id as idProduto, p.descricao AS produto, c.id as idClasse , c.descricao AS classe, unidade, P.qtde_atual, P.qtde_min, P.status
-  FROM REQ_Produto AS P 
-  LEFT JOIN REQ_ClasseProduto AS C ON p.classe = c.id 
-  WHERE p.descricao IS NOT NULL AND idProduto = $idProduto";
-  $qry = odbc_exec($connP, $sql);
-  $row = odbc_fetch_array($qry);
-
-  $return = ['dados' =>  utf8ize($row)];
-
-  echo json_encode($return);
-
-}
-if($action == 'cadastrarProduto'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-   $unidadeCad = $_REQUEST['unidadeCad'];
-   $produtoCad = $_REQUEST['produtoCad'];
-   $idClasseCad = $_REQUEST['idClasseCad'];
-   $statusCad = $_REQUEST['statusCad'];
-   $qtdeAtualCad = $_REQUEST['qtdeAtualCad'];
-   $qtdeMinCad = $_REQUEST['qtdeMinCad'];
-
-   $sql = ("INSERT INTO REQ_Produto (unidade, descricao, classe, status, qtde_atual, qtde_min)
-   VALUES('$unidadeCad','$produtoCad','$idClasseCad','$statusCad','$qtdeAtualCad','$qtdeMinCad')");
-   odbc_exec($connP, $sql);
-
+        }
  
-
+    echo json_encode($data);
 }
-if($action == 'alterarProduto'){
 
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $unidadeAltProd = $_REQUEST['unidadeAltProd'];
-  $produtoAltProd = $_REQUEST['produtoAltProd'];
-  $classeAltProd = $_REQUEST['classeAltProd'];
-  $statusAltProd = $_REQUEST['statusAltProd'];
-  $qtdeAtualAltProd = $_REQUEST['qtdeAtualAltProd'];
-  $qtdeMinAltProd = $_REQUEST['qtdeMinAltProd'];
-  $idProdutoAltProd = $_REQUEST['idProdutoAltProd'];
-
-  $sql = ("UPDATE REQ_Produto SET unidade = '$unidadeAltProd', descricao = '$produtoAltProd', classe = '$classeAltProd' , 
-  status = '$statusAltProd' , qtde_atual = '$qtdeAtualAltProd', qtde_min = '$qtdeMinAltProd' WHERE id = '$idProdutoAltProd'");
-  odbc_exec($connP, $sql);
-
-  
-}
-if($action == 'verClasses'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $txtTable .="<table class='table table-sm table-bordered border-dark'>
-  <thead class='header-tabela'>
-        <th><center>ID</th>
-        <th><center>DESCRICAO</th>
-        <th><center>ITENS TOTAL</th>
-        <th><center>ITENS ATIVOS</th>
-    </tr>
- </thead>
-  <tbody>";
-
-  $sql = "SELECT DISTINCT c.id, c.descricao AS classe, 
-  (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id ) AS total,
-  (SELECT count() FROM REQ_Produto AS p WHERE p.classe = c.id AND STATUS = 'ATIVO') AS ativos
-  FROM REQ_ClasseProduto AS c WHERE statusClasse IS NULL
-  ORDER BY classe" ;
-  $qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
-
-    while ($row = odbc_fetch_array($qry)) { 
-
-      extract($row);
-
-      $txtTable .="<tr id='$id' data-bs-dismiss='modal' onclick='AltExcClasse(this.id)' style='cursor:pointer'>
-        <td>$id</td>
-        <td>$classe</td>
-        <td>$total</td>
-        <td>$ativos</td>
-        </tr>";
-
-    } 
-
-    $txtTable .="</tbody>
-    </table>";
-
-    echo utf8ize($txtTable);
-
-}
-if($action == 'incluirClasse'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $classe = strtoupper($_REQUEST['classe']);
-	$sql = "INSERT INTO REQ_ClasseProduto (descricao) VALUES ('$classe')";
-	odbc_exec($connP, $sql) or die('Erro:'.$sql);
-
-}
-if($action == 'buscarClasse'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $idClasse = $_REQUEST['idClasse'];
-
-	$sql = "SELECT descricao FROM REQ_ClasseProduto WHERE id = $idClasse";
-	$qry = odbc_exec($connP, $sql) or die('Erro:'.$sql);
-  $row = odbc_fetch_array($qry);
-  extract($row);
-
-  $return = ['dados' => utf8ize($descricao) ];
-
-  echo json_encode($return);
-
-}
-if($action == 'alterarClasse'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $idClasse = $_REQUEST['idClasse'];
-  $classe = $_REQUEST['classe'];
-
-  $sql = "UPDATE REQ_ClasseProduto SET descricao = '$classe' WHERE id = $idClasse";
-  odbc_exec($connP, $sql) or die('Erro:'.$sql);
-
-
-}
-if($action == 'excluirClasse'){
-
-  include 'controllerAux/validaLogin.php';
-  include 'controllerAux/functionsAuxiliar.php';
-  include '../model/EnviarMateriais.php';
-
-  $idClasse = $_REQUEST['idClasse'];
-
-  $sql = "UPDATE REQ_ClasseProduto SET statusClasse = 'INATIVO' WHERE id = $idClasse";
-  odbc_exec($connP, $sql) or die('Erro:'.$sql);
-
-}

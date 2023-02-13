@@ -10,7 +10,7 @@ include('controller/caixaDiario.php');
             <div class="row mt-1">
                 <div class="col-4">
                 </div>
-                <div class="col-4 mt-1">
+                <div class="col-sm-4 mt-1 p-2 d-inline">
                     <button type='button' class='btn btn-info btn-sm' @click="getCaixas()">Filtrar</button>
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
                 </div>
@@ -321,13 +321,12 @@ include('controller/caixaDiario.php');
                     <form id="incluirObservacaoForm" method="POST">
                         <input id="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
-                        <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE CAIXA</p>
+                        <p class="texto-de-advertencia">REGISTRE AQUI ALGUMA OBSERVAÇÃO SOBRE ESTE PEDIDO</p>
 
                         <div class="input-group input-group-sm mb-3 ">
                             <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
                             <textarea name="observacao" id="observacao" v-model="descricaoObservacao" cols="60" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
                         </div>
-                        {{descricaoObservacao}}
                 </div>
                 <div class="modal-footer">
                     <button data-bs-dismiss="modal" v-show="descricaoObservacao.length > 10" @click="salvarObs()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>

@@ -9,7 +9,7 @@ include('controller/serasa.php');
             <div class="row mt-1">
                 <div class="col-4">
                 </div>
-                <div class="col-4 mt-1 p-1">
+                <div class="col-sm-4 mt-1 p-2 d-inline">
                     <button type='button' class='btn btn-info btn-sm' @click="getPendencias()">Filtrar</button>
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
                     <button type="button" class='btn btn-secondary btn-sm'>PFIN</button>
