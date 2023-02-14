@@ -146,6 +146,7 @@ const app = new Vue({
       )
         .then((res) => {
          
+          console.log(this.solicitacoes)
           this.solicitacoes = res.data.rows
           this.totalResults = res.data.results
 

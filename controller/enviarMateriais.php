@@ -19,8 +19,9 @@ if ($action == 'findAllMeds') {
 if ($action == 'findAll') {
 
   $status1 = $_REQUEST['statusNovo'];
-  $status2 = $_REQUEST['statusFinalizado'];
-  $status3 = $_REQUEST['statusCancelado'];
+  $status2 = $_REQUEST['statusEnviado'];
+  $status3 = $_REQUEST['statusFinalizado'];
+  $status4 = $_REQUEST['statusCancelado'];
   $med = $_REQUEST['idMed'];
   $produto =  $_REQUEST['produto'];
   $paginaAtual = $_REQUEST['paginaAtual'];
@@ -34,10 +35,10 @@ if ($action == 'findAll') {
   if (isset($produto) && $produto <> '') {
     $Fproduto = "AND lista LIKE '%$produto%'";
   }
-  if ($status1 == '' && $status2 == '' && $status3 == '') {
+  if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '') {
     $Fstatus =  "AND status = 'NOVO'";
   } else {
-    $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "')";
+    $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "')";
   }
 
   $model = new Model();
