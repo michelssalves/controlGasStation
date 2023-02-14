@@ -10,7 +10,6 @@ include('controller/enviarMateriais.php');
                 <div class="col-4">
                 </div>
                 <div class="col-sm-4 mt-1 p-2 d-inline">
-                    <button type='button' class='btn btn-info btn-sm' @click="getSolicitacoes()">Filtrar</button>
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
                     <button type="button" class='btn btn-primary btn-sm'>Estoque</button>
                 </div>
@@ -29,20 +28,21 @@ include('controller/enviarMateriais.php');
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
-                            <li><input class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
+                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-4">
-                    <select id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <select @change="getSolicitacoes()" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
                 <div class="col-4">
-                    <input type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
+                    <input @keyup="getSolicitacoes()" type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
                 </div>
             </div>
         </div>
@@ -114,10 +114,8 @@ include('controller/enviarMateriais.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
-                            <!--<div v-if="status == 'ABERTO'" class="p-1"><button :disabled="disabled" type="button" title="Fechar Caixa" class="btn btn-light btn-sm" :data-bs-dismiss="readonly ? modal : ''" @click="modalFecharCaixa(id_requisicao)"><img class="iconeSize" :src="iconCxFechado"></button></div>
-                            <div v-if="status == 'NOVO'" class="p-1"><button :disabled="disabled" type="button" title="Abrir Caixa" class="btn btn-light btn-sm" :data-bs-dismiss="readonly ? modal : ''" @click="modalAbrirCaixa(id_requisicao)"><img class="iconeSize" :src="iconCx"></button></div>
-                     -->        <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Enviar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="enviarPedido(idPedido)"><img class="iconeSize" :src="iconEnviado"></button></div>
-
+                            <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'ENVIADO' || status == 'CANCELADO' || status == 'NOVO')"><button type="button" title="Confirmar Recebimento" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="confirmarRecebimento(idPedido)"><img class="iconeSize" :src="iconRecebido"></button></div> 
+                            <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Enviar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="enviarPedido(idPedido)"><img class="iconeSize" :src="iconEnviado"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao()"><img class="iconeSize" :src="iconObs"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="cancelarPedido(idPedido)"><img class="iconeSize" :src="iconExc"></button></div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>

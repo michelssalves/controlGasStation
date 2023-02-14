@@ -32,19 +32,13 @@ const app = new Vue({
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/enviado.gif",
       iconSave:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
-    iconEdit:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pencil.gif",
-    iconObs:
+      iconObs:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
-    iconAnx:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anexo.png",
-    iconExc:
+      iconExc:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/excluir.gif",
-    iconQuitar:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pagou.gif",
-    iconPfin:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/divida.png",
-    iconClose:
+      iconRecebido:
+      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/recebido.png",
+      iconClose:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
 
     }
@@ -64,7 +58,6 @@ const app = new Vue({
     limparFiltros(){
 
       document.getElementById("statusNovo").checked =  false
-      document.getElementById("statusParcial").checked =  false
       document.getElementById("statusEnviado").checked =  false
       document.getElementById("statusFinalizado").checked =  false
       document.getElementById("statusCancelado").checked =  false

@@ -22,18 +22,17 @@ if ($action == 'findAll') {
   $status2 = $_REQUEST['statusFinalizado'];
   $status3 = $_REQUEST['statusCancelado'];
   $med = $_REQUEST['idMed'];
-  $cliente =  $_REQUEST['nomeCliente'];
+  $produto =  $_REQUEST['produto'];
   $paginaAtual = $_REQUEST['paginaAtual'];
   $resultadoPorPagina = 50;
-
   $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
   if (isset($med) && $med <> '0') {
     $Fmed = "AND p.codcliente = '$med' ";
   }
 
-  if (isset($cliente) && $cliente <> '') {
-    $Fcliente = " AND nomeCliente LIKE '%$cliente%' ";
+  if (isset($produto) && $produto <> '') {
+    $Fproduto = "AND lista LIKE '%$produto%'";
   }
   if ($status1 == '' && $status2 == '' && $status3 == '') {
     $Fstatus =  "AND status = 'NOVO'";
@@ -60,7 +59,7 @@ if ($action == 'findById') {
   $rowObs = $model->selectObservacaoByIdPedido($id);
 
   $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
-
+  
   echo json_encode($data);
 }
 if ($action == 'findByIdItem') {
