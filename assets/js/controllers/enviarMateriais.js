@@ -249,6 +249,14 @@ const app = new Vue({
       this.callAxios(id, url, formData)
 
     },
+    alterarStatus(id){
+
+      const formvisualizarSolicitacao = document.getElementById("formvisualizarSolicitacao")
+      const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarStatus"
+      const formData = new FormData(formvisualizarSolicitacao)
+      this.callAxios(id, url, formData)
+
+    },
     callAxios(id, url, formData){
 
       axios
@@ -259,6 +267,7 @@ const app = new Vue({
       .then((res) => {
         console.log(res.data.res)
         if (res.data.res == "success") {
+          console.log(res.data.res.sql)
           this.message = res.data.msg;
           this.modalVisualizarSolicitacao(id)
          

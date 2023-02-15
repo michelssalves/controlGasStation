@@ -32,7 +32,6 @@ include('controller/enviarMateriais.php');
                             <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
                             <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
                             <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
-
                         </ul>
                     </div>
                 </div>
@@ -113,8 +112,10 @@ include('controller/enviarMateriais.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1" v-if="!(status == 'ENVIADO' || status == 'CANCELADO' || status == 'NOVO')"><button type="button" title="Confirmar Recebimento" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="confirmarRecebimento(idPedido)"><img class="iconeSize" :src="iconRecebido"></button></div> 
-                            <div class="p-1" v-if="!(status == 'ENVIADO' || status == 'CANCELADO'|| status == 'FINALIZADO')"><button type="button" title="Enviar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="enviarPedido(idPedido)"><img class="iconeSize" :src="iconEnviado"></button></div>
+                            <input type="hidden" name="status" id="status" :value="status">
+                            <input type="hidden" name="idPedido" id="idPedido" :value="idPedido">
+                            <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO' || status == 'NOVO')"><button type="button" title="Confirmar Recebimento" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="alterarStatus(idPedido)"><img class="iconeSize" :src="iconRecebido"></button></div> 
+                            <div class="p-1" v-if="!(status == 'ENVIADO' || status == 'CANCELADO'|| status == 'FINALIZADO')"><button type="button" title="Enviar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="alterarStatus(idPedido)"><img class="iconeSize" :src="iconEnviado"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao()"><img class="iconeSize" :src="iconObs"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO' || status == 'ENVIADO')"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="cancelarPedido(idPedido)"><img class="iconeSize" :src="iconExc"></button></div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
@@ -132,7 +133,6 @@ include('controller/enviarMateriais.php');
                                     <tr>
                                         <th>DESCRIÇÃO</th>
                                         <th>SOLICITADO</th>
-                                        <th>ENVIADO</th>
                                         <th>DT ENVIO</th>
                                         <th>DT RECEB</th>
                                     </tr>
@@ -141,9 +141,8 @@ include('controller/enviarMateriais.php');
                                     <tr @click="verItem(solicitacao.item)" data-bs-dismiss="modal" style="cursor:pointer" v-for="(solicitacao, i) in verSolicitacao">
                                         <td>{{solicitacao.desc_produto}}</td>
                                         <td>{{solicitacao.quant}}</td>
-                                        <td>{{solicitacao.env}}</td>
-                                        <td>{{solicitacao.data_envio}}</td>
-                                        <td>{{solicitacao.data_recebido}}</td>
+                                        <td>{{solicitacao.dataEnvio}}</td>
+                                        <td>{{solicitacao.dataRecebimento}}</td>
                                     </tr>
                                 </tbody>
                             </table>

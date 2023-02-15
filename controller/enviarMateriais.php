@@ -79,11 +79,12 @@ if ($action == 'cancelarPedido') {
 
   $id = $_REQUEST['idPedido'];
 
-  //$model = new Model();
+  $model = new Model();
 
-  if ($id) {
+  if($model->cancelarPedido($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
+
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
@@ -94,9 +95,9 @@ if ($action == 'cancelarItem') {
 
   $id = $_REQUEST['idItem'];
 
-  //$model = new Model();
+  $model = new Model();
 
-  if ($id) {
+  if($model->cancelarItem($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Item Cancelado');
   } else {
@@ -108,15 +109,18 @@ if ($action == 'cancelarItem') {
 if ($action == 'alterarItem') {
 
   $id = $_REQUEST['idItem'];
+  $quantidade = $_REQUEST['quantidade'];
 
-  //$model = new Model();
+  $model = new Model();
 
-  if ($id) {
+  if ($model->alterarQtdeItem($id, $quantidade)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+    
   }
   echo json_encode($data);
 }
@@ -124,10 +128,11 @@ if ($action == 'addObservacao') {
 
   $id = $_REQUEST['idPedido'];
   $observacao = limpaObservacao($_REQUEST['observacao']);
+ 
 
   $model = new Model();
 
-  if ($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+  if($model->insertObservacao($id, $usuarioLogado, $observacao)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
   } else {
@@ -136,212 +141,27 @@ if ($action == 'addObservacao') {
   }
   echo json_encode($data);
 }
+if ($action == 'alterarStatus') {
 
-/*if ($action == 'gravarAnexo'){
+  $id = $_REQUEST['idPedido'];
+  $status = $_REQUEST['status'];
 
-    $id = $_REQUEST['id'];
-    $descricao = limpaObservacao($_REQUEST['descricao']);
-    $descricaoAnexo = "ANEXO";
-    $temp = $_FILES['file']['tmp_name'];
-    $localDeArmazenagem = "../assets/docs/serasa/";
-    $tabela = 'ccp_serasa_anexo';
-    $evento = "ADICIONOU UM ANEXO";
+  if($status == 'NOVO'){ $status = 'ENVIADO';}
+  elseif($status == 'ENVIADO'){ $status = 'FINALIZADO';}
 
-    if ($_FILES['file']['name'] <> ''){
+  $model = new Model();
 
-        $model = new Model();
+  if($model->alterarStatus($id, $status)) {
 
-        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
 
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+  } else {
 
-        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+  }
 
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-
-        $data = array('res' => 'success');
-
-        }else {
-
-            $data = array('res' => 'error');
-           
-        }
-    }else{
-
-       $data = array('res' => 'error');
-       
-    }
-
-    echo json_encode($data);
+  echo json_encode($data);
 }
-if ($action == 'gravarObs'){
 
-    $id = $_REQUEST['id'];
-    $observacao = limpaObservacao($_REQUEST['observacao']);
 
-    $model = new Model();
-
-    if($model->insertSerasaObs($id, $usuarioLogado, $observacao)){
-
-        $data = array('res' => 'success');
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-}
-if($action == 'findAnexosById'){
-
-    $id = $_REQUEST['id'];
-
-    $model = new Model();
-
-    $rows = $model->selectSerasaAnexos($id);
-
-    if(!empty($rows)){
-
-        $data = array('rows' => utf8ize($rows));
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-    
-}
-if($action == 'findEventosById'){
-
-    $id = $_REQUEST['id'];
-
-    $model = new Model();
-
-    $rows = $model->selectSerasaEventos($id);
-    
-    if(!empty($rows)){
-
-        $data = array('rows' => utf8ize($rows));
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-    
-}
-if($action == 'findObservacoesById'){
-
-    $id = $_REQUEST['id'];
-
-    $model = new Model();
-
-    $rows = $model->selectSerasaObservacoes($id);
-    
-    if(!empty($rows)){
-
-        $data = array('rows' => utf8ize($rows));
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-    
-}
-if($action == 'alterarStatus'){
-
-    $id = $_REQUEST['id'];
-    $status = $_REQUEST['status'];
-    $observacaoStatus = $_REQUEST['observacaoStatus'];
-    $evento = $_REQUEST['evento']; 
-    
-    
-    $model = new Model();
-
-    if($model->alterarStatus($id, $status)){
-
-        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
-        $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
-
-        $data = array('res' => 'success');
-
-    }else {
-
-        $data = array('res' => 'error');
-    }
-
-    echo json_encode($data);
-    
-}
-if ($action == 'baixarSerasa'){
-
-    $id = $_REQUEST['id'];
-    $status = $_REQUEST['status'];
-    $observacaoStatus = $_REQUEST['observacaoStatus'];
-    $evento = $_REQUEST['evento']; 
-    $descricao = $_REQUEST['descricao']; 
-    $descricaoAnexo = "ANEXO";
-    $temp = $_FILES['file']['tmp_name'];
-    $localDeArmazenagem = "../assets/docs/serasa/";
-    $tabela = 'ccp_serasa_anexo';
-    $evento = "ADICIONOU UM COMPROVANTE DE PGTO";
-
-    if ($_FILES['file']['name'] <> ''){
-
-        $model = new Model();
-
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-
-        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
-
-            $model->alterarStatus($id, $status);
-            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
-            $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-
-            $data = array('res' => 'success');
-
-        }else {
-
-            $data = array('res' => 'error');
-
-        }
-    }else{
-
-       $data = array('res' => 'semAnexo');
-       
-    }
-
-    echo json_encode($data);
-}
-if ($action == 'alterarSerasa'){
-
-    $id = intval($_REQUEST['id_requisicao']);
-    $dtNascimento = $_REQUEST['dtNascimento']; 
-    $dtEmissao = $_REQUEST['dtEmissao']; 
-    $dtVencimento = $_REQUEST['dtVencimento']; 
-    $tipo = $_REQUEST['tipo']; 
-    $valorInicial = $_REQUEST['valorInicial']; 
-    $valorJuros = $_REQUEST['valorJuros']; 
-    $evento = "ALTEROU O REGISTRO";
-
-        $model = new Model();
-
-        if($model->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
-
-            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
-            $data = array('res' =>  'success');
-       
-        }else {
-
-            $data = array('res' => 'error');
-
-        }
- 
-    echo json_encode($data);
-}
 
