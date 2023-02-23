@@ -31,7 +31,7 @@ if ($action == 'findAll') {
   $dataVencimento = $_REQUEST['dataVencimento'];
   $paginaAtual  = ($_REQUEST['paginaAtual'] ? $_REQUEST['paginaAtual'] : '1');
 
-  $resultadoPorPagina = 50;
+  $resultadoPorPagina = 12;
   $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
   if($data1 != '' &&  $data2 != ''){
@@ -48,7 +48,7 @@ if ($action == 'findAll') {
     $Ffornecedor = "AND fornecedor LIKE '%$fornecedor%'";
   }
   if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '' && $status5 == '') {
-    $Fstatus =  "AND status = 'NOVO'";
+    $Fstatus =  "AND status IN ('NOVO', 'AGUARDANDO')";
   } else {
     $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "','" . $status5 . "')";
   }

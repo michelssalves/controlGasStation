@@ -18,7 +18,7 @@ if ($action == 'findAll') {
     $turnoDefinitivo = $_REQUEST['turnoDefinitivo'];
     $concBancaria = $_REQUEST['concBancaria'];
     $paginaAtual = $_REQUEST['paginaAtual'];
-    $resultadoPorPagina = 20;
+    $resultadoPorPagina = 12;
 
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 

@@ -27,7 +27,7 @@ if ($action == 'findAll'){
     $tipo =  $_REQUEST['tipo'];
     $cliente =  $_REQUEST['nomeCliente'];
     $paginaAtual = $_REQUEST['paginaAtual'];
-    $resultadoPorPagina = 50;
+    $resultadoPorPagina = 12;
 
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
@@ -40,7 +40,7 @@ if ($action == 'findAll'){
         $Fmed = "AND id_med = '$med' ";
     }
     if (isset($tipo) && $tipo <> '0') {
-        $Ftipo = " AND tipo LIKE '%$tipo%' ";
+        $Ftipo = "AND tipo LIKE '%$tipo%'";
     }
     if (isset($cliente) && $cliente <> '') {
         $Fcliente = " AND nomeCliente LIKE '%$cliente%' ";

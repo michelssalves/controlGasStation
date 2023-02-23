@@ -73,7 +73,7 @@ const app = new Vue({
   },
   methods: {
     
-    limparFiltros(){
+      limparFiltros(){
 
       document.getElementById("matrizFiltro").value = '2'
       document.getElementById("tipoFiltro").value =  '0'
@@ -83,7 +83,7 @@ const app = new Vue({
       document.getElementById("statusPefin").checked =  false
       document.getElementById("statusBaixado").checked =  false
       document.getElementById("statusCancelado").checked =  false
-      this.getPendencias()
+      this.getPendencias('filtrar')
       this.message = 'Limpado!'
    
     },
@@ -122,24 +122,6 @@ const app = new Vue({
         "width=820, height=820"
       );
     },
-    nextPage(){
-
-      this.paginaAtual = this.paginaAtual + 1
-      this.paginaAntAtual = this.paginaAntAtual +1
-      this.paginaDpsAtual = this.paginaDpsAtual +1
-
-      this.getPendencias()
-      
-    },
-    previousPage(){
-
-      this.paginaAtual = this.paginaAtual -1
-      this.paginaAntAtual = this.paginaAntAtual -1
-      this.paginaDpsAtual = this.paginaDpsAtual -1
-
-      this.getPendencias()
-      
-    },
     getAllMeds() {
       axios
         .post(
@@ -153,7 +135,7 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getPendencias(){
+    getPendencias(action){
 
      const formFiltroSerasa = document.getElementById('formFiltroSerasa')
      const formdata = new FormData(formFiltroSerasa)
@@ -164,10 +146,14 @@ const app = new Vue({
          formdata
       )
         .then((res) => {
-
+          if(action == 'filtrar'){
+            
+            this.paginaAtual = 1
+         }  
+         
           this.pendencias = res.data.rows
           this.totalResults = res.data.results
-
+    
         })
         .catch((err) => {
           console.log(err);

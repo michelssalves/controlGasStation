@@ -64,7 +64,7 @@ const app = new Vue({
       document.getElementById("statusAguardando").checked =  false
       document.getElementById("statusFinalizado").checked =  false
       document.getElementById("statusCancelado").checked =  false
-      this.getPagamentos()
+      this.getPagamentos('filtrar')
       this.message = 'Limpado!'
    
     },
@@ -117,8 +117,8 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getPagamentos() {
-
+    getPagamentos(action) {
+    
       const formFiltroPagamentos = document.getElementById("formFiltroPagamentos");
       const formData = new FormData(formFiltroPagamentos);
 
@@ -128,10 +128,17 @@ const app = new Vue({
           formData
         )
         .then((res) => {
+
+          if(action == 'filtrar'){
+            
+            this.paginaAtual = 1
+
+          }  
         
-          console.log(res.data.rows)
           this.pagamentos = res.data.rows;
           this.totalResults = res.data.results
+
+   
 
         })
         .catch((err) => {

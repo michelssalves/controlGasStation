@@ -6,13 +6,13 @@ include('controller/solicitacaoDePagamento.php');
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROSDA LINHA 6 ATÉ 89-->
     <form method='POST' id='formFiltroPagamentos'>
-        <div class="container text-center p-2">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-md-2 p-1">
-                    <input @keyup="getPagamentos()" @mouseleave="getPagamentos()" class='form-control' type='date' id='data1' name="data1">
+                    <input @keyup="getPagamentos('filtrar')" @mouseleave="getPagamentos()" class='form-control' type='date' id='data1' name="data1">
                 </div>
                 <div class="col-md-2 p-1">
-                    <input @keyup="getPagamentos()" @mouseleave="getPagamentos()" class='form-control' type='date' id='data2' name="data2">
+                    <input @keyup="getPagamentos('filtrar')" @mouseleave="getPagamentos()" class='form-control' type='date' id='data2' name="data2">
                 </div>
                 <div class="col-md-2 p-1">
                     <div class="dropdown">
@@ -20,18 +20,18 @@ include('controller/solicitacaoDePagamento.php');
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input @click="getPagamentos()" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input @click="getPagamentos()" type="checkbox" id="statusPendente" name="statusPendente" value="PENDENTE" /> PENDENTE</label></li>
-                            <li><input @click="getPagamentos()" type="checkbox" id="statusAguardando" name="statusAguardando" value="AGUARDANDO" /> AGUARDANDO</label></li>
-                            <li><input @click="getPagamentos()" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
-                            <li><input @click="getPagamentos()" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getPagamentos('filtrar')" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input @click="getPagamentos('filtrar')" type="checkbox" id="statusPendente" name="statusPendente" value="PENDENTE" /> PENDENTE</label></li>
+                            <li><input @click="getPagamentos('filtrar')" type="checkbox" id="statusAguardando" name="statusAguardando" value="AGUARDANDO" /> AGUARDANDO</label></li>
+                            <li><input @click="getPagamentos('filtrar')" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
+                            <li><input @click="getPagamentos('filtrar')" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-2 p-1"><input @keypress="getPagamentos()" class='form-control' type='text' id='fornecedor' name="fornecedor" placeholder="Fornecedor">
                 </div>
                 <div class="col-md-2 p-1">
-                    <select @change="getPagamentos()" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <select @change="getPagamentos('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.nomecompleto">{{ med.nomecompleto }}</option>
                     </select>

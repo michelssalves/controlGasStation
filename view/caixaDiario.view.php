@@ -6,39 +6,39 @@ include('controller/caixaDiario.php');
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROSDA LINHA 6 ATÉ 89-->
     <form method='POST' id='formFiltroCaixaDiario'>
-    <div class="container text-center p-2">
+    <div class="container text-center">
             <div class="row">
                 <div class="col-md-2 p-1">
-                 <input @keyup="getCaixas()" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1"></div>
-                 <div class="col-md-2 p-1"><input @keyup="getCaixas()" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2"></div>
+                 <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1"></div>
+                 <div class="col-md-2 p-1"><input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2"></div>
                  <div class="col-md-2 p-1">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input @click="getCaixas()" type="checkbox" id="statusAberto" name="statusAberto" value="ABERTO" /> ABERTO</label></li>
-                            <li><input @click="getCaixas()" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input @click="getCaixas()" type="checkbox" id="statusFechado" name="statusFechado" value="FECHADO" /> FECHADO</label></li>
-                            <li><input @click="getCaixas()" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getCaixas('filtrar')" type="checkbox" id="statusAberto" name="statusAberto" value="ABERTO" /> ABERTO</label></li>
+                            <li><input @click="getCaixas('filtrar')" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input @click="getCaixas('filtrar')" type="checkbox" id="statusFechado" name="statusFechado" value="FECHADO" /> FECHADO</label></li>
+                            <li><input @click="getCaixas('filtrar')" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-1 p-1">
-                    <select @change="getCaixas()" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <select @change="getCaixas('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select @change="getCaixas()" id='turnoDefinitivo' name='turnoDefinitivo' class='form-select' aria-label='Default select example'>
+                    <select @change="getCaixas('filtrar')" id='turnoDefinitivo' name='turnoDefinitivo' class='form-select' aria-label='Default select example'>
                         <option value='0'>Turno</option>
                         <option value='SIM'>Sim</option>
                         <option value='NAO'>Não</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select @change="getCaixas()" id='concBancaria' name='concBancaria' class='form-select' aria-label='Default select example'>
+                    <select @change="getCaixas('filtrar')" id='concBancaria' name='concBancaria' class='form-select' aria-label='Default select example'>
                         <option value='0'>Conci</option>
                         <option value='SIM'>Sim</option>
                         <option value='NAO'>Não</option>

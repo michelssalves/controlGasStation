@@ -63,7 +63,7 @@ const app = new Vue({
       document.getElementById("statusCancelado").checked =  false
       document.getElementById("idMed").value =  '0'
       document.getElementById("produto").value = ''
-      this.getSolicitacoes()
+      this.getSolicitacoes('filtrar')
       this.message = 'Limpado!'
    
     },
@@ -103,24 +103,6 @@ const app = new Vue({
         "width=820, height=820"
       );
     },
-    nextPage(){
-
-      this.paginaAtual = this.paginaAtual + 1
-      this.paginaAntAtual = this.paginaAntAtual +1
-      this.paginaDpsAtual = this.paginaDpsAtual +1
-
-      this.getMateriais()
-      
-    },
-    previousPage(){
-
-      this.paginaAtual = this.paginaAtual -1
-      this.paginaAntAtual = this.paginaAntAtual -1
-      this.paginaDpsAtual = this.paginaDpsAtual -1
-
-      this.getMateriais()
-      
-    },
     getAllMeds() {
       axios
         .post(
@@ -134,7 +116,7 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getSolicitacoes(){
+    getSolicitacoes(action){
 
      const formFiltroSolicitacoes = document.getElementById('formFiltroSolicitacoes')
      const formdata = new FormData(formFiltroSolicitacoes)
@@ -146,7 +128,11 @@ const app = new Vue({
       )
         .then((res) => {
          
-          console.log(this.solicitacoes)
+          if(action == 'filtrar'){
+            
+            this.paginaAtual = 1
+         }  
+         console.log(res.data.results)
           this.solicitacoes = res.data.rows
           this.totalResults = res.data.results
 
@@ -285,7 +271,7 @@ const app = new Vue({
   watch: {
     paginaAtual() {
 
-      this.getMateriais()
+      this.getSolicitacoes()
 
     },
     message() {

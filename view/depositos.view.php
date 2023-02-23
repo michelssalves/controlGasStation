@@ -4,7 +4,7 @@ include('controller/depositos.php');
 ?>
 <div id="app">
     <form method='POST' id='formulario-caixa-diario'>
-        <div class="container text-center p-2">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-md-3 p-1">
                     <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>

@@ -6,7 +6,7 @@ include('controller/serasa.php');
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA 6 ATÉ 106-->
     <form method='POST' id='formFiltroSerasa'>
-    <div class="container text-center p-2">
+    <div class="container text-center">
             <div class="row">
                 <div class="col-md-2 p-1">
                     <div class="dropdown">
@@ -14,35 +14,35 @@ include('controller/serasa.php');
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input class="ml-3" type="checkbox" id="statusPefin" name="statusPefin" value="PEFIN" /> PEFIN</label></li>
-                            <li><input class="ml-3" type="checkbox" id="statusBaixado" name="statusBaixado" value="BAIXADO" /> BAIXADO</label></li>
-                            <li><input class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getPendencias('filtrar')" class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input @click="getPendencias('filtrar')" class="ml-3" type="checkbox" id="statusPefin" name="statusPefin" value="PEFIN" /> PEFIN</label></li>
+                            <li><input @click="getPendencias('filtrar')" class="ml-3" type="checkbox" id="statusBaixado" name="statusBaixado" value="BAIXADO" /> BAIXADO</label></li>
+                            <li><input @click="getPendencias('filtrar')" class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <select @change="getPendencias('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select id="matrizFiltro" name="matriz" class="form-select" aria-label="Default select example">
+                    <select @change="getPendencias('filtrar')" id="matrizFiltro" name="matriz" class="form-select" aria-label="Default select example">
                         <option value='2'>Todos</option>
                         <option value='1'>Matriz</option>
                         <option value='0'>Meds</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select id="tipoFiltro" name="tipo" class='form-select' aria-label='Default select example'>
+                    <select @change="getPendencias('filtrar')" id="tipoFiltro" name="tipo" class='form-select' aria-label='Default select example'>
                         <option value='0'>Tipo</option>
                         <option value='CHEQUE'>CHEQUE</option>
                         <option value='NOTA'>NOTA</option>
                     </select>
                 </div>
                 <div class="col-md-2 p-1">
-                    <input type="text" class='form-control' id="nomeClienteFiltro" name="nomeCliente" placeholder="Nome do Cliente">
+                    <input @keyup="getPendencias('filtrar')" type="text" class='form-control' id="nomeClienteFiltro" name="nomeCliente" placeholder="Nome do Cliente">
                 </div>
                 <div class="col-md-2 mt-2">
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>

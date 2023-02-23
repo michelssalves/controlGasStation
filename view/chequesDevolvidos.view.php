@@ -2,10 +2,9 @@
 include('model/ChequesDevolvidos.php');
 include('controller/chequesDevolvidos.php');
 ?>
-
 <div class="app">
     <form method='POST' id='formulario-cheques'>
-        <div class="container text-center p-2">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-sm-2 p-1">
                     <div class="dropdown">
@@ -54,8 +53,8 @@ include('controller/chequesDevolvidos.php');
         </div>
     </form>
     <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead class="header-tabela">
+            <table class="table table-striped table-hover">
+                <thead class="header-tabela">
                 <tr>
                     <th>Id</th>
                     <th>Dt Reg</th>

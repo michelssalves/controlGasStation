@@ -25,7 +25,7 @@ if ($action == 'findAll') {
   $med = $_REQUEST['idMed'];
   $produto =  $_REQUEST['produto'];
   $paginaAtual = $_REQUEST['paginaAtual'];
-  $resultadoPorPagina = 50;
+  $resultadoPorPagina = 6;
   $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
   if (isset($med) && $med <> '0') {

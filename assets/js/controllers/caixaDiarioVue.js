@@ -79,7 +79,7 @@ const app = new Vue({
       document.getElementById("statusNovo").checked =  false
       document.getElementById("statusFechado").checked =  false
       document.getElementById("statusCancelado").checked =  false
-      this.getCaixas()
+      this.getCaixas('filtrar')
       this.message = 'Limpado!'
    
     },
@@ -109,24 +109,6 @@ const app = new Vue({
       this.bloquearCampos()
       this.modalVisualizar(id)
 
-    },
-    nextPage(){
-
-      this.paginaAtual = this.paginaAtual + 1
-      this.paginaAntAtual = this.paginaAntAtual +1
-      this.paginaDpsAtual = this.paginaDpsAtual +1
-
-      this.getPendencias()
-      
-    },
-    previousPage(){
-
-      this.paginaAtual = this.paginaAtual -1
-      this.paginaAntAtual = this.paginaAntAtual -1
-      this.paginaDpsAtual = this.paginaDpsAtual -1
-
-      this.getPendencias()
-      
     },
     modalFecharCaixa(id) {
 
@@ -176,7 +158,7 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getCaixas() {
+    getCaixas(action) {
 
       const formFiltroCaixaDiario = document.getElementById("formFiltroCaixaDiario");
       const formData = new FormData(formFiltroCaixaDiario);
@@ -187,7 +169,12 @@ const app = new Vue({
           formData
         )
         .then((res) => {
-        
+          
+          if(action == 'filtrar'){
+            
+            this.paginaAtual = 1
+
+          }  
           this.caixas = res.data.rows;
           this.totalResults = res.data.results
 

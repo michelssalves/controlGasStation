@@ -6,7 +6,7 @@ include('controller/enviarMateriais.php');
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <form method='POST' id='formFiltroSolicitacoes'>
-        <div class="container text-center p-2">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-md-3 p-1">
                     <div class="dropdown">
@@ -14,21 +14,21 @@ include('controller/enviarMateriais.php');
                             Status
                         </button>
                         <ul class="dropdown-menu p-3">
-                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
-                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
-                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
-                            <li><input @click="getSolicitacoes()" class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
+                            <li><input @click="getSolicitacoes('filtrar')" class="ml-3" type="checkbox" id="statusNovo" name="statusNovo" value="NOVO" /> NOVO</label></li>
+                            <li><input @click="getSolicitacoes('filtrar')" class="ml-3" type="checkbox" id="statusEnviado" name="statusEnviado" value="ENVIADO" /> ENVIADO</label></li>
+                            <li><input @click="getSolicitacoes('filtrar')" class="ml-3" type="checkbox" id="statusFinalizado" name="statusFinalizado" value="FINALIZADO" /> FINALIZADO</label></li>
+                            <li><input @click="getSolicitacoes('filtrar')" class="ml-3" type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md-3 p-1">
-                    <select @change="getSolicitacoes()" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <select @change="getSolicitacoes('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
                 <div class="col-md-3 p-1">
-                    <input @keyup="getSolicitacoes()" type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
+                    <input @keyup="getSolicitacoes('filtrar')" type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
                 </div>
                 <div class="col-md-2 mt-2">
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
