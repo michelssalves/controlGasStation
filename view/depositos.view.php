@@ -2,74 +2,71 @@
 include('model/Depositos.php');
 include('controller/depositos.php');
 ?>
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-md-auto mt-4">
-            <form method='POST' id='formulario-caixa-diario'>
-                <input type='hidden' name='p' value='3'>
-                <button type="submit" name='action' value='filtrar-depositos' class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" name='action' value='limpar-filtrar-depositos' class='btn btn-danger btn-sm'>Limpar</button>
-        </div>
-    </div>
-</div>
-<div class='table-responsive mt-1'>
-    <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
-        <tr>
-            <th colspan='10' style='background-color:#009688'>
-                <center>FILTROS</center>
-            </th>
-        </tr>
-        <tr>
-            <td>
-                <div class="container">
-                    <div class="row justify-content-md-center">
-                        <div class="col-md-auto">
-                            <select id='id_med' name='id_med' class='form-select-sm' aria-label='Default select example'>
-                                <option selected value="<?= ($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
-                                <?= $cboMed ?>
-                                <option="-1">PERIODO</option>
-                            </select>
-                            <select required id='contaDeposito' name='contaDeposito' class='form-select-sm' aria-label='Default select example'>
-                                <option selected disabled><?= $contaDeposito; ?></option>
-                                <option>CONTA</option>
-                                <option>BB</option>
-                                <option>BB MEDS</option>
-                                <option>BB PROPRIO</option>
-                                <option>ITAU</option>
-                                <option>BRINKS</option>
-                                <option>PROSEGUR</option>
-                            </select>
-                            <input class='form-control-sm' type='date' name='dataIni' id='dataIni' value='<?= $dataIni ?>'>
-                            <input class='form-control-sm' type='date' name='dataFim' id='dataFim' value='<?= $dataFim ?>'>
-                        </div>
-                    </div>
+<div id="app">
+    <form method='POST' id='formulario-caixa-diario'>
+        <div class="container text-center p-2">
+            <div class="row">
+                <div class="col-md-3 p-1">
+                    <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
+            
+                    </select>
                 </div>
-            </td>
-        </tr>
-        
-    </table>
+                <div class="col-md-3 p-1">
+                    <select required id='contaDeposito' name='contaDeposito' class='form-select' aria-label='Default select example'>
+                        <option>CONTA</option>
+                        <option>BB</option>
+                        <option>BB MEDS</option>
+                        <option>BB PROPRIO</option>
+                        <option>ITAU</option>
+                        <option>BRINKS</option>
+                        <option>PROSEGUR</option>
+                    </select>
+                </div>
+                <div class="col-md-2 p-1">
+                    <input type='date' class='form-control' name='dataIni' id='dataIni'>
+                </div>
+                <div class="col-md-2 p-1">
+                    <input type='date' class='form-control' name='dataFim' id='dataFim'>
+                </div>
+                <div class="col-md-1 p-1 mt-1">
+                    <button type="button" class='btn btn-danger btn-sm'>Limpar</button>
+                </div>
+            </div>
+        </div>
     </form>
-</div>
-<div class="table-responsive">
-    <div class="tabela-ver-todos-os-cheques">
-        <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-            <thead class="header-tabela">
+    <div class="table-responsive">
+            <table class="table table-striped table-hover mt-1 ">
+                <thead class="header-tabela">
                 <tr>
-                <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT MOV</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">DIA SEM</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">MED</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">DINHEIRO</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">CONTA DIN</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">CHEQUE</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">CONTA CH</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">TOTAL DEP</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">DÉBITO</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">DT REG</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">OBS</th>
+                    <td>DT MOV</td>
+                    <td>DT MOV</td>
+                    <td>DIA SEM</td>
+                    <td>MED</td>
+                    <td>DINHEIRO</td>
+                    <td>CONTA DIN</td>
+                    <td>CHEQUE</td>
+                    <td>CONTA CH</td>
+                    <td>TOTAL DEP</td>
+                    <td>DÉBITO</td>
+                    <td>DT REG</td>
+                    <td>OBS</td>
                 </tr>
             </thead>
             <tbody>
-                <?= $txtTab ?>
+                    <th>DT MOV</th>
+                    <th>DT MOV</th>
+                    <th>DIA SEM</th>
+                    <th>MED</th>
+                    <th>DINHEIRO</th>
+                    <th>CONTA DIN</th>
+                    <th>CHEQUE</th>
+                    <th>CONTA CH</th>
+                    <th>TOTAL DEP</th>
+                    <th>DÉBITO</th>
+                    <th>DT REG</th>
+                    <th>OBS</th>
+            </tbody>
+        </table>
     </div>
+
 </div>

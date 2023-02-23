@@ -2,27 +2,13 @@
 include('model/EnviarMateriais.php');
 include('controller/enviarMateriais.php');
 ?>
+<!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <form method='POST' id='formFiltroSolicitacoes'>
-        <div class="container text-center">
-            <div class="row mt-1">
-                <div class="col-4">
-                </div>
-                <div class="col-sm-4 mt-1 p-2 d-inline">
-                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                    <button type="button" class='btn btn-primary btn-sm'>Estoque</button>
-                </div>
-            </div>
-            <div class="container mt-1 mb-1">
-                <div class="fundo-header-tabelas rounded d-flex justify-content-center">
-                    <div class="text-dark fs-6 ">
-                        <h4>Filtro {{menu}}</h4>
-                    </div>
-                </div>
-            </div>
+        <div class="container text-center p-2">
             <div class="row">
-                <div class="col-4">
+                <div class="col-md-3 p-1">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -35,14 +21,18 @@ include('controller/enviarMateriais.php');
                         </ul>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-md-3 p-1">
                     <select @change="getSolicitacoes()" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
-                <div class="col-4">
+                <div class="col-md-3 p-1">
                     <input @keyup="getSolicitacoes()" type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
+                </div>
+                <div class="col-md-2 mt-2">
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+                    <button type="button" class='btn btn-primary btn-sm'>Estoque</button>
                 </div>
             </div>
         </div>
@@ -114,7 +104,7 @@ include('controller/enviarMateriais.php');
                         <div class="d-flex flex-row">
                             <input type="hidden" name="status" id="status" :value="status">
                             <input type="hidden" name="idPedido" id="idPedido" :value="idPedido">
-                            <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO' || status == 'NOVO')"><button type="button" title="Confirmar Recebimento" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="alterarStatus(idPedido)"><img class="iconeSize" :src="iconRecebido"></button></div> 
+                            <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO' || status == 'NOVO')"><button type="button" title="Confirmar Recebimento" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="alterarStatus(idPedido)"><img class="iconeSize" :src="iconRecebido"></button></div>
                             <div class="p-1" v-if="!(status == 'ENVIADO' || status == 'CANCELADO'|| status == 'FINALIZADO')"><button type="button" title="Enviar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="alterarStatus(idPedido)"><img class="iconeSize" :src="iconEnviado"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO')"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao()"><img class="iconeSize" :src="iconObs"></button></div>
                             <div class="p-1" v-if="!(status == 'FINALIZADO' || status == 'CANCELADO' || status == 'ENVIADO')"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="cancelarPedido(idPedido)"><img class="iconeSize" :src="iconExc"></button></div>
@@ -260,162 +250,5 @@ include('controller/enviarMateriais.php');
     </div>
     <!--MODAL VISUALIZAR ITEM-->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 </div>
+<!--FIM DIV APP VUE JS-->

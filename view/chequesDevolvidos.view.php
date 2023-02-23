@@ -1,33 +1,13 @@
-<?php 
-include('model/ChequesDevolvidos.php'); 
+<?php
+include('model/ChequesDevolvidos.php');
 include('controller/chequesDevolvidos.php');
-
-
- 
 ?>
-<div class="container">
-    <div class="row justify-content-md-center">
-        <div class="col-md-auto mt-4">
-            <form method='POST' id='formulario-cheques'>
-                <input type='hidden' name='p' value='2'>
-                <input type='hidden' id='action' name='action' value='filtrar-cheques-devolvidos'>
-                <button type="button"  onclick="incluirCheque()" class='btn btn-warning btn-sm'>Incluir</button>
-                <button type="submit" name='action' value='filtrar-cheques-devolvidos'  class='btn btn-info btn-sm'>Filtrar</button>
-                <button type="submit" name='action' value='limpar-cheques-devolvidos' class='btn btn-danger btn-sm'>Limpar</button>
-        </div>
-    </div>
-</div>
-    <table class='table mb-0 table-sm table-hover fs-6 fst-italic'>
-        <thead class="header-tabela">
-            <tr>
-                <th colspan='11'>
-                    <center>FILTROS</center>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>
+
+<div class="app">
+    <form method='POST' id='formulario-cheques'>
+        <div class="container text-center p-2">
+            <div class="row">
+                <div class="col-sm-2 p-1">
                     <div class="dropdown">
                         <button class="form-select " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -44,64 +24,54 @@ include('controller/chequesDevolvidos.php');
                             <li><input <?= $flagCancelado ?> type="checkbox" id="statusCancelado" name="statusCancelado" value="CANCELADO" /> CANCELADO</label></li>
                         </ul>
                     </div>
-                </td>
-                <td colspan='2'>
+                </div>
+                <div class="col-md-2 p-1">
                     <select id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
                         <option selected value='0'>Data Inclusão</option>
                         <option value='1'>Data Cheque</option>
                         <option value='2'>Data Devolução</option>
                         <option value='3'>Data Quitação</option>
                     </select>
-                </td>
-                <td colspan='2'>
+                </div>
+                <div class="col-md-2 p-1">
                     <select id='id_med' name='id_med' class='form-select' aria-label='Default select example'>
                         <option selected value="<?= ($id_med ? $id_med : ''); ?>"><?= ($nome_f[$id_med] ? $nome_f[$id_med] : 'Filial'); ?></option>
                         <?= $cboMed ?>
                     </select>
-                </td>
-                <td colspan='2'>
-                    <div class='input-group input-group mb-3'>
-                        <input type='text' name='cliente' id='cliente' value="<?= $cliente ?>" placeholder='Cliente' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
-                    </div>
-                </td colspan='2'>
 
-                <td>
-                    <div class='input-group input-group mb-3'>
-                        <input type='text' name='idChq' id='idChq' value="<?= $idChq ?>" placeholder='Id' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
-                    </div>
-                </td>
-                <td>
-                    <div class='input-group input-group mb-3'>
-                        <input type='text' name='banco' id='banco' value="<?= $banco ?>" placeholder='Banco' class='form-control' aria-label='Sizing example input' aria-describedby='inputGroup-sizing-sm'>
-                    </div>
-                </td>
-                <td><input class='form-control' type='date' name='data1' id='data1' value='<?= $data1 ?>'></td>
-                <td><input class='form-control' type='date' name='data2' id='data2' value='<?= $data2 ?>'></td>
-            </tr>
-        </tbody>
-    </table>
+                </div>
+                <div class="col-md-2 p-1">
+                    <input class='form-control' type='date' name='data1' id='data1' value='<?= $data1 ?>'>
+                </div>
+                <div class="col-md-2 p-1">
+                    <input class='form-control' type='date' name='data2' id='data2' value='<?= $data2 ?>'>,
+                </div>
+                <div class="col-md-2 mt-1 p-1">
+                    <button type="button" class='btn btn-warning btn-sm'>Incluir</button>
+                    <button type="button" class='btn btn-danger btn-sm'>Limpar</button>
+                </div>
+            </div>
+        </div>
     </form>
-<div class="table-responsive">
-    <div class="tabela-ver-todos-os-cheques">
-        <table data-tablesaw-sortable data-tablesaw-sortable-switch class="tablesaw table-sm table-hover table-striped fs-6 mb-0" data-tablesaw-mode="columntoggle" data-tablesaw-minimap>
-
-            <thead>
-                <tr style='background-color:#009688'>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Id</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Reg</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Banco</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">Cliente</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">Nr Cheque</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Motivo</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Cheque</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">Valor</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Devol</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dias</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">$ Corr</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Dt Quit</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="1">Med</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">Stat</th>
-                    <th data-tablesaw-sortable-col data-tablesaw-priority="5">UltAlt</th>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="header-tabela">
+                <tr>
+                    <th>Id</th>
+                    <th>Dt Reg</th>
+                    <th>Banco</th>
+                    <th>Cliente</th>
+                    <th>Nr Cheque</th>
+                    <th>Motivo</th>
+                    <th>Dt Cheque</th>
+                    <th>Valor</th>
+                    <th>Dt Devol</th>
+                    <th>Dias</th>
+                    <th>$ Corr</th>
+                    <th>Dt Quit</th>
+                    <th>Med</th>
+                    <th>Stat</th>
+                    <th>UltAlt</th>
                 </tr>
             </thead>
             <tbody>

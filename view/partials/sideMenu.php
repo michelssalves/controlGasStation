@@ -1,7 +1,9 @@
 
-<?php include 'header.php'; ?>
 
-<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+
+<div class="app-sidebar__overlay" data-toggle="sidebar">
+      
+</div>
 <aside class="app-sidebar">
     <ul class="app-menu">
         <li><a class="app-menu__item <?= $active[2]; ?>" href="?p=2"><i class="app-menu__icon fa-solid fa-money-check-dollar"></i><span class="app-menu__label">Cheques</span></a></li>
@@ -18,6 +20,7 @@
         <li><a class="app-menu__item <?= $active[13]; ?>" href="?p=13"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Ctrl Qualidade</span></a></li>
     </ul>
 </aside>
+<?php include 'header.php'; ?>
 <main class="app-content">
     <div>
 

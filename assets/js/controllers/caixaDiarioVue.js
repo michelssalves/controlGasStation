@@ -34,7 +34,7 @@ const app = new Vue({
       aplicarIcon: true,
       motivoCancelamento: "",
       filtroData1: "2017-01-08",
-      filtroData2: new Date().toLocaleDateString("en-CA"),
+      filtroData2: this.dataAtual(),
       caixaPix: "",
       message: "",
       modal: "modal",
@@ -101,8 +101,13 @@ const app = new Vue({
     fecharModal(){
 
         this.bloquearCampos()
-
         this.getCaixas()
+
+    },
+    voltarVisualizar(id){
+
+      this.bloquearCampos()
+      this.modalVisualizar(id)
 
     },
     nextPage(){
@@ -148,6 +153,7 @@ const app = new Vue({
         });
     },
     modalAbrirCaixa(id) {
+
       const formData = new FormData();
       formData.append("id", id);
 
@@ -331,10 +337,9 @@ const app = new Vue({
           console.log(err);
         });
     },
-    modalObservacao() {
-      const incluirObservacaoModal = new bootstrap.Modal(
-        document.getElementById("incluirObservacaoModal")
-      );
+    modalObservacao(id) {
+
+      const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"));
       incluirObservacaoModal.show();
     },
     salvarObs() {
@@ -438,19 +443,10 @@ const app = new Vue({
           });
       }
     },
+    
   },
   computed: {
-    /*aqui consigo manipular os valres do data()
-    multiplicar: function(){
 
-      return this.pix * 100
-    }
-    now: function () {
-      return Date.now()
-    },
-    fullName: function () {
-      return this.firstName + ' ' + this.lastName
-    }*/
   },
   watch: {
     paginaAtual() {
@@ -461,7 +457,7 @@ const app = new Vue({
     message() {
       setTimeout(() => {
         this.message = "";
-      }, 3000);
+      }, 1500);
     },
   },
   mounted: function () {

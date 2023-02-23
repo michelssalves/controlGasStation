@@ -31,7 +31,7 @@ if ($action == 'findAll') {
     }
     if($med <> ''){ $filtroFilial = "AND id_med = $med ";  }
     if($turnoDefinitivo <> '0'){ $filtroTurno = "AND turnos_definitivo = '$turnoDefinitivo' ";  }
-    if($concBancaria <> '0'){ $filtroConciliacao = "AND conc = '$concBancaria' ";  }
+    if($concBancaria <> '0'){ $filtroConciliacao = "AND conc = '$concBancaria'";  }
     
     $model = new Model();
 
@@ -45,7 +45,7 @@ if ($action == 'findAllMeds') {
 
     $model = new Model();
 
-    $rows = $model->selectAllMeds();
+    $rows = $model->findAllMeds();
 
     $data = array('rows' => utf8ize($rows));
 

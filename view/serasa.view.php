@@ -2,28 +2,13 @@
 include('model/Serasa.php');
 include('controller/serasa.php');
 ?>
+<!--INICIO DIV APP VUE JS-->
 <div id="app">
-<!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA 6 ATÉ 106-->   
+    <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA 6 ATÉ 106-->
     <form method='POST' id='formFiltroSerasa'>
-        <div class="container text-center">
-            <div class="row mt-1">
-                <div class="col-4">
-                </div>
-                <div class="col-sm-4 mt-1 p-2 d-inline">
-                    <button type='button' class='btn btn-info btn-sm' @click="getPendencias()">Filtrar</button>
-                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                    <button type="button" class='btn btn-secondary btn-sm'>PFIN</button>
-                </div>
-            </div>
-            <div class="container mt-1 mb-1">
-                <div class="fundo-header-tabelas rounded d-flex justify-content-center">
-                    <div class="text-dark fs-6 ">
-                        <h4>Filtros {{menu}}</h4>
-                    </div>
-                </div>
-            </div>
+    <div class="container text-center p-2">
             <div class="row">
-                <div class="col">
+                <div class="col-md-2 p-1">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -36,28 +21,32 @@ include('controller/serasa.php');
                         </ul>
                     </div>
                 </div>
-                <div class="col">
+                <div class="col-md-2 p-1">
                     <select id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="0">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
                     </select>
                 </div>
-                <div class="col">
+                <div class="col-md-2 p-1">
                     <select id="matrizFiltro" name="matriz" class="form-select" aria-label="Default select example">
                         <option value='2'>Todos</option>
                         <option value='1'>Matriz</option>
                         <option value='0'>Meds</option>
                     </select>
                 </div>
-                <div class="col">
+                <div class="col-md-2 p-1">
                     <select id="tipoFiltro" name="tipo" class='form-select' aria-label='Default select example'>
                         <option value='0'>Tipo</option>
                         <option value='CHEQUE'>CHEQUE</option>
                         <option value='NOTA'>NOTA</option>
                     </select>
                 </div>
-                <div class="col">
+                <div class="col-md-2 p-1">
                     <input type="text" class='form-control' id="nomeClienteFiltro" name="nomeCliente" placeholder="Nome do Cliente">
+                </div>
+                <div class="col-md-2 mt-2">
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+                    <button type="button" class='btn btn-secondary btn-sm'>PFIN</button>
                 </div>
             </div>
         </div>
@@ -118,8 +107,8 @@ include('controller/serasa.php');
             </ul>
         </nav>
     </div>
-<!--AREA ONDE ESTÁ A TABELA COM FILTROS -->   
-<!--AREA ONDE ESTÃO OS MODAIS  DA LINHA 106 ATÉ 421-->    
+    <!--AREA ONDE ESTÁ A TABELA COM FILTROS -->
+    <!--AREA ONDE ESTÃO OS MODAIS  DA LINHA 106 ATÉ 421-->
     <!--MODAL VISUALIZAR CX DIÁRIO-->
     <div class="modal fade" id="visualizarSerasa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizarSerasaoModalLabel" aria-hidden="true">
         <form id="formVerSerasa" method="POST">
@@ -434,5 +423,7 @@ include('controller/serasa.php');
         </div>
     </div>
     <!-- /MODAL BAIXAR SERASA-->
-<!--AREA ONDE ESTÃO OS MODAIS --> 
+    <!--AREA ONDE ESTÃO OS MODAIS -->
+
 </div>
+<!--FIM DIV APP VUE JS-->
