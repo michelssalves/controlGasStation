@@ -1,492 +1,334 @@
 <?php
 session_start();
 include './controllerAux/validaLogin.php';
-include './controllerAux/vetoresAuxiliares.php';
 include './controllerAux/functionsAuxiliar.php';
 include '../model/ChequesDevolvidos.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'filtrar-cheques-devolvidos' || $action == 'limpar-cheques-devolvidos' || $action == '') {
+if ($action == 'findAllMeds') {
 
+    $model = new Model();
+  
+    $rows = $model->findAllMeds();
+  
+    $data = array('rows' => utf8ize($rows));
+  
+    echo json_encode($data);
+  }
+if ($action == 'findAll') {
+
+    $status1 =  $_REQUEST['statusNovo'];
+    $status2 =  $_REQUEST['statusNegociando'];
+    $status3 =  $_REQUEST['statusQuitado'];
+    $status4 =  $_REQUEST['statusPfin'];
+    $status5 =  $_REQUEST['statusJuridico'];
+    $status6 =  $_REQUEST['statusExecucao'];
+    $status7 =  $_REQUEST['statusCaducou'];
+    $status8 =  $_REQUEST['statusExtraviado'];
+    $status9 =  $_REQUEST['statusCancelado'];
+    $tipoData = $_REQUEST['tipoData'];
+    $idMed = $_REQUEST['idMed'];
     $data1 = $_REQUEST['data1'];
     $data2 = $_REQUEST['data2'];
-    $tipoData = $_REQUEST['tipoData'];
-    $id_med = $_REQUEST['id_med'];
-    $cliente = $_REQUEST['cliente'];
-    $idChq = $_REQUEST['idChq'];
-    $banco = $_REQUEST['banco'];
+    $paginaAtual = $_REQUEST['paginaAtual'];
+    $resultadoPorPagina = 6;
+    $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
-    $statusNovo =  $_REQUEST['statusNovo'];
-    $statusNegociando =  $_REQUEST['statusNegociando'];
-    $statusQuitado =  $_REQUEST['statusQuitado'];
-    $statusPfin =  $_REQUEST['statusPfin'];
-    $statusJuridico =  $_REQUEST['statusJuridico'];
-    $statusExecucao =  $_REQUEST['statusExecucao'];
-    $statusCaducou =  $_REQUEST['statusCaducou'];
-    $statusExtraviado =  $_REQUEST['statusExtraviado'];
-    $statusCancelado =  $_REQUEST['statusCancelado'];
-    $flagNovo = $statusNovo <> '' ? 'checked' : '';
-    $flagNegociando  = $statusNegociando <> '' ? 'checked' : '';
-    $flagQuitado = $statusQuitado <> '' ? 'checked' : '';
-    $flagPfin = $statusPfin <> '' ? 'checked' : '';
-    $flagJuridico = $statusJuridico <> '' ? 'checked' : '';
-    $flagExecucao = $statusExecucao <> '' ? 'checked' : '';
-    $flagCaducou = $statusCaducou <> '' ? 'checked' : '';
-    $flagExtraviado = $statusExtraviado <> '' ? 'checked' : '';
-    $flagCancelado = $statusCancelado <> '' ? 'checked' : '';
 
-    if ($action == 'limpar-cheques-devolvidos') {
+    if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '' && $status5 == '' && $status6 == '' && $status7 == '' && $status8 == '' && $status9 == ''){
+        $Fstatus =  "AND ch.status = 'PFIN'";
+    }else {
+        $Fstatus =  "AND ch.status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "',
+        '" . $status5 . "','" . $status6 . "','" . $status7 . "','" . $status8 . "','" . $status9 . "')";
+    }
+    if ($idMed <> '0') {
 
-        $data1  = date('1999-01-01');
-        $data2  = date('Y-m-d');
-        $id_med = '';
-        $banco = '';
-        $idChq = '';
-        $cliente = '';
-        $flagNovo = '';
-        $flagNegociando = '';
-        $flagQuitado = '';
-        $flagPfin = 'checked';
-        $flagJuridico = '';
-        $flagExecucao = '';
-        $flagCaducou = '';
-        $flagExtraviado = '';
-        $flagCancelado = '';
+        $Fmed = "AND u.id = $idMed";
     }
-    if (
-        $statusNovo == '' && $statusNegociando == '' && $statusQuitado == '' && $statusPfin == ''
-        && $statusJuridico == '' && $statusExecucao == '' && $statusCaducou == '' && $statusExtraviado == ''
-        && $statusCancelado == ''
-    ) {
-        $Fstatus =  "AND status = 'PFIN'";
-    } else {
-        $Fstatus =  "AND status IN ('" . $statusNovo . "','" . $statusNegociando . "','" . $statusQuitado . "','" . $statusPfin . "',
-        '" . $statusJuridico . "','" . $statusExecucao . "','" . $statusCaducou . "','" . $statusExtraviado . "','" . $statusCancelado . "')";
-    }
+    if (empty($tipoData) || $tipoData == '0') {
 
-    if ($idChq <> '') {
-
-        $Fid = "AND ch.id = $idChq";
-    }
-    if ($cliente <> '') {
-        $Fcliente = "AND nome LIKE '%$cliente%' ";
-    }
-    if ($banco <> '') {
-        $Fbanco = "AND bco = $banco";
-    }
-    if ($id_med <> '') {
-        $Fmed = "AND ch.id_med = $id_med";
-    }
-    if (empty($tipoData)) {
-
-        $tipoData = 'dthrInclusao';
-    }
-    if ($tipoData  === '0') {
-        $tipoData = 'dthrInclusao';
+        $tipoData = 'ch.dthrInclusao';
     }
     if ($tipoData  === '1') {
-        $tipoData = 'dtCheque';
+        $tipoData = 'ch.dtCheque';
     }
     if ($tipoData  === '2') {
-        $tipoData = 'dtDevol';
+        $tipoData = 'ch.dtDevol';
     }
     if ($tipoData  === '3') {
-        $tipoData = 'dtQuitacao';
-    }
-    if ($data1 == '') {
-
-        $data1 = date('1999-01-01');
-    }
-    if ($data2  == '') {
-
-        $hoje = date('Y-m-d');
-        $amanha = date('Y-m-d', strtotime($hoje . ' +1 day'));
-        $data2 = $amanha;
+        $tipoData = 'ch.dtQuitacao';
     }
 
     $FtipoData = " AND $tipoData BETWEEN '" . $data1 . "' AND '" . $data2 . "' ";
 
-    $qry = selectChequeDevolvidos($FtipoData, $FBanco, $Fid, $Fcliente, $Fbanco, $Fmed, $Fstatus);
+    $model = new Model();
 
-    $totalValor = 0;
-    $totalValorCorrigido = 0;
+    $rows = $model->findAll($FtipoData, $Fmed, $Fstatus, $start, $resultadoPorPagina);
 
-    while ($row = odbc_fetch_array($qry)) {
+    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
-
-        extract($row);
-
-        $ultimaAlt = '';
-        if ($ultimaAlteracao <> '') {
-            $ultimaAlt = dma($ultimaAlteracao);
-        }
-        $dtQuita = '';
-        if ($dtQuitacao <> '') {
-            $dtQuita = dma($dtQuitacao);
-        }
-
-        $motivoTitle = $vetorMotivo[$motivo];
-        $bancoTitle = $vetorBanco[$bco];
-
-        if ($valorQuitacao <> '') {
-            $valorCorrigido = $valorQuitacao;
-            $tituloValCorr = 'Valor Recebido';
-        } else {
-            $valorCorrigido = $valorCorr;
-            $tituloValCorr = 'Taxa de 0,1% por dia de atraso';
-        }
-        if ($subclasse == 'OUTRO') {
-            $obs = '(' . l50($obs) . ')';
-        } else {
-            $obs = '';
-        }
-
-        $link = " id='$id' onclick='visualizarCheque(this.id)' style='cursor:pointer'";
-
-        $txtTab .= "<tr $link>
-                <td>$id</td>
-                <td>" . dma($dthrInclusao) . "</td>
-                <td title='$bancoTitle'>$bco</td>
-                <td>" . l10($nome) . "</td>
-                <td>$nrcheque</td>
-                <td title='$motivoTitle'>$motivo</td>
-                <td>" . dma($dtCheque) . "</td>
-                <td>" . v2($valor) . "</td>
-                <td>" . dma($dtDevol) . "</td>
-                <td>$dias</td>
-                <td title=$tituloValCorr>" . v2($valorCorrigido) . "</td>
-                <td>$dtQuita</td>
-                <td>$loginName </td>
-                <td>" . l5($status) . "</td>
-                <td>$ultimaAlt</td>
-            </tr>";
-        $totalValor += $valor;
-        $totalValorCorrigido += $valorCorr;
-    }
-
-    $txtTab .= "</tbody>
-            <tr class='w3-yellow'>
-                <td colspan='7'><center>Total</td><td><center>
-                <a>" . v2($totalValor) . "</a></td><td colspan='2'></td>
-                <td><center><a>" . v2($totalValorCorrigido) . "</a></td><td colspan='4'></td>
-            </tr>";
+    echo json_encode($data);
 }
-include 'view/modal/chequesDevolvidos/chequesDevolvidosAnexo.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosVisualizar.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosIncluir.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosCancelar.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosQuitacao.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosObservacao.view.php';
-include 'view/modal/chequesDevolvidos/chequesDevolvidosPendenciaFinanceira.view.php';
 
-//INCLUIR NOVO CHEQUE
-if ($action == 'incluir-cheque') {
 
-    $idMed = $_REQUEST['idMed'];
-    $codigoBanco = $_REQUEST['codigoBanco'];
-    $rzSocialCheque = $_REQUEST['rzSocialCheque'];
-    $rzSocialCliente = $_REQUEST['rzSocialCliente'];
-    $telefone = $_REQUEST['telefone'];
-    $nrCheque = $_REQUEST['nrCheque'];
-    $valor = $_REQUEST['valor'];
-    $motivo = $_REQUEST['motivo'];
-    $dataCheque = $_REQUEST['dataCheque'];
-    $dataDevol = $_REQUEST['dataDevol'];
-    $cpfcnpj = $_REQUEST['cpfcnpj'];
-    $evento = 'Incluído no Sistema';
+if ($action == 'findById') {
 
-    $row = selectMedCadatrosGerentesByMed($idMed);
-    $emailGerentePosto = $row[0];
-    $nomeGerentePosto = $row[1];
-    $emailGerenteRede = $row[2];
-    $nomeGerenteRede = $row[3];
+    $id = $_REQUEST['id'];
 
-    $idCheque = insertNovoChequeDevolvido($codigoBanco, $rzSocialCheque, $rzSocialCliente, $telefone, $nrCheque, $valor, $motivo, $dataCheque, $dataDevol, $cpfcnpj, $idMed, $idUsuario, $usuarioLogado, $evento);
+    $model = new Model();
 
-    if ($_FILES['chequeFrente']['name'] <> '' && $_FILES['chequeVerso']['name'] <> '') {
+    $rows = $model->findById($id);
 
-        $extensao = strtolower(end(explode('.', $_FILES['chequeFrente']['name'])));
-        $temp = $_FILES['chequeFrente']['tmp_name'];
-        $descricao = 'CHEQUE FRENTE';
-        $localDeArmazenagem = "assets/docs/chequesDevolvidos/";
-        $tabela = "ccp_chequeDevAnexo";
+    $arrayMotivo = array(
 
-        insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
+        '0' => array( 
+            'cod' =>  '11',
+            'desc' =>  'Insuficiência de fundos - 1ª apresentação',
+        
+        ),
+        '1' => array( 
+            'cod' =>  '12',
+            'desc' =>  'Insuficiência de fundos - 2º apresentação',
+        
+        ),
+        '2' => array( 
+            'cod' =>  '13',
+            'desc' =>  'Conta encerrada',
+        ),
+        '3' => array( 
+            'cod' =>  '14',
+            'desc' =>  'Prática espária - compromisso pronto acolhimento',
+        ),
+        '4' => array( 
+            'cod' =>  '20',
+            'desc' =>  'Folha de cheque cancelada por solicitação do correntista',
+        ),
+        '5' => array( 
+            'cod' =>  '21',
+            'desc' =>  'Contra-ordem ou oposição ao pagamento',
+        ),
+        '6' => array( 
+            'cod' =>  '22',
+            'desc' =>  'Divergência ou insuficiência de assinatura',
+        ),
+        '7' => array( 
+            'cod' =>  '23',
+            'desc' =>  'Cheques de Órgãos da administração federal em desacordo com o decreto-lei 200',
+        ),
+        '8' => array( 
+            'cod' =>  '24',
+            'desc' =>  'Bloqueio judicial ou determinação do bacen',
+        ),
+        '9' => array( 
+            'cod' =>  '25',
+            'desc' =>  'Cancelamento de talonário pelo banco sacado',
+        ),
+        '10' => array( 
+            'cod' =>  '26',
+            'desc' =>  'Inoperância temporária de transporte',
+        ),
+        '11' => array( 
+            'cod' =>  '27',
+            'desc' =>  'Feriado municipal não previsto',
+        ),
+        '12' => array( 
+            'cod' =>  '28',
+            'desc' =>  'Contra-ordem ou oposição ao pagamento motivada por furto ou roubo',
+        ),
+        '13' => array( 
+            'cod' =>  '29',
+            'desc' =>  'Falta de confirmação do recebimento do talonário pelo correntista',
+        ),
+        '14' => array( 
+            'cod' =>  '30',
+            'desc' =>  'Furto ou roubo de malotes',
+        ),
+        '15' => array( 
+            'cod' =>  '31',
+            'desc' =>  'Erro formal de preenchimento',
+        ),
+        '16' => array( 
+            'cod' =>  '32',
+            'desc' =>  'Ausência ou irregularidade na aplicação do carimbo de compensação',
+        ),
+        '17' => array( 
+            'cod' =>  '33',
+            'desc' =>  'Divergência de endosso',
+        ),
+        '18' => array( 
+            'cod' =>  '34',
+            'desc' =>  'Cheque apresentado por estabelecimento que não o indicado no cruzamento em preto, sem o endosso-mandato',
+        ),
+        '19' => array( 
+            'cod' =>  '35',
+            'desc' =>  'Cheque fraudado(adulterado), emitido sem prévio controle ou responsabilidade do estabelecimento bancário ("cheque universal")',
+        ),
+        '20' => array( 
+            'cod' =>  '36',
+            'desc' =>  'Cheque emitido com mais de um endosso',
+        ),
+        '21' => array( 
+            'cod' =>  '37',
+            'desc' =>  'Registro inconsistente - CEL',
+        ),
+        '22' => array( 
+            'cod' =>  '40',
+            'desc' =>  'Moeda inválida',
+        
+        ),
+        '23' => array( 
+            'cod' =>  '41',
+            'desc' =>  'Cheque apresentado a banco que não o sacado',
+        
+        ),
+        '25' => array( 
+            'cod' =>  '42',
+            'desc' =>  'Cheque não compensável na sessão ou sistema de compensação em que apresentado e o recibo bancário trocado em sessão indevida',
+        ),
+        '26' => array( 
+            'cod' =>  '43',
+            'desc' =>  'Cheque devolvido anteriormente pelos motivos 21, 22, 23, 24, 31 e 34, persistindo o vetorMotivo de devolução',
+        ),
+        '27' => array( 
+            'cod' =>  '44',
+            'desc' =>  'Cheque prescrito',
+        ),
+        '28' => array( 
+            'cod' =>  '45',
+            'desc' =>  'Cheque emitido por entidade obrigada a emitir ordem bancária',
+        ),
+        '29' => array( 
+            'cod' =>  '46',
+            'desc' =>  'CR - Comunicação de remessa cujo cheque correspondente não for entregue no prazo devido',
+        ),
+        '30' => array( 
+            'cod' =>  '47',
+            'desc' =>  'CR - Comunicação de remessa com ausência ou inconsistância de dados obrigatórios',
+        ),
+        '31' => array( 
+            'cod' =>  '48',
+            'desc' =>  'Cheque de valor superior a R$ 100,00 sem identificação do beneficiário',
+        ),
+        '32' => array( 
+            'cod' =>  '49',
+            'desc' =>  'Remessa nula, caracterizada pela reapresentação de cheque devolvido pelos motivos 12, 13, 14, 20, 25, 35, 43, 44 e 45',
+        ),
+        '33' => array( 
+            'cod' =>  '71',
+            'desc' =>  'Inadimplemento contratual da cooperativa de crédito no acordo de compensação',
+        ),
+        '34' => array( 
+            'cod' =>  '72',
+            'desc' =>  'Contrato de compensação encerrado (Cooperativas de crédito)',
+        )
+    );
 
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+ //   $rowObs = $model->selectObservacaoByIdPedido($id);
 
-        $extensao = strtolower(end(explode('.', $_FILES['chequeVerso']['name'])));
-        $temp = $_FILES['chequeVerso']['tmp_name'];
-        $descricao = 'CHEQUE VERSO';
+  //  $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
 
-        insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
+    $data = array('rows' => utf8ize($rows),  'motivos' => utf8ize($arrayMotivo));
 
-        if (uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)) {
-
-            $assunto = 'NOTIFICAÇÃO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . " - Cliente: " . $rzSocialCheque;
-            $mensagemHTML = '
-                            <table align="center" width="100%">
-                                <tr>
-                                    <td align="center">
-                                     <table id="table-1" width="760" >
-                                        <tr align="left" bgcolor="#006633">
-                                          <td height="20" colspan="3" align="right" bgcolor="#FFFFFF"><div align="center"><img src="assets/img/logos/topo-rdp-petroleo.png" alt="RDP"><p></div>
-                                  </td>
-                                </tr>
-                                <tr align="center"><td colspan = "2"><h2>NOTIFICAÇÃO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . '<br>
-                                <tr align="center"><td colspan = "2"><h2><hr></td></tr>	
-                                <tr ><td width="200">Data/Hora Registro.:</td><td>' . date('Y-m-d H:i:s') . '</td></tr>
-                                <tr ><td>Destinatários.:</td><td>' . $nomeGerentePosto . ' (' . $emailGerentePosto . ')</td></tr>
-                                <tr ><td>&nbsp;</td><td >' . $nomeGerenteRede . ' (' . $emailGerenteRede . ')</td></tr>
-                        
-                                <tr ><td colspan="2">&nbsp;</td></tr>
-                                <tr ><td colspan="2">Um cheque de cliente da sua unidade foi devolvido, algumas ações são necessárias para regularizar esta situação.</td></tr>
-                                <tr ><td colspan="2">Para visualizar em detalhes este incidente vá até o site da <a href="https://www.rdppetroleo.com.br">RDP Petroleo</a>,clique em Intranet, depois clique em <b>"Controle Financeiro Mediterrâneo"</b> <p>Qualquer duvida entre em contato com o Suporte na Matriz dos Postos Mediterrâneo em Curitiba (41) 3254-5330</td></tr>
-                            </table>';
-
-            enviarEmail($assunto, $mensagemHTML);
-        }
-    }
+    echo json_encode($data);
 }
-//QUITACAO DO CHEQUE OU PFIN-> NÃO FOI CRIADO FORM PARA PFIN POR NAO COMPREENDER O ESCOPO, POREM O BACKEND É O MESMO DO QUITAÇÃO
-if ($action == 'quitacao' || $action == 'pendenciaFinanceira' || $action == 'cancelar-cheque') {
 
-    $idCheque = $_REQUEST['id'];
+/*
+if ($action == 'findByIdItem') {
 
-    if ($action == 'quitacao') {
-        $status = "status = 'QUITADO',";
-        $evento = 'Confirmada Quitação';
-    }
-    if ($action == 'pendenciaFinanceira') {
+    $id = $_REQUEST['id'];
 
-        $status = "status = 'PFIN',";
-        $evento = 'Incluido em PFIN (Serasa/SPC)';
-    }
-    if ($action == 'cancelar-cheque') {
+    $model = new Model();
 
-        $status = "status = 'CANCELADO',";
-        $evento = 'CANCELADO';
-    }
+    $rows = $model->findByIdItem($id);
 
-    if ($status <> '' && $evento <> '') {
+    $data = array('rows' => utf8ize($rows));
 
-        updateChequeDevolvidoById($status, $idCheque);
-        insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
-    }
-    if ($_REQUEST['motivo'] <> '') {
-
-        $observacao = limpaObservacao($_REQUEST['motivo']);
-        insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
-    }
-
-    if ($_FILES['file']['name'] <> '') {
-
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-        $temp = $_FILES['file']['tmp_name'];
-        $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
-        $tabela = "ccp_chequeDevAnexo";
-
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-    }
+    echo json_encode($data);
 }
-//GRAVAR ANEXO
-if ($action == 'gravarAnexo') {
+if ($action == 'cancelarPedido') {
 
-    $idCheque = $_REQUEST['id'];
-    $descricao = limpaObservacao($_REQUEST['descricao']);
-    $evento = 'Incluiu Anexo';
+    $id = $_REQUEST['idPedido'];
 
-    if ($_FILES['file']['name'] <> '') {
+    $model = new Model();
 
-        if ($descricao == '') {
+    if ($model->cancelarPedido($id)) {
 
-            $descricao = $_FILES['file']['name'];
-        }
-
-        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-        $temp = $_FILES['file']['tmp_name'];
-        $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
-        $tabela = "ccp_chequeDevAnexo";
-
-        insertChequeDevolvidoAnexo($descricao, $extensao, $idCheque, $idUsuario, $usuarioLogado);
-
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-
-        updateChequeDevolvidoById($status = "", $idCheque);
-
-        insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+        $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
     } else {
-        echo 'Houve algum erro, tente refazer o processo';
+
+        $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
     }
+    echo json_encode($data);
 }
-//GRAVAR OBS E NOTIFICAR POR EMAIL             
-if ($action == 'gravarObservacao') {
+if ($action == 'cancelarItem') {
 
-    $idCheque = $_REQUEST['id'];
-    $observacao = limpaObservacao($_REQUEST['obs']);
-    $evento = 'Incluiu Observação';
-    $email =  $_REQUEST['email'];
+    $id = $_REQUEST['idItem'];
 
-    insertChequeDevolvidoObersevacao($idCheque, $idUsuario, $usuarioLogado, $observacao);
+    $model = new Model();
 
-    insertChequeDevolvidoEvento($evento, $idCheque, $idUsuario, $usuarioLogado);
+    if ($model->cancelarItem($id)) {
 
-    if ($email == 'true') {
+        $data = array('res' => 'success', 'msg' => 'Item Cancelado');
+    } else {
 
-        $assunto = 'Atualização no Cheque Devolvido Nº ' . $idCheque;
-        $mensagemHTML = ' 
-            <table align="center" width="100%">
-                        <tr>
-                            <td align="center">
-                            <table id="table-1" width="760" >
-                                <tr align="left" bgcolor="#006633">
-                                <td height="20" align="right" bgcolor="#FFFFFF"><div align="center"><img src="https://www.rdppetroleo.com.br/medwebnovo/assets/img/logos/topo-rdp-petroleo.png" alt="RDP"><p></div>
-                            </td>
-                        </tr>
-                        <tr align="center"><td><h2>UM REGISTRO DE CHEQUE DEVOLVIDO Nº ' . $idCheque . ' DE SUA UNIDADE RECEBEU ATUALIZAÇÃO<br>
-                        <tr align="center"><td ><h2><hr></td></tr>	
-                        <tr><td><h3>Detalhe: ' . $observacao . '<h3></td></tr>
-                        <tr align="center"><td ><hr><a href="https://www.rdppetroleo.com.br">Clique aqui e acesse o site da RDP para maiores detalhes </a><hr></td></tr>
-                        </table>';
-
-        enviarEmail($assunto, $mensagemHTML);
+        $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
     }
+    echo json_encode($data);
 }
-if ($action == 'visualizarCheque') {
+if ($action == 'alterarItem') {
 
-    $idCheque = $_REQUEST['id'];
+    $id = $_REQUEST['idItem'];
+    $quantidade = $_REQUEST['quantidade'];
 
-    $row = selectChequeDevolvidosById($idCheque);
-    extract($row);
-    $txtTable .= "<table class='table table-sm table-bordered border-dark'>
-    <input type='hidden' id='idCheque' value='$idCheque'>
-    <tr>
-      <th colspan='2'>STATUS</th>
-      <td colspan='3'>$status</td>
-    </tr>
-    <tr>
-      <th colspan='2'>DT INC</th>
-      <td colspan='3'>" . dma($dthrInclusao) . "</td>
-    </tr>
-    <tr>
-      <th colspan='2'>MED</th>
-      <td colspan='3'>$usuarioLogado</td>
-    </tr>
-    <tr>
-      <th colspan='2'>BANCO</th>
-      <td colspan='3'>$bco - $vetorBanco[$bco]</td>
-    </tr>
-    <tr>
-      <th colspan='2'>CORRENTISTA</th>
-      <td colspan='3'>$nome</td>
-    </tr>
-    <tr>
-      <th colspan='2'>CLIENTE</th>
-      <td colspan='3'>$nomeCliente</td>
-    </tr>
-    <tr>
-      <th colspan='2'>CPF/CNPJ</th>
-      <td colspan='3'>$cpfcnpj</td>
-    </tr>
-    <tr>
-      <th colspan='2'>TELEFONE</th>
-      <td colspan='3'>$telefone</td>
-    </tr>
-    <tr>
-      <th colspan='2'>VALOR</th>
-      <td colspan='3'>" . v2($valor) . "</td>
-    </tr>
-    <tr>
-      <th colspan='2'>Nº CHEQUE</th>
-      <td colspan='3'>$nrcheque</td>
-    </tr>
-    <tr>
-      <th colspan='2'>MOTIVO</th>
-      <td colspan='3'>$motivo - $vetorMotivo[$motivo]</td>
-    </tr>
-    <tr>
-      <th colspan='2'>DT CHEQUE</th>
-      <td colspan='3'>" . dma($dtCheque) . "</td>
-    </tr>
-    <tr>
-      <th colspan='2'>DT DEV</th>
-      <td colspan='3'>" . dma($dtDevol) . "</td>
-    </tr>
-    <tr>
-      <th colspan='2'>DT QUIT</th>
-      <td colspan='3'>" . dma($dtQuitacao) . "</td>
-    </tr>
-    <tr>
-      <th colspan='2'>PDV</th>
-      <td colspan='3'>$pdv</td>
-    </tr>
-    </table>
-    <table class='table table-sm table-bordered border-dark'>
-    <tr>
-      <th colspan='2'>Data Hora</th>
-      <th>Usuário</th>
-      <th colspan='2'>Observação</th>
-    </tr>";
+    $model = new Model();
 
-    $qryObs = selectChequeObsById($idCheque);
-    while ($rowObs = odbc_fetch_array($qryObs)) {
-        extract($rowObs);
+    if ($model->alterarQtdeItem($id, $quantidade)) {
 
-        $txtTable .= "<tr>
-            <td colspan='2'>" . dmaH($datahora) . "</td>
-            <td>$usuario</td>
-            <td colspan='2'>$obs</td>
-        </tr>";
+        $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+    } else {
+
+        $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+    }
+    echo json_encode($data);
+}
+if ($action == 'addObservacao') {
+
+    $id = $_REQUEST['idPedido'];
+    $observacao = limpaObservacao($_REQUEST['observacao']);
+
+
+    $model = new Model();
+
+    if ($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+
+        $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+    } else {
+
+        $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+    }
+    echo json_encode($data);
+}
+if ($action == 'alterarStatus') {
+
+    $id = $_REQUEST['idPedido'];
+    $status = $_REQUEST['status'];
+
+    if ($status == 'NOVO') {
+        $status = 'ENVIADO';
+    } elseif ($status == 'ENVIADO') {
+        $status = 'FINALIZADO';
     }
 
-    $txtTable .= "
-    </table>
-    <table class='table table-sm table-bordered border-dark'>
-      <tr>
-        <th colspan='2'>Data Hora</th>
-        <th>Usuário</td>
-        <th>Descrição/Nome</th>
-        <th>Tipo</th>
-      </tr>";
+    $model = new Model();
 
-    $qryAnexo = selectChequeAnexoById($idCheque);
+    if ($model->alterarStatus($id, $status)) {
 
-    while ($rowAnexo = odbc_fetch_array($qryAnexo)) {
+        $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+    } else {
 
-        extract($rowAnexo);
-
-        $link2 = "'https://www.rdppetroleo.com.br/medwebnovo/view/modal/visualizarDocumentosModal.view.php?doc=$id.$tipo&pasta=chequesDevolvidos'";
-
-        $txtTable .= "<tr>
-            <td colspan='2'>" . dmaH($datahora) . "</td>
-            <td>$usuario</td>
-            <td><a style='cursor:pointer' onclick='abriNovaJanela($link2)'>$descricao</td>
-            <td>$tipo</td>
-        </tr>";
+        $data = array('res' => 'error', 'msg' => 'Erro para alterar');
     }
 
-    $txtTable .= "</table>
-    <table class='table table-sm table-bordered border-dark'>
-    <tr>
-    <th colspan='2'>Data Hora</th>
-    <th>Usuário</th>
-    <th colspan='2'>Descrição</th>
-    </tr>";
-
-    $qryEventos = selectChequeEventos($idCheque);
-    while ($rowEventos = odbc_fetch_array($qryEventos)) {
-
-        extract($rowEventos);
-
-        $txtTable .= "<tr>
-            <td colspan='2'>" . dmaH($dthrEvento) . "</td>
-            <td>$usuario</td>
-            <td colspan='2'>$evento</td>
-        </tr>";
-    }
-
-    $txtTable .= "</table>";
-
-    echo utf8ize($txtTable);
+    echo json_encode($data);
 }

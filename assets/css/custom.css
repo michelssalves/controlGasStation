@@ -1,5 +1,15 @@
 @import 'pre-loader.css';
+a:link{
 
+  text-decoration: none;
+ 
+}
+.a-link-color{
+  color: #0d1214;
+}
+tr{
+  cursor: pointer;
+}
 /* conteudo apresentado */
 .app-content {
 

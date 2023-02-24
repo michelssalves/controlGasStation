@@ -8,13 +8,13 @@ $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-  $model = new Model();
+    $model = new Model();
 
-  $rows = $model->selectAllMeds();
+    $rows = $model->selectAllMeds();
 
-  $data = array('rows' => utf8ize($rows));
+    $data = array('rows' => utf8ize($rows));
 
-  echo json_encode($data);
+    echo json_encode($data);
 }
 if ($action == 'findAll') {
 
