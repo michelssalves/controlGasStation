@@ -6,12 +6,13 @@ include('controller/caixaDiario.php');
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROSDA LINHA 6 ATÉ 89-->
     <form method='POST' id='formFiltroCaixaDiario'>
-    <div class="container text-center">
+        <div class="container text-center">
             <div class="row">
                 <div class="col-md-2 p-1">
-                 <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1"></div>
-                 <div class="col-md-2 p-1"><input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2"></div>
-                 <div class="col-md-2 p-1">
+                    <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1">
+                </div>
+                <div class="col-md-2 p-1"><input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2"></div>
+                <div class="col-md-2 p-1">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -45,7 +46,7 @@ include('controller/caixaDiario.php');
                     </select>
                 </div>
                 <div class="col-md-1 p-1 mt-1">
-                <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
                 </div>
             </div>
         </div>
@@ -56,60 +57,60 @@ include('controller/caixaDiario.php');
                 </div>
             </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-striped table-hover mt-1 ">
-                <thead class="header-tabela">
-                    <tr>
-                        <th>id</th>
-                        <th>STATUS</th>
-                        <th>MED</th>
-                        <th>DATA</th>
-                        <th>DINHEIRO</th>
-                        <th>CHEQUE</th>
-                        <th>BRINKS</th>
-                        <th>PIX</th>
-                        <th>TOTAL</th>
-                        <th title="TURNOS EM DEFINITIVO">TURNO</th>
-                        <th>OBS</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr @click="modalVisualizar(caixa.id_requisicao)" style="cursor:pointer" v-for="(caixa, i) in caixas">
-                        <td>{{caixa.id_requisicao}}</td>
-                        <td>{{caixa.status}}</td>
-                        <td>{{caixa.loginName}}</td>
-                        <td>{{caixa.data_caixa | dataFormatada }}</td>
-                        <td>{{caixa.dep_dinheiro | duasCasasDecimais}}</td>
-                        <td>{{caixa.dep_cheque | duasCasasDecimais}}</td>
-                        <td>{{caixa.dep_brinks | duasCasasDecimais}}</td>
-                        <td>{{caixa.pix | duasCasasDecimais}}</td>
-                        <td>{{caixa.soma}}</td>
-                        <td>{{caixa.turnos_definitivo}}</td>
-                        <td>{{caixa.obs}}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example" style="cursor:pointer">
-                <ul class="pagination pagination-sm justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" @click="paginaAtual = 1">Primeira</a>
-                    </li>
-                    <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
-                        <a class="page-link">{{paginaAtual - 1}}</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link">{{ paginaAtual }}</a>
-                    </li>
-                    <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
-                        <a class="page-link">{{paginaAtual + 1}}</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </form>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="header-tabela">
+                <tr>
+                    <th>ID</th>
+                    <th>STATUS</th>
+                    <th>MED</th>
+                    <th>DATA</th>
+                    <th>DINHEIRO</th>
+                    <th>CHEQUE</th>
+                    <th>BRINKS</th>
+                    <th>PIX</th>
+                    <th>TOTAL</th>
+                    <th title="TURNOS EM DEFINITIVO">TURNO</th>
+                    <th>OBS</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr @click="modalVisualizar(caixa.id_requisicao)" style="cursor:pointer" v-for="(caixa, i) in caixas">
+                    <td>{{caixa.id_requisicao}}</td>
+                    <td>{{caixa.status}}</td>
+                    <td>{{caixa.loginName}}</td>
+                    <td>{{caixa.data_caixa | dataFormatada }}</td>
+                    <td>{{caixa.dep_dinheiro | duasCasasDecimais}}</td>
+                    <td>{{caixa.dep_cheque | duasCasasDecimais}}</td>
+                    <td>{{caixa.dep_brinks | duasCasasDecimais}}</td>
+                    <td>{{caixa.pix | duasCasasDecimais}}</td>
+                    <td>{{caixa.soma}}</td>
+                    <td>{{caixa.turnos_definitivo}}</td>
+                    <td>{{caixa.obs}}</td>
+                </tr>
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example" style="cursor:pointer">
+            <ul class="pagination pagination-sm justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = 1">Primeira</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
+                    <a class="page-link">{{paginaAtual - 1}}</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">{{ paginaAtual }}</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
+                    <a class="page-link">{{paginaAtual + 1}}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
     <!--AREA ONDE ESTÁ A TABELA E FILTROSDA LINHA 6 ATÉ 89-->
     <!--AREA ONDE ESTÃO OS MODAIS DA LINHA 89 ATÉ 332-->
     <!--MODAL VISUALIZAR CX DIÁRIO-->

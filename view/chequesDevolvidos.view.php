@@ -1,12 +1,12 @@
 <?php
-//include('model/ChequesDevolvidos.php');
+include('model/ChequesDevolvidos.php');
 include('controller/chequesDevolvidos.php');
 ?>
 <div id="app">
     <form method='POST' id='formChequesDevolvidos'>
-        <div class="container text-center">
+        <div class="text-center">
             <div class="row">
-                <div class="col-sm-2 p-1">
+                <div class="col-md-2 p-1">
                     <div class="dropdown">
                         <button class="form-select " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status

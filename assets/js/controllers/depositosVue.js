@@ -1,67 +1,328 @@
-function fecharModal(id){
+import Vue from "https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vueJsFramework.js";
 
-	
-	visualizarDeposito(id)
+const app = new Vue({
+  el: "#app",
+	data() {
+		return{
+      menu: 'Depositos',
+      depositos:[],
+      meds: [],
+	  motivos: [],
+	  data1: '1999-01-01',
+	  data2: this.dataAtual(),
+      solicitacoes: [],
+      verSolicitacao:[],
+      verObservacoes: [],
+      itemSolicitacao: [],
+      descricaoObservacao:'',
+      motivoCancelamento:'',
+	  status: '',
+      id:'',
+      dthrInclusao:'',
+      loginName:'',
+	  dthrInclusao: '',
+	  loginName: '',
+	  banco: '',
+	  nome: '',
+	  cpfcnpj: '',
+	  telefone: '',
+	  valor: '',
+	  nrcheque: '',
+	  motivo: '',
+	  dtCheque: '',
+	  dtDevol: '',
+	  dtQuitacao: '',
+      quantidade:'',
+      status: '',
+      observacao: '',
+      paginaAntAtual: 0,
+      paginaAtual: 1,
+      paginaDpsAtual: 0,
+      totalResults: 0,
+      message:'',
+      aplicarIcon:true,
+      title:true,
+      disabled:true,
+      readonly:true,
+	  eventos: [],
+	  anexos: [],
+      iconSave:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
+      iconEdit:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pencil.gif",
+      iconObs:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
+      iconAnx:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anexo.png",
+      iconExc:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/excluir.gif",
+      iconCx:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/registradora.png",
+      iconCxFechado:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/caixaFechada.gif",
+      iconClose:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
 
-}
-async function visualizarDeposito(id){
+    }
+	},
+  filters: {
+    upper: function (value) {
+      return value.toUpperCase();
+    },
+    dataFormatada: function (value) {
+      return value.split("-").reverse().join("/");
+    },
+    duasCasasDecimais: function (value) {
+      return Number(value).toFixed(2);
+    },
+  },
+  methods: {
+    limparFiltros(){
 
-	const tabelaObsDepositos = document.querySelector(".tabelaObsDepositos")
-	const alterarDeposito = new bootstrap.Modal(document.getElementById("alterarDeposito"))
-	const formData = new FormData();
-	formData.append("id", id)
-	const dados = await fetch('https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=visualizarDeposito', {
-	  method: "POST", 
-	  body: formData
-	}); 
+      document.getElementById("idMed").value =  '0'
+      document.getElementById("contaDeposito").value ='CONTA'
+	  document.getElementById("data1").value = ''
+	  document.getElementById("data1").value = ''
+      this.getDepositos('filtrar')
+      this.message = 'Limpado!'
+   
+    },
+    dataAtual(){
 
-	const response = await dados.json()
+      const data = new Date()
+      const dia = String(data.getDate()).padStart(2, '0')
+      const mes = String(data.getMonth()+1).padStart(2, '0')
+      const ano = data.getFullYear()
+      const dataAtual = `${ano}-${mes}-${dia}`
+      return dataAtual
+    },
+    bloquearCampos(){
 
-	const tabelaobs = response['tabela'].toString()
-	alterarDeposito.show()
-	tabelaObsDepositos.innerHTML = tabelaobs
-	document.getElementById("idDeposito").value = response['dados'].id_reg
-	document.getElementById("loginNameDepositoAlterar").value = response['dados'].loginName
-	document.getElementById("debitoDepositoAlterar").value = response['dados'].debito
-	document.getElementById("dinheiroDepositoAlterar").value = response['dados'].dinheiro
-	document.getElementById("contaDepositoAlterar").value = response['dados'].conta
-	document.getElementById("chequeDepositoAlterar").value = response['dados'].cheque
-	document.getElementById("contaChDepositoAlterar").value = response['dados'].contaCh
-	document.getElementById("dataMovimentoDepositoAlterar").value = response['dados'].DATA
+      this.aplicarIcon = true;
+      this.title = true;
+      this.disabled = true;
+      this.readonly = true;
+    },
+    fecharModal(){
 
+        this.bloquearCampos()
 
-}
-async function alterarDeposito(idForm){
+        this.getDepositos()
 
-	const action = document.getElementById("actionaAlterar").value
-	const id = document.getElementById("idDeposito").value
-	const formData = new FormData(idForm);
-	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=${action}`, {
-	  method: "POST", 
-	  body: formData
-	}); 
+    },
+    onlyNumber($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) { // 46 é ponto e 44 é virgula
+         $event.preventDefault();
+      }
+    },
+    newTab(id) {
+      window.open(
+        `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=serasa`,
+        "",
+        "width=820, height=820"
+      );
+    },
+    getAllMeds() {
+      axios
+        .post(
+        "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=findAllMeds",
+   
+      )
+        .then((res) => {
+			console.log(res.data.rows)
+          this.meds = res.data.rows;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getDepositos(action){
 
-	visualizarDeposito(id)
+     const formularioDepositos = document.getElementById('formularioDepositos')
+     const formdata = new FormData(formularioDepositos)
 
-}
-function incluirObservacao(){
+      axios
+        .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=findAll&paginaAtual=${this.paginaAtual}`,
+         formdata
+      )
+        .then((res) => {
+         
+          if(action == 'filtrar'){
+            
+            this.paginaAtual = 1
+         }  
+         console.log(res.data.results)
+		 console.log(res.data.rows)
+          this.depositos = res.data.rows
+          this.totalResults = res.data.results
 
-	const idDepositoObs = document.getElementById("idDeposito").value
-	const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"))
-	incluirObservacaoModal.show()
-	document.getElementById("idDepositoObs").value = idDepositoObs 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-}
-async function salvarObservacao(idForm){
+    },
+    modalVisualizar(id){
 
-	const action = document.getElementById("actionaObs").value
-	const id = document.getElementById("idDepositoObs").value
-	const formData = new FormData(idForm);
-	await fetch(`https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=${action}`, {
-	  method: "POST", 
-	  body: formData
-	}); 
+      const visualizarCheque = new bootstrap.Modal( document.getElementById("visualizarCheque"))
+      visualizarCheque.show()
 
-	visualizarDeposito(id)
+      this.buscarSolicitacao(id)
 
-}
+    },
+	buscarSolicitacao(id){
+
+        axios
+          .post(
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=findById&id=${id}`,
+          
+        )
+          .then((res) => {
+            console.log(res.data.rows)
+			this.id = res.data.rows[0]['id']
+			this.dthrInclusao = res.data.rows[0]['dthrInclusao']
+			this.loginName = res.data.rows[0]['loginName']
+			this.banco = res.data.rows[0]['banco']
+			this.nome = res.data.rows[0]['nome']
+			this.cpfcnpj = res.data.rows[0]['cpfcnpj']
+			this.telefone = res.data.rows[0]['telefone']
+			this.valor = res.data.rows[0]['valor']
+			this.nrcheque = res.data.rows[0]['nrcheque']
+			this.motivo = res.data.rows[0]['motivo']
+			this.dtCheque = res.data.rows[0]['dtCheque']
+			this.dtDevol = res.data.rows[0]['dtDevol']
+			this.dtQuitacao = res.data.rows[0]['dtQuitacao']
+			this.status = res.data.rows[0]['status']
+			this.motivos = res.data.motivos
+        
+        
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+   
+    },
+    modalObservacao(){
+
+      const incluirObservacaoModal = new bootstrap.Modal( document.getElementById("incluirObservacaoModal"))
+      incluirObservacaoModal.show()
+
+    },
+    salvarObservacao(id){
+
+      this.observacao = ''
+      const incluirObservacaoForm = document.getElementById("incluirObservacaoForm")
+      const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=addObservacao"
+      const formData = new FormData(incluirObservacaoForm)
+      this.callAxios(id, url, formData)
+
+    },
+
+    verItem(id){
+
+      const modalvisualizarItem = new bootstrap.Modal( document.getElementById("modalvisualizarItem"))
+      modalvisualizarItem.show()
+      this.buscarItem(id)
+
+    },
+    buscarItem(id){
+      axios
+          .post(
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=findByIdItem&id=${id}`,
+          
+        )
+          .then((res) => {
+            
+            this.status = res.data.rows[0]['status']
+            this.idPedido = res.data.rows[0]['pedido']
+            this.idItem = res.data.rows[0]['item']
+            this.produto = res.data.rows[0]['desc_produto']
+            this.quantidade = res.data.rows[0]['quant']
+        
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+    },
+    salvarQtdes(id){
+
+      const formVisualizarItem = document.getElementById("formVisualizarItem")
+      const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=alterarItem"
+      const formData = new FormData(formVisualizarItem)
+      this.callAxios(id, url, formData)
+
+    },
+    cancelarPedido(id){
+      alert(id)
+      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=cancelarPedido&idPedido=${id}`
+      const formData = new FormData()
+      this.callAxios(id, url, formData)
+
+    },
+    cancelarItem(id){
+
+      const formVisualizarItem = document.getElementById("formVisualizarItem")
+      const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=cancelarItem"
+      const formData = new FormData(formVisualizarItem)
+      this.callAxios(id, url, formData)
+
+    },
+    alterarStatus(id){
+
+      const formvisualizarSolicitacao = document.getElementById("formvisualizarSolicitacao")
+      const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=alterarStatus"
+      const formData = new FormData(formvisualizarSolicitacao)
+      this.callAxios(id, url, formData)
+
+    },
+    callAxios(id, url, formData){
+
+      axios
+      .post(
+        url,
+        formData
+      )
+      .then((res) => {
+        console.log(res.data.res)
+        if (res.data.res == "success") {
+          console.log(res.data.res.sql)
+          this.message = res.data.msg;
+          this.modalVisualizarSolicitacao(id)
+         
+        } else {
+          this.message = res.data.msg;
+          this.modalVisualizarSolicitacao(id)
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+   
+  },
+  watch: {
+    paginaAtual() {
+
+      this.getDepositos()
+
+    },
+    message() {
+        setTimeout(() => {
+          this.message = ""
+        }, 1500);
+      },
+   
+  },
+  mounted: function () {
+    this.getDepositos()
+    this.getAllMeds()
+  },
+  computed:{
+
+    
+  },
+  
+});
