@@ -8,9 +8,6 @@
 </head>
 <body>
     <ul>
-        <li>Aplicar Vue js em Cheques</li>
-        <li>Aplicar Vue js Depositos</li>
-        <li>Caixa diario esta com backend comentado</li>
         <li>Criação de Pfin no menu Caixa diario</li>
         <li>Quando filtra a quantidade de itens esta errada</li>
     </ul>

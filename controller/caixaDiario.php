@@ -6,6 +6,16 @@ include '../model/CaixaDiario.php';
 
 $action = $_REQUEST['action'];
 
+if ($action == 'findAllMeds') {
+
+    $model = new Model();
+
+    $rows = $model->findAllMeds();
+
+    $data = array('rows' => utf8ize($rows));
+
+    echo json_encode($data);
+}
 if ($action == 'findAll') {
     
     $status1 = $_REQUEST['statusNovo'];
@@ -38,16 +48,6 @@ if ($action == 'findAll') {
     $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
-
-    echo json_encode($data);
-}
-if ($action == 'findAllMeds') {
-
-    $model = new Model();
-
-    $rows = $model->findAllMeds();
-
-    $data = array('rows' => utf8ize($rows));
 
     echo json_encode($data);
 }

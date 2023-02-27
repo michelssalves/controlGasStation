@@ -16,7 +16,6 @@ if ($action == 'findAllMeds') {
 
   echo json_encode($data);
 }
-
 if ($action == 'findAll') {
 
   $data1 = $_REQUEST['data1'];

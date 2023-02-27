@@ -10,6 +10,7 @@ $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
+
     $model = new Model();
   
     $rows = $model->findAllMeds();
@@ -17,7 +18,7 @@ if ($action == 'findAllMeds') {
     $data = array('rows' => utf8ize($rows));
   
     echo json_encode($data);
-  }
+}
 if ($action == 'findAll') {
 
 	$contaDeposito = $_REQUEST['contaDeposito'];
@@ -25,7 +26,7 @@ if ($action == 'findAll') {
     $data1 = ($_REQUEST['data1']);
     $data2 = ($_REQUEST['data2']);
     $paginaAtual = $_REQUEST['paginaAtual'];
-    $resultadoPorPagina = 6;
+    $resultadoPorPagina = 11;
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
     if ($idMed <> '0') {
@@ -48,7 +49,6 @@ if ($action == 'findAll') {
 
     echo json_encode($data);
 }
-
 
 if ($action == 'findById') {
 

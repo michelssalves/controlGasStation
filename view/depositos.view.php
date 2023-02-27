@@ -66,5 +66,25 @@ include('controller/depositos.php');
                 </tr>
             </tbody>
         </table>
+        
     </div>
+    <nav aria-label="Page navigation example" style="cursor:pointer">
+            <ul class="pagination pagination-sm justify-content-center">
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = 1">Primeira</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
+                    <a class="page-link">{{paginaAtual - 1}}</a>
+                </li>
+                <li class="page-item active">
+                    <a class="page-link">{{ paginaAtual }}</a>
+                </li>
+                <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
+                    <a class="page-link">{{paginaAtual + 1}}</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
+                </li>
+            </ul>
+        </nav>
 </div>
