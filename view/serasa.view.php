@@ -58,7 +58,7 @@ include('controller/serasa.php');
             </div>
         </div>
     </div>
-    <div class="table-responsive">
+    <div class="table-wrapper">
         <table class="table table-striped table-hover mt-1">
             <thead class="header-tabela">
                 <tr>

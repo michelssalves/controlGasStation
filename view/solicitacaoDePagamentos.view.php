@@ -148,8 +148,7 @@ include('controller/solicitacaoDePagamento.php');
                             <input disabled id="obs" name="obs" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="container">
-                            <div class="table-responsive">
-                                <div class="">
+                            <div class="table-wrapper">
                                     <table class="table table-striped table-hover mt-2">
                                         <thead class="header-tabela">
                                             <tr>

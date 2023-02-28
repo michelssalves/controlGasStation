@@ -4,9 +4,9 @@ include('controller/chequesDevolvidos.php');
 ?>
 <div id="app">
     <form method='POST' id='formChequesDevolvidos'>
-        <div class="text-center">
+        <div class="container text-center">
             <div class="row">
-                <div class="col-md-2 p-1">
+                <div class="col-md-1 p-1">
                     <div class="dropdown">
                         <button class="form-select " type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -25,7 +25,7 @@ include('controller/chequesDevolvidos.php');
                     </div>
                 </div>
                 <div class="col-md-2 p-1">
-                    <select @change="getChequeDevolvidos('filtrar')" id='tipoData' name='tipoData' class='form-select' aria-label='Default select example'>
+                    <select @change="getChequeDevolvidos('filtrar')" id='tipoData' name='tipoData' class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option selected value='0'>Data Inclusão</option>
                         <option value='1'>Data Cheque</option>
                         <option value='2'>Data Devolução</option>
@@ -42,17 +42,24 @@ include('controller/chequesDevolvidos.php');
                     <input class='form-control' type='date' name='data1' id='data1' v-model="data1">
                 </div>
                 <div class="col-md-2 p-1">
-                    <input class='form-control' type='date' name='data2' id='data2' v-model="data2">,
+                    <input class='form-control' type='date' name='data2' id='data2' v-model="data2">
                 </div>
-                <div class="col-md-2 mt-1 p-1">
+                <div class="col-md-2 p-1 mt-1">
                     <button type="button" class='btn btn-warning btn-sm'>Incluir</button>
                     <button type="button" @click="limparFiltros()" class='btn btn-danger btn-sm'>Limpar</button>
                 </div>
             </div>
         </div>
     </form>
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
+    <div class="container">
+        <div class="fundo-header-tabelas d-flex justify-content-center">
+            <div v-show="message.length > 0" class="text-dark fs-6 ">
+                <h4>{{message}}</h4>
+            </div>
+        </div>
+    </div>
+    <div class="table-wrapper">
+        <table class="table table-striped table-hover mt-1 ">
             <thead class="header-tabela">
                 <tr>
                     <th>Dt Reg</th>
@@ -86,27 +93,27 @@ include('controller/chequesDevolvidos.php');
                 </tr>
             </tbody>
         </table>
-        <nav aria-label="Page navigation example" style="cursor:pointer">
-            <ul class="pagination pagination-sm justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" @click="paginaAtual = 1">Primeira</a>
-                </li>
-                <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
-                    <a class="page-link">{{paginaAtual - 1}}</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link">{{ paginaAtual }}</a>
-                </li>
-                <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
-                    <a class="page-link">{{paginaAtual + 1}}</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
-                </li>
-            </ul>
-        </nav>
     </div>
-    <!--MODAL VISUALIZAR PAGAMENTOS-->
+    <nav aria-label="Page navigation example" style="cursor:pointer">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item">
+                <a class="page-link" @click="paginaAtual = 1">Primeira</a>
+            </li>
+            <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
+                <a class="page-link">{{paginaAtual - 1}}</a>
+            </li>
+            <li class="page-item active">
+                <a class="page-link">{{ paginaAtual }}</a>
+            </li>
+            <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
+                <a class="page-link">{{paginaAtual + 1}}</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
+            </li>
+        </ul>
+    </nav>
+    <!--MODAL VISUALIZAR CHEQUE-->
     <div class="modal fade" id="visualizarCheque" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizarSerasaoModalLabel" aria-hidden="true">
         <form id="formVerCheque" method="POST">
             <div class="modal-dialog modal-lg">
@@ -119,13 +126,13 @@ include('controller/chequesDevolvidos.php');
                             <h2 class="p-2 bg-light rounded-circle text-dark fs-6">{{ status }}</h2>
                         </div>
                         <div class="d-flex flex-row">
-
-                            <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="Pfin" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalParaPfin(id_requisicao)"><img class="iconeSize" :src="iconCxFechado"></button></div>
-                            <div v-if="status == 'PEFIN'" class="p-1"><button type="button" title="Quitar" class="btn btn-light btn-sm" :disabled="disabled" data-bs-dismiss="modal" @click="modalBaixado(id_requisicao)"><img class="iconeSize" :src="iconCxFechado"></button></div>
-                            <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
-                            <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
-                            <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" :disabled="disabled" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
-
+                            <div v-if="status != 'CANCELADO'" class="d-flex flex-row">
+                                <div v-if="status == 'NOVO'" class="p-1"><button type="button" title="PFIN" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="statusPfin(id)"><img class="iconeSize" :src="iconPfin"></button></div>
+                                <div v-if="status == 'PFIN'" class="p-1"><button type="button" title="Quitar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalQuitar(id)"><img class="iconeSize" :src="iconFinalizar"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao(id)"><img class="iconeSize" :src="iconObs"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalAnexar(id)"><img class="iconeSize" :src="iconAnx"></button></div>
+                                <div v-if="status != 'CANCELADO'" class="p-1"><button type="button" title="Cancelar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalCancelar(id)"><img class="iconeSize" :src="iconExc"></button></div>
+                            </div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -177,36 +184,56 @@ include('controller/chequesDevolvidos.php');
                             <input disabled id="dtDevol" name="dtDevol" type="date" v-model="dtDevol" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="container">
-                            <div class="table-responsive">
-                                <div class="">
+                        <div class="table-wrapper">
                                     <table class="table table-striped table-hover mt-2">
                                         <thead class="header-tabela">
                                             <tr>
-                                                <th>ANEXO</th>
-                                                <th>USUÁRIO</th>
                                                 <th>DATA</th>
+                                                <th>USUÁRIO</th>
+                                                <th>OBS</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr @click="newTab(anexo.id)" style="cursor:pointer" v-for="anexo in anexos">
-
+                                            <tr style="cursor:pointer" v-for="observacao in observacoes">
+                                                <td>{{observacao.datahora}}</td>
+                                                <td>{{observacao.usuario}}</td>
+                                                <td>{{observacao.obs}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div>
                             </div>
-                            <div class="table-responsive">
+                        <div class="table-wrapper">
+                                    <table class="table table-striped table-hover mt-2">
+                                        <thead class="header-tabela">
+                                            <tr>
+                                                <th>DATA</th>
+                                                <th>USUÁRIO</th>
+                                                <th>DESCRICÃO</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr @click="newTab(anexo.idAnexo)" style="cursor:pointer" v-for="anexo in anexos">
+                                                <td>{{anexo.datahora}}</td>
+                                                <td>{{anexo.usuario}}</td>
+                                                <td>{{anexo.descricao}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                            <div class="table-wrapper">
                                 <table class="table table-striped table-hover mt-2">
                                     <thead class="header-tabela">
                                         <tr>
-                                            <th>INFO</th>
-                                            <th>USUÁRIO</th>
                                             <th>DATA</th>
+                                            <th>USUÁRIO</th>
+                                            <th>DESCRICÃO</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr v-for="evento in eventos">
-
+                                            <td>{{evento.datahora}}</td>
+                                            <td>{{evento.usuario}}</td>
+                                            <td>{{evento.evento}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -219,5 +246,165 @@ include('controller/chequesDevolvidos.php');
             </div>
         </form>
     </div>
-    <!--/MODAL VISUALIZAR PAGAMENTOS-->
+    <!--/MODAL VISUALIZAR CHEQUE-->
+    <!--MODAL INCLUIR ANEXO -->
+    <div class="modal fade" id="incluirAnexoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
+        <form id="formAnexar" method="POST" enctype="multipart/form-data">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
+                        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                            <button type="button" @click="voltarVisualizar(id)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+
+                        <input id="action" name="action" type="text" v-model="actionAnexar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id" name="id" type="text" v-model="id" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="mb-3">
+                            <div class="container">
+                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                    <p>
+                                        Arraste aqui <br>ou clique para procurar
+                                    </p>
+                                </div>
+
+                                <div v-for="(file, key) in files" class="file-listing">
+                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                    {{ file.name }}
+                                    <div class="success-container" v-if="file.id > 0">
+
+                                    </div>
+                                    <div class="remove-container" v-else>
+                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarAnexo('gravarAnexo')" v-show="files.length > 0">Salvar</button>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL INCLUIR ANEXO-->
+    <!--MODAL INCLUIR OBSERVAÇÃO-->
+    <div class="modal fade" id="incluirObservacaoModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="incluirObservacaoModalLabel" aria-hidden="true">
+        <form id="incluirObservacaoForm" method="POST">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Observação</h2>
+                        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                            <button type="button" @click="voltarVisualizar(id)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <input id="action" name="action" type="hidden" v-model="actionObs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id" name="id" type="hidden" v-model="id" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="input-group input-group-sm mb-3 ">
+                            <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
+                            <textarea name="observacao" id="observacao" v-model="observacao" cols="80" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-bs-dismiss="modal" v-show="observacao.length > 10" @click="salvarObservacao()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL INCLUIR OBSERVAÇÃO-->
+    <!--MODAL ALTERAR STATUS-->
+    <div class="modal fade" id="alteraStatusModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="alteraStatusModalLabel" aria-hidden="true">
+        <form id="formAlterarStatusCheque" method="POST">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Status</h2>
+                        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                            <button type="button" @click="voltarVisualizar(id)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+
+                        <input id="id" name="id" type="hidden" v-model="id" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="action" name="action" type="hidden" v-model="actionStatus" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="container">
+                                <p>Selecione o novo status para o Cheque</p>
+                                <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
+                                <select v-model="status" id="status" name="status" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                    <option :value='status'>{{status}}</option>
+                                    <option value='NOVO'>NOVO</option>
+                                    <option value='NEGOCIANDO'>NEGOCIANDO</option>
+                                    <option value='PFIN'>PFIN</option>
+                                    <option value='JURIDICO'>JURIDICO</option>
+                                    <option value='EXECUÇÃO'>EXECUÇÃO</option>
+                                    <option value='CADUCOU'>CADUCOU</option>
+                                    <option value='EXTRAVIADO'>EXTRAVIADO</option>
+                                    <option value='CANCELADO'>CANCELADO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-bs-dismiss="modal" type="button" @click="salvarCancelamento()" class="btn btn-outline-light btn-sm"><img :src="iconSave"></button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--MODAL ALTERAR STATUS-->
+    <!--MODAL QUITAR-->
+    <div class="modal fade" id="modalQuitarCheque" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="quitarChequeModalLabel" aria-hidden="true">
+        <form id="formQuitar" method="POST" enctype="multipart/form-data">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <input id="id" name="id" type="hidden" v-model="id" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <div class="modal-header fundo-cabecalho">
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
+                        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                            <button type="button" @click="voltarVisualizar(id)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <input id="action" name="action" type="text" v-model="actionQuitar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id" name="id" type="text" v-model="id" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="mb-3">
+                            <div class="container">
+                                <p><strong>Anexar comprovante para confirmar quitação</strong></p>
+                                <div v-if="filesQuitar.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file" id="filesQuitar" ref="filesQuitar" multiple v-on:change="handleFilesQuitar()" />
+                                    <p>
+                                        Arraste aqui <br>ou clique para procurar
+                                    </p>
+                                </div>
+
+                                <div v-for="(fileQ, key) in filesQuitar" class="file-listing">
+                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                    {{ fileQ.name }}
+                                    <div class="success-container" v-if="fileQ.id > 0">
+
+                                    </div>
+                                    <div class="remove-container" v-else>
+                                        <a class="remove" v-on:click="removeFileQuitar(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarAnexoQuitar()" v-show="filesQuitar.length > 0">Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL QUITAR-->
 </div>

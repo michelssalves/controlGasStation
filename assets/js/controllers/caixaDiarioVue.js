@@ -93,10 +93,12 @@ const app = new Vue({
       return dataAtual
     },
     bloquearCampos(){
+
       this.aplicarIcon = true;
       this.title = true;
       this.disabled = true;
       this.readonly = true;
+
     },
     fecharModal(){
 
@@ -430,10 +432,6 @@ const app = new Vue({
           });
       }
     },
-    
-  },
-  computed: {
-
   },
   watch: {
     paginaAtual() {

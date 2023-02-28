@@ -13,5 +13,5 @@
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/controllersAux/main.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/axios.min.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vue.global.js"></script>
-    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/solicitacaoDePagamentos.js"></script>
+    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/solicitacaoDePagamentosVue.js"></script>
 </head>

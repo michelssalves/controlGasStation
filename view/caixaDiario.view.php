@@ -11,8 +11,10 @@ include('controller/caixaDiario.php');
                 <div class="col-md-2 p-1">
                     <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1">
                 </div>
-                <div class="col-md-2 p-1"><input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2"></div>
                 <div class="col-md-2 p-1">
+                    <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data2' name="data2" v-model="filtroData2">
+                </div>
+                <div class="col-md-1 p-1">
                     <div class="dropdown">
                         <button class="form-select" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Status
@@ -25,7 +27,7 @@ include('controller/caixaDiario.php');
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-1 p-1">
+                <div class="col-md-2 p-1">
                     <select @change="getCaixas('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <option value="">Filial</option>
                         <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
@@ -58,7 +60,7 @@ include('controller/caixaDiario.php');
             </div>
         </div>
     </form>
-    <div class="table-responsive">
+    <div class="table-wrapper">
         <table class="table table-striped table-hover">
             <thead class="header-tabela">
                 <tr>

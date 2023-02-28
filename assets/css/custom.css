@@ -1,4 +1,13 @@
 @import 'pre-loader.css';
+  /* Tabela responsiva */
+  .table-wrapper {
+    overflow-x: auto;
+  }
+
+  .table-wrapper table {
+    width: 100%;
+    white-space: nowrap;
+  }
 a:link{
 
   text-decoration: none;

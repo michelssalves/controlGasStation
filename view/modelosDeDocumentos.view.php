@@ -4,7 +4,7 @@ include('controller/modelosDeDocumentos.php');
 ?>
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
-    <div class="table-responsive">
+    <div class="table-wrapper">
         <table class="table table-striped table-hover mt-1 ">
             <thead class="header-tabela">
                 <tr>
