@@ -6,7 +6,7 @@ include '../model/Serasa.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'findAllMeds'){
+if($action == 'findAllMeds'){
 
     $model = new Model();
 
@@ -16,7 +16,7 @@ if ($action == 'findAllMeds'){
 
     echo json_encode($data);
 }
-if ($action == 'findAll'){
+if($action == 'findAll'){
 
     $status1 = $_REQUEST['statusNovo'];
     $status2 = $_REQUEST['statusPefin'];
@@ -59,7 +59,7 @@ if ($action == 'findAll'){
 
     echo json_encode($data);
 }
-if ($action == 'findById'){
+if($action == 'findById'){
 
     $id = $_REQUEST['id'];
 
@@ -71,10 +71,10 @@ if ($action == 'findById'){
 
     echo json_encode($data);
 }
-if ($action == 'gravarAnexo'){
+if($action == 'gravarAnexo'){
 
     $id = $_REQUEST['id'];
-    $descricao = limpaObservacao($_REQUEST['descricao']);
+    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricao']));
     $descricaoAnexo = "ANEXO";
     $temp = $_FILES['file']['tmp_name'];
     $localDeArmazenagem = "../assets/docs/serasa/";
@@ -85,11 +85,11 @@ if ($action == 'gravarAnexo'){
 
         $model = new Model();
 
-        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+        $model->insertEventos($id, $evento, $usuarioLogado);
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+        if($model->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
 
         uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
@@ -108,14 +108,14 @@ if ($action == 'gravarAnexo'){
 
     echo json_encode($data);
 }
-if ($action == 'gravarObs'){
+if($action == 'gravarObs'){
 
     $id = $_REQUEST['id'];
-    $observacao = limpaObservacao($_REQUEST['observacao']);
+    $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
     $model = new Model();
 
-    if($model->insertSerasaObs($id, $usuarioLogado, $observacao)){
+    if($model->insertObservacao($id, $usuarioLogado, $observacao)){
 
         $data = array('res' => 'success');
 
@@ -132,7 +132,7 @@ if($action == 'findAnexosById'){
 
     $model = new Model();
 
-    $rows = $model->selectSerasaAnexos($id);
+    $rows = $model->selectAnexos($id);
 
     if(!empty($rows)){
 
@@ -152,7 +152,7 @@ if($action == 'findEventosById'){
 
     $model = new Model();
 
-    $rows = $model->selectSerasaEventos($id);
+    $rows = $model->selectEventos($id);
     
     if(!empty($rows)){
 
@@ -172,7 +172,7 @@ if($action == 'findObservacoesById'){
 
     $model = new Model();
 
-    $rows = $model->selectSerasaObservacoes($id);
+    $rows = $model->selectObservacoes($id);
     
     if(!empty($rows)){
 
@@ -196,10 +196,10 @@ if($action == 'alterarStatus'){
     
     $model = new Model();
 
-    if($model->alterarStatus($id, $status)){
+    if($model->updateStatus($id, $status)){
 
-        $model->insertSerasaEventos($id, $evento, $usuarioLogado);
-        $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
+        $model->insertEventos($id, $evento, $usuarioLogado);
+        $model->insertObservacao($id, $usuarioLogado, $observacaoStatus);
 
         $data = array('res' => 'success');
 
@@ -211,7 +211,7 @@ if($action == 'alterarStatus'){
     echo json_encode($data);
     
 }
-if ($action == 'baixarSerasa'){
+if($action == 'baixarSerasa'){
 
     $id = $_REQUEST['id'];
     $status = $_REQUEST['status'];
@@ -230,11 +230,11 @@ if ($action == 'baixarSerasa'){
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        if($model->insertSerasaAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+        if($model->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
 
-            $model->alterarStatus($id, $status);
-            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
-            $model->insertSerasaObs($id, $usuarioLogado, $observacaoStatus);
+            $model->updateStatus($id, $status);
+            $model->insertEventos($id, $evento, $usuarioLogado);
+            $model->insertObservacao($id, $usuarioLogado, $observacaoStatus);
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
             $data = array('res' => 'success');
@@ -252,7 +252,7 @@ if ($action == 'baixarSerasa'){
 
     echo json_encode($data);
 }
-if ($action == 'alterarSerasa'){
+if($action == 'alterarSerasa'){
 
     $id = intval($_REQUEST['id_requisicao']);
     $dtNascimento = $_REQUEST['dtNascimento']; 
@@ -267,7 +267,7 @@ if ($action == 'alterarSerasa'){
 
         if($model->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
 
-            $model->insertSerasaEventos($id, $evento, $usuarioLogado);
+            $model->insertEventos($id, $evento, $usuarioLogado);
             $data = array('res' =>  'success');
        
         }else {

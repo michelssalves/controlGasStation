@@ -3,7 +3,7 @@ $p = $_REQUEST['p'];
 
 $acao = $_REQUEST['acao'];
 
-$pag[1] = 'view/principal.php';
+$pag[1] = 'view/chequesDevolvidos.view.php';
 $pag[2] = 'view/chequesDevolvidos.view.php';
 $pag[3] = 'view/depositos.view.php';
 $pag[4] = 'view/caixaDiario.view.php';

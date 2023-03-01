@@ -16,7 +16,7 @@ if ($action == 'findAllMeds') {
 
   echo json_encode($data);
 }
-if ($action == 'findAll') {
+if($action == 'findAll') {
 
   $data1 = $_REQUEST['data1'];
   $data2 = $_REQUEST['data2'];
@@ -60,109 +60,46 @@ if ($action == 'findAll') {
 
   echo json_encode($data);
 }
-if ($action == 'findById') {
+if($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
   $model = new Model();
 
   $rows = $model->findById($id);
+  $rowAnx = $model->selectAnexos($id);
+  $rowObs = $model->selectObservacao($id);
 
-  $rowObs = $model->selectObservacaoByIdPedido($id);
-
-  $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
+  $data = array('rows' => utf8ize($rows),  'observacoes' => utf8ize($rowObs),  'anexos' => utf8ize($rowAnx));
   
   echo json_encode($data);
 }
-if ($action == 'findByIdItem') {
+if($action == 'addObservacao') {
 
   $id = $_REQUEST['id'];
 
-  $model = new Model();
-
-  $rows = $model->findByIdItem($id);
-
-  $data = array('rows' => utf8ize($rows));
-
-  echo json_encode($data);
-}
-if ($action == 'cancelarPedido') {
-
-  $id = $_REQUEST['idPedido'];
-
-  $model = new Model();
-
-  if($model->cancelarPedido($id)) {
-
-    $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
-
-  } else {
-
-    $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
-  }
-  echo json_encode($data);
-}
-if ($action == 'cancelarItem') {
-
-  $id = $_REQUEST['idItem'];
-
-  $model = new Model();
-
-  if($model->cancelarItem($id)) {
-
-    $data = array('res' => 'success', 'msg' => 'Item Cancelado');
-  } else {
-
-    $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
-  }
-  echo json_encode($data);
-}
-if ($action == 'alterarItem') {
-
-  $id = $_REQUEST['idItem'];
-  $quantidade = $_REQUEST['quantidade'];
-
-  $model = new Model();
-
-  if ($model->alterarQtdeItem($id, $quantidade)) {
-
-    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-
-  } else {
-
-    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
-    
-  }
-  echo json_encode($data);
-}
-if ($action == 'addObservacao') {
-
-  $id = $_REQUEST['idPedido'];
-  $observacao = limpaObservacao($_REQUEST['observacao']);
+  $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
  
-
   $model = new Model();
 
   if($model->insertObservacao($id, $usuarioLogado, $observacao)) {
 
-    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-  } else {
+      $data = array('res' => 'success', 'msg' => 'Registrada Com Sucesso');
+    } else {
 
-    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
-  }
+      $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+    }
+
   echo json_encode($data);
 }
-if ($action == 'alterarStatus') {
+if($action == 'alterarStatus') {
 
-  $id = $_REQUEST['idPedido'];
+  $id = $_REQUEST['id'];
   $status = $_REQUEST['status'];
-
-  if($status == 'NOVO'){ $status = 'ENVIADO';}
-  elseif($status == 'ENVIADO'){ $status = 'FINALIZADO';}
 
   $model = new Model();
 
-  if($model->alterarStatus($id, $status)) {
+  if($model->updateStatus($id, $status)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
 
@@ -172,4 +109,42 @@ if ($action == 'alterarStatus') {
   }
 
   echo json_encode($data);
+}
+if($action == 'gravarAnexo') {
+
+    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricao']));
+    $id = $_REQUEST['id'];
+
+    if ($_FILES['file']['name'] <> '') {
+
+        if ($descricao == '') {
+
+            $descricao = $_FILES['file']['name'];
+        }
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+        $temp = $_FILES['file']['tmp_name'];
+        $localDeArmazenagem = "../assets/docs/solicitacaoPgtos/";
+        $tabela = "ccp_reqCompras_anexos";
+
+        $model = new Model();
+
+        
+        if($model->insertAnexo($descricao, $extensao, $id, $usuarioLogado)){
+
+            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+  
+            $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
+       
+        }else {
+    
+            $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+    
+        }
+    
+        echo json_encode($data);
+        
+    } else {
+        echo 'Houve algum erro, tente refazer o processo';
+    }
 }

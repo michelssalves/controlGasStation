@@ -7,8 +7,7 @@ include '../model/Depositos.php';
 
 $action = $_REQUEST['action'];
 
-
-if ($action == 'findAllMeds') {
+if($action == 'findAllMeds') {
 
 
     $model = new Model();
@@ -19,7 +18,7 @@ if ($action == 'findAllMeds') {
   
     echo json_encode($data);
 }
-if ($action == 'findAll') {
+if($action == 'findAll') {
 
 	$contaDeposito = $_REQUEST['contaDeposito'];
     $idMed = $_REQUEST['idMed'];
@@ -49,8 +48,7 @@ if ($action == 'findAll') {
 
     echo json_encode($data);
 }
-
-if ($action == 'findById') {
+if($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
@@ -58,11 +56,28 @@ if ($action == 'findById') {
 
     $rows = $model->findById($id);
 
- //   $rowObs = $model->selectObservacaoByIdPedido($id);
+    $rowObs = $model->selectObservacoes($id);
 
-  //  $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
+    $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
 
-    $data = array('rows' => utf8ize($rows));
+    echo json_encode($data);
+}
+if($action == 'addObservacao') {
+
+    $id = $_REQUEST['id'];
+    $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
+
+    $model = new Model();
+
+    if($model->insertObservacao($id, $idUsuario, $observacao)){
+
+        $data = array('res' =>  'success', 'msg' => 'Registrado com sucesso!');
+   
+    }else {
+
+        $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+
+    }
 
     echo json_encode($data);
 }

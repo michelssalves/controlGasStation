@@ -6,7 +6,7 @@ include '../model/ModelosDeDocumentos.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'findAll') {
+if($action == 'findAll') {
 
   $fileList = glob('../assets/docs/modelosDeDocumentos/*.*');
   $name = 'name';

@@ -116,8 +116,9 @@ const app = new Vue({
       }
     },
     newTab(id) {
+
       window.open(
-        `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=serasa`,
+        `https://www.rdppetroleo.com.br/medwebnovo/view/verDocumento.view.php?id=${id}&p=serasa`,
         "",
         "width=820, height=820"
       );

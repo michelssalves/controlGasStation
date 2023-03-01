@@ -6,7 +6,7 @@ include '../model/CaixaDiario.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'findAllMeds') {
+if($action == 'findAllMeds') {
 
     $model = new Model();
 
@@ -16,7 +16,7 @@ if ($action == 'findAllMeds') {
 
     echo json_encode($data);
 }
-if ($action == 'findAll') {
+if($action == 'findAll') {
     
     $status1 = $_REQUEST['statusNovo'];
     $status2 = $_REQUEST['statusFechado'];
@@ -51,7 +51,7 @@ if ($action == 'findAll') {
 
     echo json_encode($data);
 }
-if ($action == 'findById') {
+if($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
@@ -63,10 +63,10 @@ if ($action == 'findById') {
 
     echo json_encode($data);
 }
-if ($action == 'gravarAnexo') {
+if($action == 'gravarAnexo') {
 
     $id = $_REQUEST['id'];
-    $descricao = limpaObservacao($_REQUEST['descricao']);
+    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricao']));
 
     if ($_FILES['file']['name'] <> '') {
 
@@ -74,7 +74,7 @@ if ($action == 'gravarAnexo') {
 
         $model = new Model();
 
-        if ($model->insertCaixaDiarioAnexo($id, $descricao, $extensao)) {
+        if ($model->insertAnexo($id, $descricao, $extensao)) {
 
             $temp = $_FILES['file']['tmp_name'];
             $localDeArmazenagem = "../assets/docs/fechamentoCaixa/";
@@ -97,14 +97,14 @@ if ($action == 'gravarAnexo') {
 
     echo json_encode($data);
 }
-if ($action == 'gravarObs') {
+if($action == 'gravarObs') {
 
     $id = $_REQUEST['id'];
-    $obs = limpaObservacao($_REQUEST['observacao']);
+    $obs = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
     $model = new Model();
 
-    if($model->insertCaixaDiarioObs($id, $usuarioLogado, $obs)){
+    if($model->insertObservacoes($id, $usuarioLogado, $obs)){
 
         $data = array('res' => 'success');
 
@@ -115,7 +115,7 @@ if ($action == 'gravarObs') {
 
     echo json_encode($data);
 }
-if ($action == 'alterarCaixa') {
+if($action == 'alterarCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
     $dinheiro = $_REQUEST['dinheiro'];
@@ -144,7 +144,7 @@ if ($action == 'alterarCaixa') {
 if($action == 'cancelarCaixa'){
 
     $id = $_REQUEST['id_requisicao'];
-    $motivoCancelamento = limpaObservacao($_REQUEST['motivoCancelamento']);
+    $motivoCancelamento = limpaObservacao(utf8_decode($_REQUEST['motivoCancelamento']));
     $observacao = 'ALTEROU O STATUS PARA CANCELADO';
     $status = 'CANCELADO';
   
@@ -152,7 +152,7 @@ if($action == 'cancelarCaixa'){
 
     if($model->updateCancelarCaixa($id, $status, $observacao)){
         
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $motivoCancelamento);
+        $model->insertObservacoes($id, $usuarioLogado, $motivoCancelamento);
 
         $data = array('res' => 'success');
 
@@ -174,7 +174,7 @@ if($action == 'abrirCaixa'){
 
     if($model->updateCancelarCaixa($id, $status, $observacao)){
         
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+        $model->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
 
@@ -199,7 +199,7 @@ if($action == 'fecharCaixa'){
     if($conc == 'SIM' && $caixa == 'SIM'){
         
         $model->updateCancelarCaixa($id, $status, $observacao);
-        $model->insertCaixaDiarioObs($id, $usuarioLogado, $observacao);
+        $model->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
     
@@ -219,7 +219,7 @@ if($action == 'findAnexosById'){
 
     $model = new Model();
 
-    $rows = $model->selectCaixaDiarioAnexos($id);
+    $rows = $model->selectAnexos($id);
 
     if(!empty($rows)){
 
@@ -239,7 +239,7 @@ if($action == 'findEventosById'){
 
     $model = new Model();
 
-    $rows = $model->selectCaixaDiarioEventos($id);
+    $rows = $model->selectEventos($id);
     
     if(!empty($rows)){
 

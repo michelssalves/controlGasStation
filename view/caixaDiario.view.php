@@ -195,7 +195,7 @@ include('controller/caixaDiario.php');
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr @click="newTab(anexoCaixa.id)" style="cursor:pointer" v-for="(anexoCaixa, i) in anexosCaixa">
+                                        <tr @click="newTab(anexoCaixa.id, anexoCaixa.extensao)" style="cursor:pointer" v-for="(anexoCaixa, i) in anexosCaixa">
                                             <td>{{anexoCaixa.descricao}}</td>
                                             <td>{{anexoCaixa.extensao}}</td>
                                             <td>{{anexoCaixa.dthr_anexo}}</td>

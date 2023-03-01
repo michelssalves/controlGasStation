@@ -7,18 +7,23 @@ const app = new Vue({
       meds: [],
       pagamentos: [],
       anexos: [],
-      eventos: [],
+      observacoes: [],
+      files: [],
+      actionQuitar: 'quitarCheque',
+      actionObs: 'addObservacao',
+      actionStatus: 'mudarStatus',
+      actionAnexar: 'gravarAnexo',
+      observacao:'',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
       totalResults: 0,
-      files: [],
       readonly: true,
       disabled: true,
       title: true,
       aplicarIcon: true,
       message:'',
-      idReq: '',
+      id: '',
       med: '',
       apelido: '',
       fornecedor: '',
@@ -31,12 +36,14 @@ const app = new Vue({
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/finish.gif",
       iconAguarde:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/ampulheta.gif",
+      iconSave:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
       iconObs:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
       iconAnx:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anexo.png",
-      iconExc:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/excluir.gif",
+      iconCancelar:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/cancelar.gif",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
     };
@@ -95,10 +102,10 @@ const app = new Vue({
       this.modalVisualizar(id)
 
     },
-    newTab(id) {
+    newTab(id, ext) {
 
       window.open(
-        `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=fechamentoCaixa`,
+        `https://www.rdppetroleo.com.br/medwebnovo/view/verDocumento.view.php?id=${id}&ext=${ext}&p=solicitacaoPgtos`,
         "",
         "width=820, height=820"
       );
@@ -146,91 +153,67 @@ const app = new Vue({
         });
     },
     modalVisualizar(id) {
-      axios
-        .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findById&id=${id}`
-        )
-        .then((res) => {
-     
-          this.idReq = res.data.rows[0]['idReq'];
-          this.med = res.data.rows[0]['med'];
-          this.apelido = res.data.rows[0]['apelido'];
-          this.fornecedor = res.data.rows[0]['fornecedor'];
-          this.descricao = res.data.rows[0]['descricao'];
-          this.vencimento = res.data.rows[0]['vencimento'];
-          this.valor = res.data.rows[0]['valor'];
-          this.obs = res.data.rows[0]['obs'];
-          this.status = res.data.rows[0]['status'];
 
-          const visualizarPagamentos = new bootstrap.Modal(document.getElementById("visualizarPagamentos"));
-          visualizarPagamentos.show();
+      const visualizarPagamentos = new bootstrap.Modal(document.getElementById("visualizarPagamentos"))
+      visualizarPagamentos.show()
+      this.buscarSolicitacao(id)
 
-        })
-        .catch((err) => {
-          console.log(err);
-        });
     },
-    modalTabelaAnexos(id) {
+    buscarSolicitacao(id){
+
       axios
-        .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findAnexosById&id=${id}`
-        )
-        .then((res) => {
-          this.anexosCaixa = res.data.rows;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    modalTabelaEventos(id) {
-      axios
-        .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findEventosById&id=${id}`
-        )
-        .then((res) => {
+      .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findById&id=${id}`
+      )
+      .then((res) => {
+   
+        this.id = res.data.rows[0]['idReq']
+        this.med = res.data.rows[0]['med']
+        this.apelido = res.data.rows[0]['apelido']
+        this.fornecedor = res.data.rows[0]['fornecedor']
+        this.descricao = res.data.rows[0]['descricao']
+        this.vencimento = res.data.rows[0]['vencimento']
+        this.valor = res.data.rows[0]['valor']
+        this.obs = res.data.rows[0]['obs']
+        this.status = res.data.rows[0]['status']
+        console.log(res.data.anexos)
+        console.log(res.data.observacoes)
+        this.anexos = res.data.anexos
+        this.observacoes = res.data.observacoes
+
+
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }, 
+    alterarStatus(status){
+ 
+      const formData = new FormData();
+      formData.append("status", status);
+      formData.append("id", this.id);
+      formData.append("action",'alterarStatus');
+      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
+      this.callAxios(this.id, url, formData)   
+
+    }, 
+    modalObservacao() {
       
-          this.eventosCaixa = res.data.rows;
-
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    modalObservacao(id) {
-
       const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"));
       incluirObservacaoModal.show();
     },
-    salvarObs() {
-      const formData = new FormData();
+    salvarObservacao() {
 
-      formData.append("observacao", this.descricaoObservacao);
-      formData.append("id", this.id_requisicao);
-
-      axios
-        .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=gravarObs",
-          formData
-        )
-        .then((res) => {
-      
-          if (res.data.res == "success") {
-            this.message = "Registrado com sucesso";
-            this.modalVisualizar(this.id_requisicao);
-          } else {
-            this.message = "Houve um erro ao registrar";
-            this.modalVisualizar(this.id_requisicao);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const incluirObservacaoForm = document.getElementById("incluirObservacaoForm");
+      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php";
+      const formData = new FormData(incluirObservacaoForm);
+      this.callAxios(this.id, url, formData);
     },
     modalAnexar() {
-      const incluirAnexoModal = new bootstrap.Modal(
-        document.getElementById("incluirAnexoModal")
-      );
+ 
+      const incluirAnexoModal = new bootstrap.Modal(document.getElementById("incluirAnexoModal"));
       incluirAnexoModal.show();
+      this.files = []
     },
     handleFiles() {
       //armazena os arquivos recebidos no vetor
@@ -269,43 +252,45 @@ const app = new Vue({
     },
     salvarAnexo() {
       //envia para o backend os anexos e as info do formulario
-      for (let i = 0; i < this.files.length; i++) {
-        if (this.files[i].id) {
-          continue;
-        }
-        let formData = new FormData();
-        formData.append("file", this.files[i]);
-        formData.append("descricao", this.descricaoAnexo);
-        formData.append("id", this.id_requisicao);
+      
+        for (let i = 0; i < this.files.length; i++) {
+          if (this.files[i].id) {
+            continue;
+          }
 
-        axios
-          .post(
-            "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=gravarAnexo",
-            formData,
+        const formAnexar = document.getElementById("formAnexar");  
+        const formData = new FormData(formAnexar);
+        formData.append("file", this.files[i]);
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
+        this.callAxios(this.id, url, formData)   
+
+      }
+    },
+    callAxios(id, url, formData) {
+      axios
+        .post(
+          url, 
+          formData,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
               },
             }
           )
-          .then((res) => {
-            if (res.data.res == "success") {
-              this.message = "Anexado com sucesso";
-              this.modalVisualizar(this.id_requisicao);
-            } else {
-              this.message = "Houve um erro ao anexar o arquivo";
-              this.modalVisualizar(this.id_requisicao);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    },
-    
-  },
-  computed: {
+        .then((res) => {
 
+          if (res.data.res == "success") {
+              this.message = res.data.msg;
+              this.modalVisualizar(id);
+          } else {
+              this.message = res.data.msg;
+              this.modalVisualizar(id);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },    
   },
   watch: {
     paginaAtual() {

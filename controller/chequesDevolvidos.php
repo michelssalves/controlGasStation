@@ -6,7 +6,7 @@ include '../model/ChequesDevolvidos.php';
 
 $action = $_REQUEST['action'];
 
-if ($action == 'findAllMeds') {
+if($action == 'findAllMeds') {
 
     $model = new Model();
   
@@ -16,7 +16,7 @@ if ($action == 'findAllMeds') {
   
     echo json_encode($data);
 }
-if ($action == 'findAll') {
+if($action == 'findAll') {
 
     $status1 =  $_REQUEST['statusNovo'];
     $status2 =  $_REQUEST['statusNegociando'];
@@ -70,7 +70,7 @@ if ($action == 'findAll') {
 
     echo json_encode($data);
 }
-if ($action == 'findById') {
+if($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
@@ -85,7 +85,7 @@ if ($action == 'findById') {
 
     echo json_encode($data);
 }
-if ($action == 'gravarAnexo') {
+if($action == 'gravarAnexo') {
 
     $id = $_REQUEST['id'];
     $evento = 'Incluiu um Anexo';
@@ -105,9 +105,9 @@ if ($action == 'gravarAnexo') {
         $model = new Model();
 
         
-        if(uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)){
+        if($model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
-            $model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado);
+            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
             $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
             $model->updateUltimaAlteracao($id);
 
@@ -124,10 +124,10 @@ if ($action == 'gravarAnexo') {
         echo 'Houve algum erro, tente refazer o processo';
     }
 }
-if ($action == 'addObservacao') {
+if($action == 'addObservacao') {
 
     $id = $_REQUEST['id'];
-    $observacao = limpaObservacao($_REQUEST['observacao']);
+    $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
     $evento = 'Incluiu Observação';
 
     $model = new Model();
@@ -147,7 +147,7 @@ if ($action == 'addObservacao') {
 
     echo json_encode($data);
 }
-if ($action == 'quitarCheque') {
+if($action == 'quitarCheque') {
 
     $id = $_REQUEST['id'];
     $evento = 'Incluiu Comprovante';
@@ -163,9 +163,9 @@ if ($action == 'quitarCheque') {
 
         $model = new Model();
 
-       if(uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)){
+       if($model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
-        $model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado);
+        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
         $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
         $model->updateDataQuitacao($id, $status);
      
@@ -183,7 +183,7 @@ if ($action == 'quitarCheque') {
         echo 'Houve algum erro, tente refazer o processo';
     }
 }
-if ($action == 'mudarStatus') {
+if($action == 'mudarStatus') {
 
     $id = $_REQUEST['id'];
     $status = $_REQUEST['status'];
@@ -205,7 +205,7 @@ if ($action == 'mudarStatus') {
 
     echo json_encode($data);
 }
-if ($action == 'considerarPfin') {
+if($action == 'considerarPfin') {
 
     $id = $_REQUEST['id'];
     $status = $_REQUEST['status'];

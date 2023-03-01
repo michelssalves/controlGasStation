@@ -199,10 +199,10 @@ const app = new Vue({
           console.log(err);
         });
     },
-    newTab(id) {
+    newTab(id, ext) {
 
       window.open(
-        `https://www.rdppetroleo.com.br/medwebnovo/view/modal/verDocumento.php?id=${id}&p=fechamentoCaixa`,
+        `https://www.rdppetroleo.com.br/medwebnovo/view/verDocumento.view.php?id=${id}&ext=${ext}&p=fechamentoCaixa`,
         "",
         "width=820, height=820"
       );
