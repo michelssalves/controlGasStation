@@ -8,8 +8,8 @@
 </head>
 <body>
     <ul>
-        <li>Criação de Pfin no menu Caixa diario</li>
-        <li>Quando filtra a quantidade de itens esta errada</li>
+        <li>Incluir Pfin</li>
+        <li>Incluir Cheque</li>
     </ul>
 </body>
 </html>

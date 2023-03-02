@@ -1,5 +1,5 @@
 import Vue from "https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vueJsFramework.js";
-
+let id = 0
 const app = new Vue({
   el: "#app",
 	data() {
@@ -7,10 +7,20 @@ const app = new Vue({
       menu: 'Envio de Materiais',
       materiais:[],
       meds: [],
+      idClasse:'',
+      classes: [],
       solicitacoes: [],
       verSolicitacao:[],
       verObservacoes: [],
       itemSolicitacao: [],
+      produtos: [],
+      selectedOption:'',
+      produtoDescricao: '',
+      idClasse: '',
+      idProduto: '',
+      qtde: '',
+      items:[],
+      indice: 0,
       descricaoObservacao:'',
       motivoCancelamento:'',
       idPedido:'',
@@ -28,10 +38,14 @@ const app = new Vue({
       title:true,
       disabled:true,
       readonly:true,
+      iconCarrinhoCompras:
+      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/carrinho-compras.gif",
       iconEnviado:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/enviado.gif",
       iconSave:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
+      iconCancelar:
+      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/cancelar.png",
       iconObs:
       "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
       iconExc:
@@ -55,6 +69,11 @@ const app = new Vue({
     },
   },
   methods: {
+    getOptionText(event) {
+      const selectedOptionIndex = event.target.options.selectedIndex;
+      this.produtoDescricao = event.target.options[selectedOptionIndex].text;
+      this.idProduto = event.target.options[selectedOptionIndex].value;
+    },
     limparFiltros(){
 
       document.getElementById("statusNovo").checked =  false
@@ -84,9 +103,8 @@ const app = new Vue({
       this.readonly = true;
     },
     fecharModal(){
-
-        this.bloquearCampos()
-
+        
+        this.items = ''
         this.getSolicitacoes()
 
     },
@@ -116,6 +134,65 @@ const app = new Vue({
           console.log(err);
         });
     },
+    addItem() {
+
+      this.items.push({ id: id++, qtde: this.qtde, idProduto: this.idProduto, produto: this.produtoDescricao })
+      this.idClasse = ''
+      this.idProduto = ''
+      this.qtde = ''
+      this.produtos = ''
+     
+    },
+    salvarSolicitacao(){
+
+     const dados = JSON.stringify(this.items);
+
+      axios
+      .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=solicitacaoMateriais&todos=${dados}`,
+ 
+    )
+      .then((res) => {
+        console.log(res.data.rows)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    },
+    excluirItem(item) {
+      this.items = this.items.filter((t) => t !== item)
+    },
+    getAllClasses() {
+      axios
+        .post(
+        "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findAllClasses",
+   
+      )
+        .then((res) => {
+          
+          this.classes = res.data.rows;
+          console.log(this.classes)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getProdutos(){
+
+      axios
+      .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=findProdutos&classe=${this.idClasse}`,
+ 
+      )
+      .then((res) => {
+        this.produtos = res.data.rows;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    },
     getSolicitacoes(action){
 
      const formFiltroSolicitacoes = document.getElementById('formFiltroSolicitacoes')
@@ -140,6 +217,13 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
+
+    },
+    modalCriarSolicitacao(){
+
+      const criarSolicitacao = new bootstrap.Modal( document.getElementById("criarSolicitacao"))
+      criarSolicitacao.show()
+      this.getAllClasses()
 
     },
     modalVisualizarSolicitacao(id){
@@ -173,7 +257,7 @@ const app = new Vue({
           
         )
           .then((res) => {
-            console.log(res.data.rowsObs)
+
             this.verObservacoes = res.data.rowsObs
             this.verSolicitacao = res.data.rows
             this.status = res.data.rows[0]['status']
@@ -282,7 +366,9 @@ const app = new Vue({
    
   },
   mounted: function () {
+    
     this.getSolicitacoes()
+  
     this.getAllMeds()
   },
   computed:{

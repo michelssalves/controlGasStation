@@ -166,8 +166,6 @@ include('controller/solicitacaoDePagamento.php');
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                        <div class="container">
                             <div class="table-wrapper">
                                 <table class="table table-striped table-hover mt-2">
                                     <thead class="header-tabela">

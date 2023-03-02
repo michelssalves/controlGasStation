@@ -16,6 +16,28 @@ if($action == 'findAllMeds') {
 
     echo json_encode($data);
 }
+if($action == 'findAllClasses') {
+
+  $model = new Model();
+
+  $rows = $model->selectAllClasses();
+
+  $data = array('rows' => utf8ize($rows));
+
+  echo json_encode($data);
+}
+if($action == 'findProdutos') {
+
+  $classe = $_REQUEST['classe'];
+
+  $model = new Model();
+
+  $rows = $model->selectProdutos($classe);
+
+  $data = array('rows' => utf8ize($rows));
+
+  echo json_encode($data);
+}
 if($action == 'findAll') {
 
   $status1 = $_REQUEST['statusNovo'];
@@ -161,6 +183,37 @@ if($action == 'alterarStatus') {
   }
 
   echo json_encode($data);
+}
+if($action == 'solicitacaoMateriais') {
+
+  $jsonArray = json_decode($_REQUEST['todos'], true);
+  echo $tam =  count($jsonArray);
+
+  for($x=0; $x<$tam; $x++){
+
+    $qtde[$x] = $jsonArray[$x]['qtde'];
+    $idProduto[$x] = $jsonArray[$x]['idProduto'];
+    $descricao[$x] =  $jsonArray[$x]['produto'];
+
+  }
+
+    $model = new Model();
+    $model->insertPedido($idUsuario);
+    $idPedido = selectUltimoId('REQ_Pedido');
+    $model->insertItens($idPedido, $idProduto, $qtde, $descricao, $tam);
+
+  /*$model = new Model();
+
+  if($model->updateStatus($id, $status)) {
+
+    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
+
+  } else {
+
+    $data = array('res' => 'error', 'msg' => 'Erro para alterar');
+  }*/
+ // $data = array('res' => $chave);
+  //echo json_encode($data);
 }
 
 

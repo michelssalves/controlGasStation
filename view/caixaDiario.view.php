@@ -183,9 +183,8 @@ include('controller/caixaDiario.php');
                             <span class="input-group-text" id="inputGroup-sizing">Observações:</span>
                             <textarea disabled id="observacao" name="observacao" cols="60" rows="7" type="text" v-model="obs" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm"><?= $obs ?></textarea>
                         </div>
-
                         <div class="container">
-                            <div class="table-responsive">
+                            <div class="table-wrapper">
                                 <table class="table table-striped table-hover mt-2">
                                     <thead class="header-tabela">
                                         <tr>
@@ -203,7 +202,7 @@ include('controller/caixaDiario.php');
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-wrapper">
                                 <table class="table table-striped table-hover mt-2">
                                     <thead class="header-tabela">
                                         <tr>
