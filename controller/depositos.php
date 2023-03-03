@@ -22,8 +22,8 @@ if($action == 'findAll') {
 
 	$contaDeposito = $_REQUEST['contaDeposito'];
     $idMed = $_REQUEST['idMed'];
-    $data1 = ($_REQUEST['data1']);
-    $data2 = ($_REQUEST['data2']);
+    $data1 = ($_REQUEST['data1'] ? $_REQUEST['data1'] : date('Y-m-d'));
+    $data2 = ($_REQUEST['data2'] ? $_REQUEST['data2'] : date('Y-m-d') );
     $paginaAtual = $_REQUEST['paginaAtual'];
     $resultadoPorPagina = 11;
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;

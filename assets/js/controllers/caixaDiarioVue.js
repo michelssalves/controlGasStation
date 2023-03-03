@@ -8,6 +8,15 @@ const app = new Vue({
       caixas: [],
       anexosCaixa: [],
       eventosCaixa: [],
+      criarTurnoDefinitivo:'',
+      criarData: this.dataAtual(),
+      criarDinheiro: 0,
+      criarCheque: 0,
+      criarBrinks: 0,
+      criarPix: 0,
+      criarObs: '',
+      criarFiles: [],
+      actionCriar: 'addFechamento',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
@@ -104,6 +113,29 @@ const app = new Vue({
 
         this.bloquearCampos()
         this.getCaixas()
+
+    },
+    modalCriarCaixa(){
+
+      const criarCaixa = new bootstrap.Modal(document.getElementById("criarCaixa"));
+      criarCaixa.show();
+    },
+    salvarCaixa(){
+
+      const formCriarCaixa = document.getElementById("formCriarCaixa")
+
+      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php"
+      const formData = new FormData(formCriarCaixa)
+      this.callAxios('insert', url, formData)
+      this.criarDinheiro = 0
+     
+      this.criarCheque = 0
+      this.criarBrinks = 0
+      this.criarPix = 0
+      this.criarData = this.dataAtual(),
+      this.criarTurnoDefinitivo = ''
+      this.criarObs = ''
+      this.criarFiles = []
 
     },
     voltarVisualizar(id){

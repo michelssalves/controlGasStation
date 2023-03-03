@@ -62,7 +62,7 @@ include('controller/depositos.php');
                 <tbody>
                     <tr @click="modalVisualizar(deposito.id)" v-for="deposito in depositos">
                         <td>{{deposito.dataMovimento}}</td>
-                        <td>{{deposito.dataMovimento}}</td>
+                        <td>{{deposito.diaDaSemana | diaSemana}}</td>
                         <td>{{deposito.loginName}}</td>
                         <td>{{deposito.dinheiro | duasCasasDecimais}}</td>
                         <td>{{deposito.conta}}</td>

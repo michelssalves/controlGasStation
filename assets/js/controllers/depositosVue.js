@@ -48,6 +48,16 @@ const app = new Vue({
     dataFormatada: function (value) {
       return value.split("-").reverse().join("/");
     },
+    diaSemana: function (value) {
+
+      const dataAtual = new Date(value);
+      const diaSemana = dataAtual.getDay();
+      const diasSemana = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      const nomeDiaSemana = diasSemana[diaSemana];
+
+      return nomeDiaSemana
+
+    },
     duasCasasDecimais: function (value) {
       return Number(value).toFixed(2);
     },
@@ -132,14 +142,22 @@ const app = new Vue({
 
       const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php"
       const formData = new FormData(formCriarDeposito)
-     
       this.callAxios('insert', url, formData)
+
+      this.criarDebito = 0
+      this.criarCheque = 0
+      this.criarDinheiro = 0
+      this.criarData = this.dataAtual(),
+      this.criarConta = ''
+      this.criarContaCh = ''
 
     },
     modalVisualizar(id) {
 
       const visualizarDepositos = new bootstrap.Modal(document.getElementById("visualizarDepositos"));
       visualizarDepositos.show();
+
+      this.buscarSolicitacao(id)
 
     },
     buscarSolicitacao(id) {
