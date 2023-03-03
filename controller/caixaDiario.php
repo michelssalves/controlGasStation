@@ -63,10 +63,10 @@ if($action == 'findById') {
 
     echo json_encode($data);
 }
-if($action == 'gravarAnexo') {
+if($action == 'addAnexo') {
 
     $id = $_REQUEST['id'];
-    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricao']));
+    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
 
     if ($_FILES['file']['name'] <> '') {
 

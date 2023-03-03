@@ -73,7 +73,7 @@ const app = new Vue({
   },
   methods: {
     
-      limparFiltros(){
+    limparFiltros(){
 
       document.getElementById("matrizFiltro").value = '2'
       document.getElementById("tipoFiltro").value =  '0'

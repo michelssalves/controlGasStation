@@ -131,9 +131,9 @@ include('controller/caixaDiario.php');
                         <div class="d-flex flex-row">
                             <div v-if="status == 'ABERTO'" class="p-1"><button :disabled="disabled" type="button" title="Fechar Caixa" class="btn btn-light btn-sm" :data-bs-dismiss="readonly ? modal : ''" @click="modalFecharCaixa(id_requisicao)"><img class="iconeSize" :src="iconCxFechado"></button></div>
                             <div v-if="status == 'NOVO'" class="p-1"><button :disabled="disabled" type="button" title="Abrir Caixa" class="btn btn-light btn-sm" :data-bs-dismiss="readonly ? modal : ''" @click="modalAbrirCaixa(id_requisicao)"><img class="iconeSize" :src="iconCx"></button></div>
-                            <div v-if="!(status == 'FECHADO' || status == 'CANCELADO')" class="p-1"><button type="button" @click="aplicarIcon ? salvarAlteracoes(id_requisicao, 'alterarCaixa') : '' " :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm"><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
+                            <div class="p-1"><button type="button" @click="aplicarIcon ? salvarAlteracoes(id_requisicao, 'alterarCaixa') : '' " :title="aplicarIcon ? 'Editar Caixa' : 'Salvar'" class="btn btn-light btn-sm"><img class="iconeSize" @click="aplicarIcon = !aplicarIcon, readonly = !readonly, disabled = !disabled, title = !title" :src="aplicarIcon ? iconEdit : iconSave" /></button></div>
                             <div v-if="!(status == 'FECHADO' || status == 'CANCELADO')" class="p-1"><button :disabled="disabled" type="button" title="Observação" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalObservacao(id_requisicao)"><img class="iconeSize" :src="iconObs"></button></div>
-                            <div v-if="!(status == 'FECHADO' || status == 'CANCELADO')" class="p-1"><button :disabled="disabled" type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
+                            <div class="p-1"><button :disabled="disabled" type="button" title="Anexo" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalAnexar(id_requisicao)"><img class="iconeSize" :src="iconAnx"></button></div>
                             <div v-if="!(status == 'FECHADO' || status == 'CANCELADO')" class="p-1"><button :disabled="disabled" type="button" title="Cancelar Caixa" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="modalCancelar(id_requisicao)"><img class="iconeSize" :src="iconExc"></button></div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
@@ -234,17 +234,18 @@ include('controller/caixaDiario.php');
     <!--/MODAL VISUALIZAR CX DIÁRIO-->
     <!--MODAL INCLUIR ANEXO OK-->
     <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header fundo-cabecalho">
-                    <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
-                    <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
-                        <button type="button" @click="voltarVisualizar(id_requisicao)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+        <form method="POST" id="formAnexo" enctype="multipart/form-data">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <h2 class="p-2 bg-light rounded-circle text-dark fs-4">Anexar</h2>
+                        <div class="d-flex gap-2 d-sm-flex mb-2 justify-content-md-right">
+                            <button type="button" @click="voltarVisualizar(id_requisicao)" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" enctype="multipart/form-data">
-                        <input id="id_requisicao" type="hidden" v-model="id_requisicao" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                    <div class="modal-body">
+                         <input id="action" name="action" type="hidden" v-model="actionAnexar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                         <input id="id" name="id" type="hidden" v-model="id_requisicao"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="mb-3">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
@@ -269,32 +270,32 @@ include('controller/caixaDiario.php');
                                 </select>
                             </div>
                             <div class="container">
-                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
-                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                <div v-if="filesAnexar.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file"  id="filesAnexar" ref="filesAnexar" multiple v-on:change="handleFilesAnexar()" />
                                     <p>
                                         Arraste aqui <br>ou clique para procurar
                                     </p>
                                 </div>
 
-                                <div v-for="(file, key) in files" class="file-listing">
+                                <div v-for="(file, key) in filesAnexar" class="file-listing">
                                     <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
                                     {{ file.name }}
                                     <div class="success-container" v-if="file.id > 0">
 
                                     </div>
                                     <div class="remove-container" v-else>
-                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                        <a class="remove" v-on:click="removeFileAnexar(key)"><i class="fa-regular fa-trash-can"></i></a>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarAnexoAdicional()" v-show="filesAnexar.length > 0">Salvar</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button data-bs-dismiss="modal" type="button" class="btn btn-success btn-sm" v-on:click="salvarAnexo()" v-show="files.length > 0">Salvar</button>
-                </div>
-                </form>
             </div>
-        </div>
+        </form>
     </div>
     <!--/MODAL INCLUIR ANEXO-->
     <!--MODAL INCLUIR OBSERVAÇÃO-->
@@ -352,7 +353,7 @@ include('controller/caixaDiario.php');
     </div>
     <!--MODAL CANCELAR-->
     <!--MODAL CRIAR FECHAMENTO-->
-        <div class="modal fade w3-animate-top" id="criarCaixa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarCaixaModalLabel" aria-hidden="true">
+    <div class="modal fade w3-animate-top" id="criarCaixa" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarCaixaModalLabel" aria-hidden="true">
         <form id="formCriarCaixa" method="POST">
             <div class="modal-dialog modal-md">
                 <div class="modal-content">
@@ -379,8 +380,8 @@ include('controller/caixaDiario.php');
                             <input :readonly="readonly" id="dinheiro" name="dinheiro" type="text" v-model="criarDinheiro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Cheque:</span>
                             <input :readonly="readonly" id="cheque" name="cheque" type="text" v-model="criarCheque" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                      
-                       </div>
+
+                        </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Brinks:</span>
                             <input :readonly="readonly" id="brinks" name="brinks" type="text" v-model="criarBrinks" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
@@ -401,24 +402,24 @@ include('controller/caixaDiario.php');
                             <textarea name="motivoCancelamento" id="motivoCancelamento" v-model="motivoCancelamento" cols="80" rows="2" style="white-space: pre;" placeholder="Observação" maxlength="500" required></textarea>
                         </div>
                         <div class="container">
-                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
-                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
-                                    <p>
-                                        Arraste aqui <br>ou clique para procurar
-                                    </p>
+                            <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
+                                <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                <p>
+                                    Arraste aqui <br>ou clique para procurar
+                                </p>
+                            </div>
+
+                            <div v-for="(file, key) in files" class="file-listing">
+                                <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                {{ file.name }}
+                                <div class="success-container" v-if="file.id > 0">
+
                                 </div>
-
-                                <div v-for="(file, key) in files" class="file-listing">
-                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
-                                    {{ file.name }}
-                                    <div class="success-container" v-if="file.id > 0">
-
-                                    </div>
-                                    <div class="remove-container" v-else>
-                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
-                                    </div>
+                                <div class="remove-container" v-else>
+                                    <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                     </div>

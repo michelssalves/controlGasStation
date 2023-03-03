@@ -17,6 +17,7 @@ const app = new Vue({
       criarObs: '',
       criarFiles: [],
       actionCriar: 'addFechamento',
+      actionAnexar: 'addAnexo',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
@@ -36,6 +37,7 @@ const app = new Vue({
       obs: "",
       status: "",
       files: [],
+      filesAnexar:[],
       descricaoAnexo: "",
       readonly: true,
       disabled: true,
@@ -394,6 +396,7 @@ const app = new Vue({
       );
       incluirAnexoModal.show();
     },
+    /*
     handleFiles() {
       //armazena os arquivos recebidos no vetor
       let uploadedFiles = this.$refs.files.files;
@@ -463,6 +466,81 @@ const app = new Vue({
             console.log(err);
           });
       }
+    },*/
+    handleFilesAnexar() {
+      //armazena os arquivos recebidos no vetor
+      let uploadedFiles = this.$refs. filesAnexar.files;
+
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this. filesAnexar.push(uploadedFiles[i]);
+      }
+      this.getImagePreviewsAnexar();
+    },
+    getImagePreviewsAnexar() {
+      //exibe os arquivos armazenadas dentro do vetor
+      for (let i = 0; i < this. filesAnexar.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this. filesAnexar[i].name)) {
+          let reader = new FileReader();
+          reader.addEventListener(
+            "load",
+            function () {
+              this.$refs["preview" + parseInt(i)][0].src = reader.result;
+            }.bind(this),
+            false
+          );
+          reader.readAsDataURL(this.files[i]);
+        } else {
+          this.$nextTick(function () {
+            this.$refs["preview" + parseInt(i)][0].src =
+              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
+          });
+        }
+      }
+    },
+    removeFileAnexar(key) {
+      //exibe os arquivos armazenadas dentro do vetor
+      this. filesAnexar.splice(key, 1);
+      this.getImagePreviewsAnexar();
+    },
+    salvarAnexoAdicional() {
+      
+        for (let i = 0; i < this. filesAnexar.length; i++) {
+          if (this. filesAnexar[i].id) {
+            continue;
+          }
+
+        const formAnexo = document.getElementById("formAnexo");  
+        const formData = new FormData(formAnexo);
+        formData.append("file", this. filesAnexar[i]);
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php`
+        this.callAxios(this.id_requisicao, url, formData)   
+
+      }
+    },
+    callAxios(id, url, formData) {
+      axios
+        .post(
+          url, 
+          formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          )
+        .then((res) => {
+
+          if (res.data.res == "success") {
+              this.message = res.data.msg;
+              this.modalVisualizar(id);
+          } else {
+              this.message = res.data.msg;
+              this.modalVisualizar(id);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   watch: {

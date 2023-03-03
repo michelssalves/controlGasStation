@@ -283,8 +283,8 @@ const app = new Vue({
             continue;
           }
 
-        const formAnexar = document.getElementById("formAnexar");  
-        const formData = new FormData(formAnexar);
+        const formAnexarCriar = document.getElementById("formAnexarCriar");  
+        const formData = new FormData(formAnexarCriar);
         formData.append("file", this.files[i]);
         const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php`
         this.callAxios(this.id, url, formData)   
@@ -350,8 +350,8 @@ const app = new Vue({
             continue;
           }
 
-        const formQuitar = document.getElementById("formQuitar");  
-        const formData = new FormData(formQuitar);
+        const formAnexar = document.getElementById("formAnexar");  
+        const formData = new FormData(formAnexar);
         formData.append("file", this.filesQuitar[i]);
         const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/chequesDevolvidos.php`
         this.callAxios(this.id, url, formData)   
