@@ -45,8 +45,8 @@ include('controller/chequesDevolvidos.php');
                     <input class='form-control' type='date' name='data2' id='data2' v-model="data2">
                 </div>
                 <div class="col-md-2 p-1 mt-1">
-                    <button type="button" class='btn btn-warning btn-sm'>Incluir</button>
-                    <button type="button" @click="limparFiltros()" class='btn btn-danger btn-sm'>Limpar</button>
+                    <button type="button" class='btn btn-primary btn-sm'>Incluir</button>
+                    <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()" >Limpar</button>
                 </div>
             </div>
         </div>

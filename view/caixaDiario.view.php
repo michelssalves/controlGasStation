@@ -49,6 +49,7 @@ include('controller/caixaDiario.php');
                 </div>
                 <div class="col-md-1 p-1 mt-1">
                     <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+            
                 </div>
             </div>
         </div>

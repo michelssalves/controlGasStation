@@ -6,17 +6,17 @@ include '../model/EnviarMateriais.php';
 
 $action = $_REQUEST['action'];
 
-if($action == 'findAllMeds') {
+if ($action == 'findAllMeds') {
 
-    $model = new Model();
+  $model = new Model();
 
-    $rows = $model->selectAllMeds();
+  $rows = $model->selectAllMeds();
 
-    $data = array('rows' => utf8ize($rows));
+  $data = array('rows' => utf8ize($rows));
 
-    echo json_encode($data);
+  echo json_encode($data);
 }
-if($action == 'findAllClasses') {
+if ($action == 'findAllClasses') {
 
   $model = new Model();
 
@@ -26,7 +26,7 @@ if($action == 'findAllClasses') {
 
   echo json_encode($data);
 }
-if($action == 'findProdutos') {
+if ($action == 'findProdutos') {
 
   $classe = $_REQUEST['classe'];
 
@@ -38,7 +38,7 @@ if($action == 'findProdutos') {
 
   echo json_encode($data);
 }
-if($action == 'findAll') {
+if ($action == 'findAll') {
 
   $status1 = $_REQUEST['statusNovo'];
   $status2 = $_REQUEST['statusEnviado'];
@@ -71,7 +71,7 @@ if($action == 'findAll') {
 
   echo json_encode($data);
 }
-if($action == 'findById') {
+if ($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
@@ -82,10 +82,10 @@ if($action == 'findById') {
   $rowObs = $model->selectObservacao($id);
 
   $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
-  
+
   echo json_encode($data);
 }
-if($action == 'findByIdItem') {
+if ($action == 'findByIdItem') {
 
   $id = $_REQUEST['id'];
 
@@ -97,29 +97,28 @@ if($action == 'findByIdItem') {
 
   echo json_encode($data);
 }
-if($action == 'cancelarPedido') {
+if ($action == 'cancelarPedido') {
 
   $id = $_REQUEST['idPedido'];
 
   $model = new Model();
 
-  if($model->updateCancelarPedido($id)) {
+  if ($model->updateCancelarPedido($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
-
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para cancelar');
   }
   echo json_encode($data);
 }
-if($action == 'cancelarItem') {
+if ($action == 'cancelarItem') {
 
   $id = $_REQUEST['idItem'];
 
   $model = new Model();
 
-  if($model->updateCancelarItem($id)) {
+  if ($model->updateCancelarItem($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Item Cancelado');
   } else {
@@ -128,7 +127,7 @@ if($action == 'cancelarItem') {
   }
   echo json_encode($data);
 }
-if($action == 'alterarItem') {
+if ($action == 'alterarItem') {
 
   $id = $_REQUEST['idItem'];
   $quantidade = $_REQUEST['quantidade'];
@@ -138,23 +137,21 @@ if($action == 'alterarItem') {
   if ($model->updateQtdeItem($id, $quantidade)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para alterar');
-    
   }
   echo json_encode($data);
 }
-if($action == 'addObservacao') {
+if ($action == 'addObservacao') {
 
   $id = $_REQUEST['idPedido'];
   $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
- 
+
 
   $model = new Model();
 
-  if($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+  if ($model->insertObservacao($id, $usuarioLogado, $observacao)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
   } else {
@@ -163,20 +160,22 @@ if($action == 'addObservacao') {
   }
   echo json_encode($data);
 }
-if($action == 'alterarStatus') {
+if ($action == 'alterarStatus') {
 
   $id = $_REQUEST['idPedido'];
   $status = $_REQUEST['status'];
 
-  if($status == 'NOVO'){ $status = 'ENVIADO';}
-  elseif($status == 'ENVIADO'){ $status = 'FINALIZADO';}
+  if ($status == 'NOVO') {
+    $status = 'ENVIADO';
+  } elseif ($status == 'ENVIADO') {
+    $status = 'FINALIZADO';
+  }
 
   $model = new Model();
 
-  if($model->updateStatus($id, $status)) {
+  if ($model->updateStatus($id, $status)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para alterar');
@@ -184,37 +183,29 @@ if($action == 'alterarStatus') {
 
   echo json_encode($data);
 }
-if($action == 'solicitacaoMateriais') {
+if ($action == 'solicitacaoMateriais') {
 
-  $jsonArray = json_decode($_REQUEST['todos'], true);
-  echo $tam =  count($jsonArray);
+  $listaItems = json_decode($_REQUEST['listaItems'], true);
+  $tam = count($listaItems);
 
-  for($x=0; $x<$tam; $x++){
+  for ($x = 0; $x < $tam; $x++) {
 
-    $qtde[$x] = $jsonArray[$x]['qtde'];
-    $idProduto[$x] = $jsonArray[$x]['idProduto'];
-    $descricao[$x] =  $jsonArray[$x]['produto'];
-
+    $qtde[$x] = $listaItems[$x]['qtde'];
+    $idProduto[$x] = $listaItems[$x]['idProduto'];
+    $descricao[$x] = $listaItems[$x]['produto'];
   }
 
-    $model = new Model();
-    $model->insertPedido($idUsuario);
-    $idPedido = selectUltimoId('REQ_Pedido');
-    $model->insertItens($idPedido, $idProduto, $qtde, $descricao, $tam);
+  $model = new Model();
+  $model->insertPedido($idUsuario);
+  $idPedido = selectUltimoId('REQ_Pedido');
 
-  /*$model = new Model();
+  if ($model->insertItens($idPedido, $idProduto, $qtde, $descricao, $tam)) {
 
-  if($model->updateStatus($id, $status)) {
-
-    $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-
+    $data = array('res' => 'success', 'msg' => 'Registrado Com Sucesso');
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para alterar');
-  }*/
- // $data = array('res' => $chave);
-  //echo json_encode($data);
+  }
+
+  echo json_encode($data);
 }
-
-
-

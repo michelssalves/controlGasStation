@@ -134,35 +134,6 @@ const app = new Vue({
           console.log(err);
         });
     },
-    addItem() {
-
-      this.items.push({ id: id++, qtde: this.qtde, idProduto: this.idProduto, produto: this.produtoDescricao })
-      this.idClasse = ''
-      this.idProduto = ''
-      this.qtde = ''
-      this.produtos = ''
-     
-    },
-    salvarSolicitacao(){
-
-     const dados = JSON.stringify(this.items);
-
-      axios
-      .post(
-        `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=solicitacaoMateriais&todos=${dados}`,
- 
-    )
-      .then((res) => {
-        console.log(res.data.rows)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-
-    },
-    excluirItem(item) {
-      this.items = this.items.filter((t) => t !== item)
-    },
     getAllClasses() {
       axios
         .post(
@@ -193,6 +164,42 @@ const app = new Vue({
       });
 
     },
+    modalCriarSolicitacao(){
+
+      const criarSolicitacao = new bootstrap.Modal( document.getElementById("criarSolicitacao"))
+      criarSolicitacao.show()
+      this.getAllClasses()
+
+    },
+    addItem() {
+
+      this.items.push({ id: id++, qtde: this.qtde, idProduto: this.idProduto, produto: this.produtoDescricao })
+      this.idClasse = ''
+      this.idProduto = ''
+      this.qtde = ''
+      this.produtos = ''
+     
+    },
+    salvarSolicitacao(){
+
+     const dados = JSON.stringify(this.items);
+
+      axios
+      .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=solicitacaoMateriais&listaItems=${dados}`,
+ 
+    )
+      .then((res) => {
+        console.log(res.data.rows)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    },
+    excluirItem(item) {
+      this.items = this.items.filter((t) => t !== item)
+    },
     getSolicitacoes(action){
 
      const formFiltroSolicitacoes = document.getElementById('formFiltroSolicitacoes')
@@ -217,13 +224,6 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-
-    },
-    modalCriarSolicitacao(){
-
-      const criarSolicitacao = new bootstrap.Modal( document.getElementById("criarSolicitacao"))
-      criarSolicitacao.show()
-      this.getAllClasses()
 
     },
     modalVisualizarSolicitacao(id){
@@ -350,7 +350,6 @@ const app = new Vue({
         console.log(err);
       });
     }
-   
   },
   watch: {
     paginaAtual() {
@@ -371,9 +370,7 @@ const app = new Vue({
   
     this.getAllMeds()
   },
-  computed:{
-
-    
+  computed:{    
   },
   
 });

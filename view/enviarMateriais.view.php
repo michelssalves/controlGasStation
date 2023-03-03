@@ -36,59 +36,60 @@ include('controller/enviarMateriais.php');
                 </div>
             </div>
         </div>
-    </form>
-    <div class="container">
-        <div class="fundo-header-tabelas d-flex justify-content-center">
-            <div v-show="message.length > 0" class="text-dark fs-6 ">
-                <h4>{{message}}</h4>
+
+        <div class="container">
+            <div class="fundo-header-tabelas d-flex justify-content-center">
+                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                    <h4>{{message}}</h4>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="table-wrapper">
-        <table class="table table-striped table-hover mt-1 ">
-            <thead class="header-tabela">
-                <tr>
-                    <th>Filial</th>
-                    <th>Dt Ped</th>
-                    <th>Dt Fec</th>
-                    <th>Obs</th>
-                    <th>Itens Total</th>
-                    <th>Itens Parcial</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr @click="modalVisualizarSolicitacao(solicitacao.id_pedido)" style="cursor:pointer" v-for="solicitacao in solicitacoes">
-                    <td>{{solicitacao.loginName}}</td>
-                    <td>{{solicitacao.dataPedido}}</td>
-                    <td>{{solicitacao.dataEntrega}}</td>
-                    <td>{{solicitacao.lista}}</td>
-                    <td>{{solicitacao.itens}}</td>
-                    <td>{{solicitacao.itens_parcial}}</td>
-                    <td>{{solicitacao.status}}</td>
-                </tr>
-            <tbody>
-        </table>
-        <nav aria-label="Page navigation example" style="cursor:pointer">
-            <ul class="pagination pagination-sm justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" @click="paginaAtual = 1">Primeira</a>
-                </li>
-                <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
-                    <a class="page-link">{{paginaAtual - 1}}</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link">{{ paginaAtual }}</a>
-                </li>
-                <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
-                    <a class="page-link">{{paginaAtual + 1}}</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+        <div class="table-wrapper">
+            <table class="table table-striped table-hover mt-1 ">
+                <thead class="header-tabela">
+                    <tr>
+                        <th>Filial</th>
+                        <th>Dt Ped</th>
+                        <th>Dt Fec</th>
+                        <th>Obs</th>
+                        <th>Itens Total</th>
+                        <th>Itens Parcial</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr @click="modalVisualizarSolicitacao(solicitacao.id_pedido)" style="cursor:pointer" v-for="solicitacao in solicitacoes">
+                        <td>{{solicitacao.loginName}}</td>
+                        <td>{{solicitacao.dataPedido}}</td>
+                        <td>{{solicitacao.dataEntrega}}</td>
+                        <td>{{solicitacao.lista}}</td>
+                        <td>{{solicitacao.itens}}</td>
+                        <td>{{solicitacao.itens_parcial}}</td>
+                        <td>{{solicitacao.status}}</td>
+                    </tr>
+                <tbody>
+            </table>
+            <nav aria-label="Page navigation example" style="cursor:pointer">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" @click="paginaAtual = 1">Primeira</a>
+                    </li>
+                    <li class="page-item" v-if="paginaAtual - 1 > 0" @click="paginaAtual--">
+                        <a class="page-link">{{paginaAtual - 1}}</a>
+                    </li>
+                    <li class="page-item active">
+                        <a class="page-link">{{ paginaAtual }}</a>
+                    </li>
+                    <li class="page-item" v-if="paginaAtual + 1 <= totalResults" @click="paginaAtual++">
+                        <a class="page-link">{{paginaAtual + 1}}</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" @click="paginaAtual = totalResults">Ultima</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </form>
     <!--MODAL VISUALIZAR CX DIÁRIO-->
     <div class="modal fade" id="visualizarSolicitacao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="visualizarSolicitacaoModalLabel" aria-hidden="true">
         <form id="formvisualizarSolicitacao" method="POST">
@@ -260,7 +261,7 @@ include('controller/enviarMateriais.php');
                                 <h2 class="p-2 bg-light rounded-circle text-dark fs-6">Criar Solicitação</h2>
                             </div>
                         </div>
-                        <div class="d-flex flex-row">  
+                        <div class="d-flex flex-row">
                             <div class="p-1"><button v-show="items.length > 0" type="button" @click="salvarSolicitacao()" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" @click="addItem()" title="Adc" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconCarrinhoCompras" /></button></div>
                             <div class="p-1"><button type="button" @click="fecharModal()" title="Fechar" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
@@ -290,23 +291,23 @@ include('controller/enviarMateriais.php');
                         </div>
                     </div>
                     <div class="container">
-                    <div class="table-wrapper">
-                        <table class="table table-striped table-hover mt-1 ">
-                            <thead class="header-tabela">
-                                <tr>
-                                    <th>Produto</th>
-                                    <th>Quantidade</th>
-                                    <th>Remover</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="item in items" :key="item.id">
-                                    <td>{{ item.produto }}</td>
-                                    <td>{{ item.qtde }}</td>
-                                    <td @click="excluirItem(item)"><img :src="iconCancelar"/></td>
-                                </tr>
-                            <tbody>
-                        </table>
+                        <div class="table-wrapper">
+                            <table class="table table-striped table-hover mt-1 ">
+                                <thead class="header-tabela">
+                                    <tr>
+                                        <th>Produto</th>
+                                        <th>Quantidade</th>
+                                        <th>Remover</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="item in items" :key="item.id">
+                                        <td>{{ item.produto }}</td>
+                                        <td>{{ item.qtde }}</td>
+                                        <td @click="excluirItem(item)"><img :src="iconCancelar" /></td>
+                                    </tr>
+                                <tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -317,6 +318,5 @@ include('controller/enviarMateriais.php');
         </form>
     </div>
     <!--/MODAL CRIAR PEDIDO-->
-
 </div>
 <!--FIM DIV APP VUE JS-->

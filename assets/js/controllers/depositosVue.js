@@ -9,7 +9,14 @@ const app = new Vue({
       observacoes: [],
       meds: [],
       actionObs:'addObservacao',
+      actionCriar: 'addDeposito',
       observacao: '',
+      criarDebito: 0,
+      criarCheque: 0,
+      criarDinheiro:0,
+      criarData: this.dataAtual(),
+      criarConta:'',
+      criarContaCh:'',
       id: '',
       id_med: '',
       dataDep: '',
@@ -76,7 +83,7 @@ const app = new Vue({
     },
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 44) {
         // 46 é ponto e 44 é virgula
         $event.preventDefault();
       }
@@ -114,12 +121,26 @@ const app = new Vue({
           console.log(err);
         });
     },
+    modalCriarDeposito(){
+
+      const criarDeposito = new bootstrap.Modal(document.getElementById("criarDeposito"));
+      criarDeposito.show();
+    },
+    salvarDeposito(){
+
+      const formCriarDeposito = document.getElementById("formCriarDeposito")
+
+      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php"
+      const formData = new FormData(formCriarDeposito)
+     
+      this.callAxios('insert', url, formData)
+
+    },
     modalVisualizar(id) {
 
       const visualizarDepositos = new bootstrap.Modal(document.getElementById("visualizarDepositos"));
       visualizarDepositos.show();
 
-      this.buscarSolicitacao(id);
     },
     buscarSolicitacao(id) {
       axios
@@ -165,12 +186,31 @@ const app = new Vue({
         .then((res) => {
           console.log(res.data.res);
           if (res.data.res == "success") {
-            console.log(res.data.res.sql);
-            this.message = res.data.msg;
-            this.modalVisualizarSolicitacao(id);
+         
+            if(id != 'insert'){
+
+              this.message = res.data.msg;
+              this.modalVisualizarSolicitacao(id)
+
+            }else{
+              
+              this.message = res.data.msg;
+              this.getDepositos()
+            }
+
           } else {
-            this.message = res.data.msg;
-            this.modalVisualizarSolicitacao(id);
+
+            if(id != 'insert'){
+              this.message = res.data.msg
+              this.modalVisualizarSolicitacao(id)
+              
+            }else{
+          
+              this.message = res.data.msg
+              this.getDepositos()
+              
+            }
+
           }
         })
         .catch((err) => {

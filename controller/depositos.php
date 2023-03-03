@@ -62,6 +62,33 @@ if($action == 'findById') {
 
     echo json_encode($data);
 }
+if($action == 'addDeposito'){
+
+    $dataDeposito = $_REQUEST['dataDeposito'];
+    $dinheiro = $_REQUEST['dinheiro'];
+    $cheque = $_REQUEST['cheque'];
+    $debito = $_REQUEST['debito'];
+    $conta = $_REQUEST['conta'];
+    $contaCh = $_REQUEST['contaCh'];
+ 
+    $model = new Model();
+  
+    if($dataDeposito && $dinheiro && $conta){
+
+        if($model->insertDeposito($idUsuario, $dataDeposito, $dinheiro, $cheque, $debito, $conta, $contaCh)){
+
+        $data = array('res' =>  'success', 'msg' => 'Registrado com sucesso!');
+
+        }
+   
+    }else {
+
+        $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+
+    }
+
+    echo json_encode($data);
+}
 if($action == 'addObservacao') {
 
     $id = $_REQUEST['id'];
