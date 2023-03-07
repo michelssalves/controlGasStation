@@ -3,26 +3,28 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: 'Caixa Diario',
+      menu: "Caixa Diario",
       meds: [],
       caixas: [],
       anexosCaixa: [],
       eventosCaixa: [],
-      criarTurnoDefinitivo:'',
+      files: [],
+      uploadedFiles: [],
+      filesAnexar: [],
+      criarTurnoDefinitivo: "",
       criarData: this.dataAtual(),
       criarDinheiro: 0,
       criarCheque: 0,
       criarBrinks: 0,
       criarPix: 0,
-      criarObs: '',
-      criarFiles: [],
-      actionCriar: 'addFechamento',
-      actionAnexar: 'addAnexo',
+      criarObs: "",
+      actionCriar: "criarFechamento",
+      actionAnexar: "addAnexo",
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
       totalResults: 0,
-      descricaoObservacao:'',
+      descricaoObservacao: "",
       id_requisicao: "",
       dep_brinks: "",
       dep_cheque: "",
@@ -36,8 +38,6 @@ const app = new Vue({
       caixa: "",
       obs: "",
       status: "",
-      files: [],
-      filesAnexar:[],
       descricaoAnexo: "",
       readonly: true,
       disabled: true,
@@ -79,75 +79,79 @@ const app = new Vue({
     },
   },
   methods: {
-    limparFiltros(){
-
-      document.getElementById("data1").value = '2017-01-01'
-      document.getElementById("data2").value =  this.dataAtual()
-      document.getElementById("idMed").value = ''
-      document.getElementById("turnoDefinitivo").value = '0'
-      document.getElementById("concBancaria").value =  '0'
-      document.getElementById("statusAberto").checked =  false
-      document.getElementById("statusNovo").checked =  false
-      document.getElementById("statusFechado").checked =  false
-      document.getElementById("statusCancelado").checked =  false
-      this.getCaixas('filtrar')
-      this.message = 'Limpado!'
-   
+    limparFiltros() {
+      document.getElementById("data1").value = "2017-01-01";
+      document.getElementById("data2").value = this.dataAtual();
+      document.getElementById("idMed").value = "";
+      document.getElementById("turnoDefinitivo").value = "0";
+      document.getElementById("concBancaria").value = "0";
+      document.getElementById("statusAberto").checked = false;
+      document.getElementById("statusNovo").checked = false;
+      document.getElementById("statusFechado").checked = false;
+      document.getElementById("statusCancelado").checked = false;
+      this.getCaixas("filtrar");
+      this.message = "Limpado!";
     },
-    dataAtual(){
-
-      const data = new Date()
-      const dia = String(data.getDate()).padStart(2, '0')
-      const mes = String(data.getMonth()+1).padStart(2, '0')
-      const ano = data.getFullYear()
-      const dataAtual = `${ano}-${mes}-${dia}`
-      return dataAtual
+    limparCampos() {
+      (this.uploadedFiles = []),
+        (this.files = []),
+        (this.criarTurnoDefinitivo = ""),
+        (this.criarData = this.dataAtual()),
+        (this.criarDinheiro = 0),
+        (this.criarCheque = 0),
+        (this.criarBrinks = 0),
+        (this.criarPix = 0),
+        (this.criarObs = "");
     },
-    bloquearCampos(){
-
+    dataAtual() {
+      const data = new Date();
+      const dia = String(data.getDate()).padStart(2, "0");
+      const mes = String(data.getMonth() + 1).padStart(2, "0");
+      const ano = data.getFullYear();
+      const dataAtual = `${ano}-${mes}-${dia}`;
+      return dataAtual;
+    },
+    bloquearCampos() {
       this.aplicarIcon = true;
       this.title = true;
       this.disabled = true;
       this.readonly = true;
-
     },
-    fecharModal(){
-
-        this.bloquearCampos()
-        this.getCaixas()
-
+    fecharModal() {
+      this.bloquearCampos();
+      this.getCaixas();
     },
-    modalCriarCaixa(){
-
-      const criarCaixa = new bootstrap.Modal(document.getElementById("criarCaixa"));
+    fecharModalCriar() {
+      this.limparCampos();
+      this.getCaixas();
+    },
+    modalCriarCaixa() {
+      const criarCaixa = new bootstrap.Modal(
+        document.getElementById("criarCaixa")
+      );
       criarCaixa.show();
     },
-    salvarCaixa(){
+    salvarCaixa() {
+      const formCriarCaixa = document.getElementById("formCriarCaixa");
 
-      const formCriarCaixa = document.getElementById("formCriarCaixa")
+      const url =
+        "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php";
+      const formData = new FormData(formCriarCaixa);
+      this.callAxios("insert", url, formData);
+      this.criarDinheiro = 0;
 
-      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php"
-      const formData = new FormData(formCriarCaixa)
-      this.callAxios('insert', url, formData)
-      this.criarDinheiro = 0
-     
-      this.criarCheque = 0
-      this.criarBrinks = 0
-      this.criarPix = 0
-      this.criarData = this.dataAtual(),
-      this.criarTurnoDefinitivo = ''
-      this.criarObs = ''
-      this.criarFiles = []
-
+      this.criarCheque = 0;
+      this.criarBrinks = 0;
+      this.criarPix = 0;
+      (this.criarData = this.dataAtual()), (this.criarTurnoDefinitivo = "");
+      this.criarObs = "";
+      this.criarFiles = [];
     },
-    voltarVisualizar(id){
-
-      this.bloquearCampos()
-      this.modalVisualizar(id)
-
+    voltarVisualizar(id) {
+      this.bloquearCampos();
+      this.modalVisualizar(id);
     },
     modalFecharCaixa(id) {
-
       const formCaixaDiario = document.getElementById("formCaixaDiario");
       const formData = new FormData(formCaixaDiario);
 
@@ -163,7 +167,7 @@ const app = new Vue({
             const action = "fecharCaixa";
             this.salvarAlteracoes(id, action);
             this.status = "FECHADO";
-            this.bloquearCampos()
+            this.bloquearCampos();
           }
         })
         .catch((err) => {
@@ -171,7 +175,6 @@ const app = new Vue({
         });
     },
     modalAbrirCaixa(id) {
-
       const formData = new FormData();
       formData.append("id", id);
 
@@ -187,7 +190,7 @@ const app = new Vue({
             const action = "abrirCaixa";
             this.message = "Caixa aberto";
             this.salvarAlteracoes(id, action);
-            this.bloquearCampos()
+            this.bloquearCampos();
           }
         })
         .catch((err) => {
@@ -195,8 +198,9 @@ const app = new Vue({
         });
     },
     getCaixas(action) {
-
-      const formFiltroCaixaDiario = document.getElementById("formFiltroCaixaDiario");
+      const formFiltroCaixaDiario = document.getElementById(
+        "formFiltroCaixaDiario"
+      );
       const formData = new FormData(formFiltroCaixaDiario);
 
       axios
@@ -205,15 +209,11 @@ const app = new Vue({
           formData
         )
         .then((res) => {
-          
-          if(action == 'filtrar'){
-            
-            this.paginaAtual = 1
-
-          }  
+          if (action == "filtrar") {
+            this.paginaAtual = 1;
+          }
           this.caixas = res.data.rows;
-          this.totalResults = res.data.results
-
+          this.totalResults = res.data.results;
         })
         .catch((err) => {
           console.log(err);
@@ -222,19 +222,16 @@ const app = new Vue({
     getAllMeds() {
       axios
         .post(
-        "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAllMeds",
-   
-      )
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAllMeds"
+        )
         .then((res) => {
           this.meds = res.data.rows;
-
         })
         .catch((err) => {
           console.log(err);
         });
     },
     newTab(id, ext) {
-
       window.open(
         `https://www.rdppetroleo.com.br/medwebnovo/view/verDocumento.view.php?id=${id}&ext=${ext}&p=fechamentoCaixa`,
         "",
@@ -254,19 +251,15 @@ const app = new Vue({
           if (res.data.res == "success") {
             if (action == "abrirCaixa") {
               this.message = "Caixa Aberto";
-              
             }
             if (action == "fecharCaixa") {
               this.message = "Caixa Fechado";
-            
             }
             if (action == "alterarCaixa") {
               this.message = "Salvo com sucesso";
-             
             }
           } else {
             this.message = "Houve um erro ao Alterar";
-           
           }
         })
         .catch((err) => {
@@ -307,20 +300,21 @@ const app = new Vue({
           `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findById&id=${id}`
         )
         .then((res) => {
-     
-          this.id_requisicao = res.data.rows[0]['id_requisicao'];
-          this.dep_brinks = Number(res.data.rows[0]['dep_brinks']).toFixed(2);
-          this.dep_cheque = Number(res.data.rows[0]['dep_cheque']).toFixed(2);
-          this.dep_dinheiro = Number(res.data.rows[0]['dep_dinheiro']).toFixed(2);
-          this.pix = Number(res.data.rows[0]['pix']).toFixed(2);
-          this.data_caixa = res.data.rows[0]['data_caixa'];
-          this.loginName = res.data.rows[0]['loginName'];
-          this.turnos_definitivo = res.data.rows[0]['turnos_definitivo'];
-          this.conc = res.data.rows[0]['conc'];
-          this.caixa = res.data.rows[0]['caixa'];
-          this.obs = res.data.rows[0]['obs'];
-          this.status = res.data.rows[0]['status'];
-          this.idMed = res.data.rows[0]['id_med'];
+          this.id_requisicao = res.data.rows[0]["id_requisicao"];
+          this.dep_brinks = Number(res.data.rows[0]["dep_brinks"]).toFixed(2);
+          this.dep_cheque = Number(res.data.rows[0]["dep_cheque"]).toFixed(2);
+          this.dep_dinheiro = Number(res.data.rows[0]["dep_dinheiro"]).toFixed(
+            2
+          );
+          this.pix = Number(res.data.rows[0]["pix"]).toFixed(2);
+          this.data_caixa = res.data.rows[0]["data_caixa"];
+          this.loginName = res.data.rows[0]["loginName"];
+          this.turnos_definitivo = res.data.rows[0]["turnos_definitivo"];
+          this.conc = res.data.rows[0]["conc"];
+          this.caixa = res.data.rows[0]["caixa"];
+          this.obs = res.data.rows[0]["obs"];
+          this.status = res.data.rows[0]["status"];
+          this.idMed = res.data.rows[0]["id_med"];
 
           this.modalTabelaAnexos(id);
           this.modalTabelaEventos(id);
@@ -352,17 +346,16 @@ const app = new Vue({
           `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findEventosById&id=${id}`
         )
         .then((res) => {
-      
           this.eventosCaixa = res.data.rows;
-
         })
         .catch((err) => {
           console.log(err);
         });
     },
     modalObservacao(id) {
-
-      const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"));
+      const incluirObservacaoModal = new bootstrap.Modal(
+        document.getElementById("incluirObservacaoModal")
+      );
       incluirObservacaoModal.show();
     },
     salvarObs() {
@@ -376,16 +369,7 @@ const app = new Vue({
           "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=gravarObs",
           formData
         )
-        .then((res) => {
-      
-          if (res.data.res == "success") {
-            this.message = "Registrado com sucesso";
-            this.modalVisualizar(this.id_requisicao);
-          } else {
-            this.message = "Houve um erro ao registrar";
-            this.modalVisualizar(this.id_requisicao);
-          }
-        })
+
         .catch((err) => {
           console.log(err);
         });
@@ -396,14 +380,19 @@ const app = new Vue({
       );
       incluirAnexoModal.show();
     },
-    /*
     handleFiles() {
       //armazena os arquivos recebidos no vetor
-      let uploadedFiles = this.$refs.files.files;
+      console.log(this.$refs.files);
+      this.uploadedFiles = this.$refs.files.files;
 
-      for (var i = 0; i < uploadedFiles.length; i++) {
-        this.files.push(uploadedFiles[i]);
+      for (var i = 0; i < this.uploadedFiles.length; i++) {
+        this.files.push(this.uploadedFiles[i]);
       }
+      this.getImagePreviews();
+    },
+    removeFile(key) {
+      //exibe os arquivos armazenadas dentro do vetor
+      this.files.splice(key, 1);
       this.getImagePreviews();
     },
     getImagePreviews() {
@@ -427,59 +416,56 @@ const app = new Vue({
         }
       }
     },
-    removeFile(key) {
-      //exibe os arquivos armazenadas dentro do vetor
-      this.files.splice(key, 1);
-      this.getImagePreviews();
+    salvarFechamento() {
+      const formCriarCaixa = document.getElementById("formCriarCaixa");
+      const formData = new FormData(formCriarCaixa);
+      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php`;
+
+      axios
+        .post(url, formData)
+        .then((res) => {
+          if (res.data.res == "success") {
+
+            this.salvarAnexos();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    salvarAnexo() {
-      //envia para o backend os anexos e as info do formulario
+    salvarAnexos() {
       for (let i = 0; i < this.files.length; i++) {
         if (this.files[i].id) {
           continue;
         }
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append("file", this.files[i]);
-        formData.append("descricao", this.descricaoAnexo);
-        formData.append("id", this.id_requisicao);
-
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=addDocumentos`;
         axios
-          .post(
-            "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=gravarAnexo",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
+          .post(url, formData)
           .then((res) => {
-            if (res.data.res == "success") {
-              this.message = "Anexado com sucesso";
-              this.modalVisualizar(this.id_requisicao);
-            } else {
-              this.message = "Houve um erro ao anexar o arquivo";
-              this.modalVisualizar(this.id_requisicao);
-            }
+            this.message = res.data.msg;
           })
           .catch((err) => {
             console.log(err);
           });
       }
-    },*/
+
+      this.fecharModalCriar();
+    },
     handleFilesAnexar() {
       //armazena os arquivos recebidos no vetor
-      let uploadedFiles = this.$refs. filesAnexar.files;
+      let uploadedFiles = this.$refs.filesAnexar.files;
 
       for (var i = 0; i < uploadedFiles.length; i++) {
-        this. filesAnexar.push(uploadedFiles[i]);
+        this.filesAnexar.push(uploadedFiles[i]);
       }
       this.getImagePreviewsAnexar();
     },
     getImagePreviewsAnexar() {
       //exibe os arquivos armazenadas dentro do vetor
-      for (let i = 0; i < this. filesAnexar.length; i++) {
-        if (/\.(jpe?g|png|gif)$/i.test(this. filesAnexar[i].name)) {
+      for (let i = 0; i < this.filesAnexar.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.filesAnexar[i].name)) {
           let reader = new FileReader();
           reader.addEventListener(
             "load",
@@ -499,45 +485,44 @@ const app = new Vue({
     },
     removeFileAnexar(key) {
       //exibe os arquivos armazenadas dentro do vetor
-      this. filesAnexar.splice(key, 1);
+      this.filesAnexar.splice(key, 1);
       this.getImagePreviewsAnexar();
     },
     salvarAnexoAdicional() {
-      
-        for (let i = 0; i < this. filesAnexar.length; i++) {
-          if (this. filesAnexar[i].id) {
-            continue;
-          }
+      for (let i = 0; i < this.filesAnexar.length; i++) {
+        if (this.filesAnexar[i].id) {
+          continue;
+        }
 
-        const formAnexo = document.getElementById("formAnexo");  
-        const formData = new FormData(formAnexo);
-        formData.append("file", this. filesAnexar[i]);
-        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php`
-        this.callAxios(this.id_requisicao, url, formData)   
-
+        const formAnexoAdicional =
+          document.getElementById("formAnexoAdicional");
+        const formData = new FormData(formAnexoAdicional);
+        formData.append("anexo", this.filesAnexar[i]);
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php`;
+        this.callAxios(this.id_requisicao, url, formData);
       }
     },
     callAxios(id, url, formData) {
       axios
-        .post(
-          url, 
-          formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-        .then((res) => {
-
-          if (res.data.res == "success") {
-              this.message = res.data.msg;
-              this.modalVisualizar(id);
-          } else {
-              this.message = res.data.msg;
-              this.modalVisualizar(id);
-          }
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         })
+        .then((res) => {
+          if (res.data.res == "success") {
+          
+              this.message = res.data.msg;
+              this.modalVisualizar(id);
+     
+          }else {
+
+              this.message = res.data.msg;
+              this.fecharModal();
+          }
+          
+        })
+
         .catch((err) => {
           console.log(err);
         });
@@ -545,9 +530,7 @@ const app = new Vue({
   },
   watch: {
     paginaAtual() {
-
-      this.getCaixas()
-
+      this.getCaixas();
     },
     message() {
       setTimeout(() => {

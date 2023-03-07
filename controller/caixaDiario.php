@@ -6,7 +6,7 @@ include '../model/CaixaDiario.php';
 
 $action = $_REQUEST['action'];
 
-if($action == 'findAllMeds') {
+if ($action == 'findAllMeds') {
 
     $model = new Model();
 
@@ -16,8 +16,8 @@ if($action == 'findAllMeds') {
 
     echo json_encode($data);
 }
-if($action == 'findAll') {
-    
+if ($action == 'findAll') {
+
     $status1 = $_REQUEST['statusNovo'];
     $status2 = $_REQUEST['statusFechado'];
     $status3 = $_REQUEST['statusCancelado'];
@@ -34,15 +34,21 @@ if($action == 'findAll') {
 
     $filtroData = "AND data_caixa BETWEEN '$data1' AND '$data2'";
 
-    if($status1 == '' && $status2 == '' && $status3 == '' && $status4 == ''){
+    if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '') {
         $filtroStatus = "AND status IN ('NOVO', 'ABERTO')";
-    }else{
+    } else {
         $filtroStatus = "AND status IN ('$status1', '$status2', '$status3', '$status4')";
     }
-    if($med <> ''){ $filtroFilial = "AND id_med = $med ";  }
-    if($turnoDefinitivo <> '0'){ $filtroTurno = "AND turnos_definitivo = '$turnoDefinitivo' ";  }
-    if($concBancaria <> '0'){ $filtroConciliacao = "AND conc = '$concBancaria'";  }
-    
+    if ($med <> '') {
+        $filtroFilial = "AND id_med = $med ";
+    }
+    if ($turnoDefinitivo <> '0') {
+        $filtroTurno = "AND turnos_definitivo = '$turnoDefinitivo' ";
+    }
+    if ($concBancaria <> '0') {
+        $filtroConciliacao = "AND conc = '$concBancaria'";
+    }
+
     $model = new Model();
 
     $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
@@ -51,7 +57,7 @@ if($action == 'findAll') {
 
     echo json_encode($data);
 }
-if($action == 'findById') {
+if ($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
@@ -63,7 +69,7 @@ if($action == 'findById') {
 
     echo json_encode($data);
 }
-if($action == 'addAnexo') {
+if ($action == 'addAnexo') {
 
     $id = $_REQUEST['id'];
     $descricao = limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
@@ -82,40 +88,36 @@ if($action == 'addAnexo') {
 
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
-            $data = array('res' => 'success');
+            $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
+        } else {
 
-        }else {
-
-            $data = array('res' => 'errorInsert');
-           
+            $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
         }
     } else {
 
-       $data = array('res' => 'errorAnexo');
-       
+        $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
     }
 
     echo json_encode($data);
 }
-if($action == 'gravarObs') {
+if ($action == 'gravarObs') {
 
     $id = $_REQUEST['id'];
     $obs = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
     $model = new Model();
 
-    if($model->insertObservacoes($id, $usuarioLogado, $obs)){
+    if ($model->insertObservacoes($id, $usuarioLogado, $obs)) {
 
         $data = array('res' => 'success');
-
-    }else {
+    } else {
 
         $data = array('res' => 'errorObs');
     }
 
     echo json_encode($data);
 }
-if($action == 'alterarCaixa') {
+if ($action == 'alterarCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
     $dinheiro = $_REQUEST['dinheiro'];
@@ -130,90 +132,81 @@ if($action == 'alterarCaixa') {
     $observacao = $_REQUEST['observacao'];
     $model = new Model();
 
-    if($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)){
-   
-        $data = array('res' => 'success');
+    if ($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)) {
 
-    }else {
+        $data = array('res' => 'success');
+    } else {
 
         $data = array('res' => 'errorObs');
     }
 
     echo json_encode($data);
 }
-if($action == 'cancelarCaixa'){
+if ($action == 'cancelarCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
     $motivoCancelamento = limpaObservacao(utf8_decode($_REQUEST['motivoCancelamento']));
     $observacao = 'ALTEROU O STATUS PARA CANCELADO';
     $status = 'CANCELADO';
-  
+
     $model = new Model();
 
-    if($model->updateCancelarCaixa($id, $status, $observacao)){
-        
+    if ($model->updateCancelarCaixa($id, $status, $observacao)) {
+
         $model->insertObservacoes($id, $usuarioLogado, $motivoCancelamento);
 
         $data = array('res' => 'success');
-
-    }else {
+    } else {
 
         $data = array('res' => 'errorObs');
     }
 
     echo json_encode($data);
-
 }
-if($action == 'abrirCaixa'){
+if ($action == 'abrirCaixa') {
 
     $id = $_REQUEST['id'];
     $status = 'ABERTO';
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
-  
+
     $model = new Model();
 
-    if($model->updateCancelarCaixa($id, $status, $observacao)){
-        
+    if ($model->updateCancelarCaixa($id, $status, $observacao)) {
+
         $model->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
-
-    }else {
+    } else {
 
         $data = array('res' => 'error');
     }
 
     echo json_encode($data);
-    
 }
-if($action == 'fecharCaixa'){
+if ($action == 'fecharCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
     $observacao = 'ALTEROU O STATUS PARA FECHADO';
     $status = 'FECHADO';
     $conc = $_REQUEST['conc'];
     $caixa = $_REQUEST['caixa'];
-  
+
     $model = new Model();
-   
-    if($conc == 'SIM' && $caixa == 'SIM'){
-        
+
+    if ($conc == 'SIM' && $caixa == 'SIM') {
+
         $model->updateCancelarCaixa($id, $status, $observacao);
         $model->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
-    
-    
-    }else {
+    } else {
 
         $data = array('res' => 'error');
-        
     }
 
     echo json_encode($data);
-   
 }
-if($action == 'findAnexosById'){
+if ($action == 'findAnexosById') {
 
     $id = $_REQUEST['id'];
 
@@ -221,36 +214,86 @@ if($action == 'findAnexosById'){
 
     $rows = $model->selectAnexos($id);
 
-    if(!empty($rows)){
+    if (!empty($rows)) {
 
         $data = array('rows' => utf8ize($rows));
-
-    }else {
+    } else {
 
         $data = array('res' => 'errorAnexos');
     }
 
     echo json_encode($data);
-    
 }
-if($action == 'findEventosById'){
+if ($action == 'findEventosById') {
 
     $id = $_REQUEST['id'];
 
     $model = new Model();
 
     $rows = $model->selectEventos($id);
-    
-    if(!empty($rows)){
+
+    if (!empty($rows)) {
 
         $data = array('rows' => utf8ize($rows));
-
-    }else {
+    } else {
 
         $data = array('res' => 'errorAnexos');
     }
 
     echo json_encode($data);
-    
 }
-    
+if ($action == 'criarFechamento') {
+
+    $dinheiro = $_REQUEST['dinheiro'];
+    $cheque = $_REQUEST['cheque'];
+    $brinks = $_REQUEST['brinks'];
+    $pix = $_REQUEST['pix'];
+    $dataCaixa = $_REQUEST['dataCaixa'];
+    $turnos_definitivo = utf8_decode($_REQUEST['turnos_definitivo']);
+    $obs = limpaObservacao(utf8_decode($_REQUEST['criarObs']));
+
+    if(isset($turnos_definitivo)){
+    $model = new Model();
+
+    if ($model->insertFechamento($dinheiro, $cheque, $brinks, $pix, $dataCaixa, $turnos_definitivo, $obs, $idUsuario)) {
+
+        $data = array('res' =>  'success', 'id' => $id);
+
+    }} else {
+
+        $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+    }
+
+    echo json_encode($data);
+}
+if ($action == 'addDocumentos') {
+
+    if ($_FILES['file']['name'] <> '') {
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+        $descricao = explode('.', $_FILES['file']['name']);
+        $model = new Model();
+        $id = $model->findLastId();
+        
+        $model->insertAnexo($id, $descricao[0], $extensao);
+        $idAnexo = $model->findLastIdAnexo();
+        
+        if($idAnexo){
+
+            $temp = $_FILES['file']['tmp_name'];
+            $localDeArmazenagem = "../assets/docs/fechamentoCaixa";
+            $tabela = "ccp_fechamentoCaixa_anexo";
+            $token = md5(time() . rand(0, 9999) . time());
+            $nomeDoArquivo = "$idAnexo.$extensao";
+
+            uploadArquivoCaixa($temp, $localDeArmazenagem, $nomeDoArquivo);
+
+            $data = array('res' =>  'success', 'msg' => 'Salvo com sucesso!');
+        }
+    } else {
+
+        $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+    }
+
+    echo json_encode($data);
+}

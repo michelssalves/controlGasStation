@@ -234,7 +234,7 @@ include('controller/caixaDiario.php');
     <!--/MODAL VISUALIZAR CX DIÁRIO-->
     <!--MODAL INCLUIR ANEXO OK-->
     <div class="modal fade" id="incluirAnexoModal" tabindex="-1" aria-labelledby="incluirAnexoModalLabel" aria-hidden="true">
-        <form method="POST" id="formAnexo" enctype="multipart/form-data">
+        <form method="POST" id="formAnexoAdicional" enctype="multipart/form-data">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header fundo-cabecalho">
@@ -245,7 +245,7 @@ include('controller/caixaDiario.php');
                     </div>
                     <div class="modal-body">
                          <input id="action" name="action" type="hidden" v-model="actionAnexar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                         <input id="id" name="id" type="hidden" v-model="id_requisicao"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                         <input id="id" name="id" type="TEXT" v-model="id_requisicao"  class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="mb-3">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
@@ -364,7 +364,7 @@ include('controller/caixaDiario.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvarCaixa()" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvarFechamento()" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="fecharModal()" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -377,49 +377,51 @@ include('controller/caixaDiario.php');
                         <div class="input-group input-group-sm mb-3">
                             <input id="action" name="action" type="hidden" v-model="actionCriar" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Dinheiro:</span>
-                            <input :readonly="readonly" id="dinheiro" name="dinheiro" type="text" v-model="criarDinheiro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="dinheiro" name="dinheiro" type="text" v-model="criarDinheiro" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Cheque:</span>
-                            <input :readonly="readonly" id="cheque" name="cheque" type="text" v-model="criarCheque" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="cheque" name="cheque" type="text" v-model="criarCheque" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Brinks:</span>
-                            <input :readonly="readonly" id="brinks" name="brinks" type="text" v-model="criarBrinks" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="brinks" name="brinks" type="text" v-model="criarBrinks" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Pix:</span>
-                            <input :readonly="readonly" id="pix" name="pix" type="text" v-model="criarPix" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="pix" name="pix" type="text" v-model="criarPix" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Data</span>
                             <input name="dataCaixa" id="dataCaixa" v-model="criarData" type="date" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Turno Definitivo:</span>
-                            <select required v-model="turnos_definitivo" name='turnos_definitivo' id='turnos_definitivo' class='form-select' aria-label='Default select example'>
+                            <select required v-model="criarTurnoDefinitivo" name='turnos_definitivo' id='turnos_definitivo' class='form-select' aria-label='Default select example'>
                                 <option value="">Escolha</option>
                                 <option>SIM</option>
                                 <option>NÃO</option>
                             </select>
                         </div>
                         <div class="input-group input-group-sm mb-3">
-                            <textarea name="motivoCancelamento" id="motivoCancelamento" v-model="motivoCancelamento" cols="80" rows="2" style="white-space: pre;" placeholder="Observação" maxlength="500" required></textarea>
+                            <textarea name="criarObs" id="criarObs" v-model="criarObs" cols="80" rows="2" style="white-space: pre;" placeholder="Observação" maxlength="500" required></textarea>
                         </div>
-                        <div class="container">
-                            <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
-                                <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
-                                <p>
-                                    Arraste aqui <br>ou clique para procurar
-                                </p>
-                            </div>
 
-                            <div v-for="(file, key) in files" class="file-listing">
-                                <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
-                                {{ file.name }}
-                                <div class="success-container" v-if="file.id > 0">
-
+                            <div class="container">
+                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file"  id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                    <p>
+                                        Arraste aqui <br>ou clique para procurar
+                                    </p>
                                 </div>
-                                <div class="remove-container" v-else>
-                                    <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+
+                                <div v-for="(file, key) in files" class="file-listing">
+                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                    {{ file.name }}
+                                    <div class="success-container" v-if="file.id > 0">
+
+                                    </div>
+                                    <div class="remove-container" v-else>
+                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                
                     </div>
                     <div class="modal-footer">
                     </div>
