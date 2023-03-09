@@ -97,15 +97,16 @@ const app = new Vue({
       return dataAtual
     },
     bloquearCampos(){
+
       this.aplicarIcon = true;
       this.title = true;
       this.disabled = true;
       this.readonly = true;
+      
     },
     fecharModal(){
 
         this.bloquearCampos()
-
         this.getPendencias()
 
     },
@@ -161,8 +162,8 @@ const app = new Vue({
         });
 
     },
-    modalSerasaVisualizar(){
-      const visualizarSerasa = new bootstrap.Modal( document.getElementById("visualizarSerasa"))
+    modalSerasaVisualizar(id){
+      const visualizarSerasa = new bootstrap.Modal(document.getElementById("visualizarSerasa"))
       visualizarSerasa.show()
     },
     visualizarSerasa(id){
@@ -192,7 +193,7 @@ const app = new Vue({
             this.dtVencimento = this.verPendencias[0]['dataVencimento'];
             this.observacao = this.verPendencias[0]['obs'];
 
-            this.modalSerasaVisualizar()
+            this.modalSerasaVisualizar(id)
             this.modalTabelaAnexos(id)
             this.modalTabelaEventos(id)
             this.modalTabelaObservacao(id)
@@ -226,10 +227,19 @@ const app = new Vue({
         });
     },
     modalCancelar() {
+
+      if(window.confirm("Deseja realmente Cancelar?")){
+
       const modalCancelarCaixa = new bootstrap.Modal(document.getElementById("modalCancelarSerasa"));
       modalCancelarCaixa.show();
+      }else{
+        
+        this.bloquearCampos()
+        this.modalSerasaVisualizar(this.id_requisicao)
+      }
     },
     salvarCancelamento() {
+      
       
       const formCancelamento = document.getElementById("formCancelamento");
       const formData = new FormData(formCancelamento);
@@ -259,13 +269,20 @@ const app = new Vue({
     },
     modalBaixado(){
 
-      const baixarSerasaModal = new bootstrap.Modal(
-        document.getElementById("baixarSerasaModal")
-      );
+      if(window.confirm("Deseja realmente Quitar?")){
+
+      const baixarSerasaModal = new bootstrap.Modal(document.getElementById("baixarSerasaModal"));
       baixarSerasaModal.show();
+
+      }else{
+
+      this.bloquearCampos()
+      this.modalSerasaVisualizar(this.id_requisicao)
+
+      } 
     },
     salvarBaixa(){ 
-      
+    
       const formBaixarSerasa = document.getElementById("formBaixarSerasa");
       const formData = new FormData(formBaixarSerasa);
       formData.append("file", this.filesBaixar[0]);
@@ -299,11 +316,13 @@ const app = new Vue({
         })
         .catch((err) => {
           console.log(err);
-        });
-
+        }); 
 
     },
     modalParaPfin(id){
+
+
+      if(window.confirm("Deseja realmente mudar pra PFIN?")){
 
       const status = 'PEFIN'
       const observacaoStatus = 'ALTERADO STATUS PARA PEFIN'
@@ -336,7 +355,13 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
+       
+      }else{
+        
+        this.bloquearCampos()
+        this.modalSerasaVisualizar(this.id_requisicao)
 
+      }  
     },
     modalTabelaAnexos(id) {
       axios
@@ -428,12 +453,10 @@ const app = new Vue({
     },
     handleFilesB() {
       //armazena os arquivos recebidos no vetor
-     console.log(this.$refs.filesBaixar.files)
       let uploadedFiles = this.$refs.filesBaixar.files;
-
-      for (var i = 0; i < uploadedFiles.length; i++) {
-        this.filesBaixar.push(uploadedFiles[i]);
-      }
+      
+        this.filesBaixar.push(uploadedFiles[0]);
+        
       this.getImagePreviewsB();
     },
     getImagePreviewsB() {
@@ -448,7 +471,7 @@ const app = new Vue({
             }.bind(this),
             false
           );
-          reader.readAsDataURL(this.FilesB[i]);
+          reader.readAsDataURL(this.filesBaixar[i]);
         } else {
           this.$nextTick(function () {
             this.$refs["preview" + parseInt(i)][0].src =

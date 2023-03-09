@@ -305,11 +305,18 @@ const app = new Vue({
 
     },
     cancelarPedido(id){
-      alert(id)
-      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=cancelarPedido&idPedido=${id}`
-      const formData = new FormData()
-      this.callAxios(id, url, formData)
 
+      if(window.confirm("Deseja realmente excluir?")){
+    
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=cancelarPedido&idPedido=${id}`
+        const formData = new FormData()
+        this.callAxios(id, url, formData)
+
+      }else{
+
+        this.modalVisualizarSolicitacao(id)
+
+      }
     },
     cancelarItem(id){
 
@@ -319,13 +326,19 @@ const app = new Vue({
       this.callAxios(id, url, formData)
 
     },
-    alterarStatus(id){
+    alterarStatus(id, stt){
 
+      if(window.confirm("Deseja realmente mudar o status para "+ stt)){
       const formvisualizarSolicitacao = document.getElementById("formvisualizarSolicitacao")
       const url = "https://www.rdppetroleo.com.br/medwebnovo/controller/enviarMateriais.php?action=alterarStatus"
       const formData = new FormData(formvisualizarSolicitacao)
       this.callAxios(id, url, formData)
 
+    }else{
+
+      this.modalVisualizarSolicitacao(id)
+
+    }
     },
     callAxios(id, url, formData){
 

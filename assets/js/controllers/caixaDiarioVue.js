@@ -151,51 +151,64 @@ const app = new Vue({
       this.bloquearCampos();
       this.modalVisualizar(id);
     },
-    modalFecharCaixa(id) {
-      const formCaixaDiario = document.getElementById("formCaixaDiario");
-      const formData = new FormData(formCaixaDiario);
+    modalFecharCaixa(id, stt) {
 
-      axios
-        .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=fecharCaixa`,
-          formData
-        )
-        .then((res) => {
-          if (res.data.res == "error") {
-            this.message = "Marcar Conciliacao/Fechamento como SIM";
-          } else {
-            const action = "fecharCaixa";
-            this.salvarAlteracoes(id, action);
-            this.status = "FECHADO";
-            this.bloquearCampos();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      if (window.confirm("Deseja realmente " + stt + "o caixa")) {
+        const formCaixaDiario = document.getElementById("formCaixaDiario");
+        const formData = new FormData(formCaixaDiario);
+
+        axios
+          .post(
+            `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=fecharCaixa`,
+            formData
+          )
+          .then((res) => {
+            if (res.data.res == "error") {
+              this.message = "Marcar Conciliacao/Fechamento como SIM";
+            } else {
+              const action = "fecharCaixa";
+              this.salvarAlteracoes(id, action);
+              this.status = "FECHADO";
+              this.bloquearCampos();
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+
+        this.bloquearCampos()
+        this.voltarVisualizar(id)
+        
+      }
     },
     modalAbrirCaixa(id) {
-      const formData = new FormData();
-      formData.append("id", id);
+      if (window.confirm("Deseja realmente " + stt + "o caixa")) {
+        const formData = new FormData();
+        formData.append("id", id);
 
-      axios
-        .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=abrirCaixa`,
-          formData
-        )
-        .then((res) => {
-          if (res.data.rows == "error") {
-            this.message = "Caixa não foi aberto";
-          } else {
-            const action = "abrirCaixa";
-            this.message = "Caixa aberto";
-            this.salvarAlteracoes(id, action);
-            this.bloquearCampos();
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        axios
+          .post(
+            `https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=abrirCaixa`,
+            formData
+          )
+          .then((res) => {
+            if (res.data.rows == "error") {
+              this.message = "Caixa não foi aberto"
+            } else {
+              const action = "abrirCaixa"
+              this.message = "Caixa aberto"
+              this.salvarAlteracoes(id, action)
+              this.bloquearCampos()
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        this.bloquearCampos()
+        this.voltarVisualizar(id)
+      }
     },
     getCaixas(action) {
       const formFiltroCaixaDiario = document.getElementById(
@@ -267,10 +280,20 @@ const app = new Vue({
         });
     },
     modalCancelar(id) {
+
+      if (window.confirm("Deseja realmente cancelar?")) {
+
       const modalCancelarCaixa = new bootstrap.Modal(
         document.getElementById("modalCancelarCaixa")
       );
       modalCancelarCaixa.show();
+
+    } else {
+
+      this.bloquearCampos()
+      this.voltarVisualizar(id)
+
+    }
     },
     salvarCancelamento() {
       const formCancelamento = document.getElementById("formCancelamento");
@@ -425,7 +448,6 @@ const app = new Vue({
         .post(url, formData)
         .then((res) => {
           if (res.data.res == "success") {
-
             this.salvarAnexos();
           }
         })
@@ -511,16 +533,12 @@ const app = new Vue({
         })
         .then((res) => {
           if (res.data.res == "success") {
-          
-              this.message = res.data.msg;
-              this.modalVisualizar(id);
-     
-          }else {
-
-              this.message = res.data.msg;
-              this.fecharModal();
+            this.message = res.data.msg;
+            this.modalVisualizar(id);
+          } else {
+            this.message = res.data.msg;
+            this.fecharModal();
           }
-          
         })
 
         .catch((err) => {

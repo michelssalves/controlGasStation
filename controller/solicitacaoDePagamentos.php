@@ -3,6 +3,7 @@ session_start();
 include './controllerAux/validaLogin.php';
 include './controllerAux/functionsAuxiliar.php';
 include '../model/SolicitacaoDePagamentos.php';
+//include '../model/SolicitacaoDePagamentos2.php';
 
 $action = $_REQUEST['action'];
 
@@ -12,6 +13,16 @@ if ($action == 'findAllMeds') {
 
   $rows = $model->selectAllMeds();
 
+  $data = array('rows' => utf8ize($rows));
+
+  echo json_encode($data);
+}
+if ($action == 'findAllFornecedores') {
+
+  $model = new Model();
+
+  $rows = $model->selectAllFornecedores($idXpert); 
+  
   $data = array('rows' => utf8ize($rows));
 
   echo json_encode($data);
@@ -54,9 +65,11 @@ if($action == 'findAll') {
 
   $model = new Model();
 
+
   $rows = $model->findAll($Fstatus, $Fmed, $Ffornecedor, $Fdata, $start, $resultadoPorPagina);
 
-  $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+
+  $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]), 'teste' => $teste);
 
   echo json_encode($data);
 }
@@ -110,7 +123,7 @@ if($action == 'alterarStatus') {
 
   echo json_encode($data);
 }
-if($action == 'gravarAnexo') {
+if($action == 'gravarAnexoAdicional') {
 
     $descricao = limpaObservacao(utf8_decode($_REQUEST['descricao']));
     $id = $_REQUEST['id'];
@@ -126,13 +139,14 @@ if($action == 'gravarAnexo') {
         $temp = $_FILES['file']['tmp_name'];
         $localDeArmazenagem = "../assets/docs/solicitacaoPgtos/";
         $tabela = "ccp_reqCompras_anexos";
+        $campo = "id_ccp_reqCompras_anexos";
 
         $model = new Model();
 
         
         if($model->insertAnexo($descricao, $extensao, $id, $usuarioLogado)){
 
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem, $campo);
   
             $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
        
@@ -147,4 +161,37 @@ if($action == 'gravarAnexo') {
     } else {
         echo 'Houve algum erro, tente refazer o processo';
     }
+}
+if ($action == 'addDocumentos') {
+
+  if ($_FILES['file']['name'] <> '') {
+
+      $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+      $descricao = explode('.', $_FILES['file']['name']);
+      $model = new Model();
+      $id = $model->findLastId();
+      
+      $model->insertAnexo($descricao[0], $extensao, $id, $usuarioLogado);
+
+      $idAnexo = $model->findLastIdAnexo();
+      
+      if($idAnexo){
+
+          $temp = $_FILES['file']['tmp_name'];
+          $localDeArmazenagem = "../assets/docs/solicitacaoPgtos/";
+          $tabela = "ccp_reqCompras_anexos";
+          $campo = "id_ccp_reqCompras_anexos";
+          //$token = md5(time() . rand(0, 9999) . time());
+          $nomeDoArquivo = "$idAnexo.$extensao";
+
+          uploadArquivoCaixa($temp, $localDeArmazenagem, $nomeDoArquivo);
+
+          $data = array('res' =>  'success', 'msg' => 'Salvo com sucesso!');
+      }
+  } else {
+
+      $data = array('res' => 'error', 'msg' => 'Houve algum erro!');
+  }
+
+  echo json_encode($data);
 }

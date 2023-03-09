@@ -32,7 +32,7 @@ if($action == 'findAll') {
     $data1 = $_REQUEST['data1'];
     $data2 = $_REQUEST['data2'];
     $paginaAtual = $_REQUEST['paginaAtual'];
-    $resultadoPorPagina = 6;
+    $resultadoPorPagina = 10;
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
 

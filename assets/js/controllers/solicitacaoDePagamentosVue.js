@@ -9,10 +9,20 @@ const app = new Vue({
       anexos: [],
       observacoes: [],
       files: [],
+      filesAnexar: [],
+      fornecedores: [],
       actionQuitar: 'quitarCheque',
       actionObs: 'addObservacao',
       actionStatus: 'mudarStatus',
       actionAnexar: 'gravarAnexo',
+      anexoAdicional: 'gravarAnexoAdicional',
+      actionCriar: 'addPagamento',
+      criarFornecedor: '',
+      criarFinalidade: '',
+      criarData: '',
+      criarObs: '',
+      criarValor: '',
+      criarObs: '',
       observacao:'',
       paginaAntAtual: 0,
       paginaAtual: 1,
@@ -92,9 +102,7 @@ const app = new Vue({
     },
     fecharModal(){
 
-        this.bloquearCampos()
         this.getPagamentos()
-
     },
     voltarVisualizar(id){
 
@@ -151,7 +159,7 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-    },
+    },    
     modalVisualizar(id) {
 
       const visualizarPagamentos = new bootstrap.Modal(document.getElementById("visualizarPagamentos"))
@@ -209,11 +217,30 @@ const app = new Vue({
       const formData = new FormData(incluirObservacaoForm);
       this.callAxios(this.id, url, formData);
     },
-    modalAnexar() {
- 
-      const incluirAnexoModal = new bootstrap.Modal(document.getElementById("incluirAnexoModal"));
-      incluirAnexoModal.show();
-      this.files = []
+    modalSolPgtos(){
+      const criarSolPgtos = new bootstrap.Modal(
+        document.getElementById("criarSolPgtos")
+      );
+      criarSolPgtos.show();
+    
+    },
+    salvarSolPgtos() {
+
+      const formSolPgtos = document.getElementById("formSolPgtos");
+      const formData = new FormData(formSolPgtos);
+      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`;
+
+      axios
+        .post(url, formData)
+        .then((res) => {
+          if (res.data.res == "success") {
+
+            this.salvarAnexos();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     handleFiles() {
       //armazena os arquivos recebidos no vetor
@@ -250,17 +277,79 @@ const app = new Vue({
       this.files.splice(key, 1);
       this.getImagePreviews();
     },
-    salvarAnexo() {
+    salvarAnexos() {
+      for (let i = 0; i < this.files.length; i++) {
+        if (this.files[i].id) {
+          continue;
+        }
+        const formData = new FormData();
+        formData.append("file", this.files[i]);
+        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=addDocumentos`;
+        axios
+          .post(url, formData)
+          .then((res) => {
+            this.message = res.data.msg;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+
+      this.fecharModal()
+    }, 
+    modalAnexar() {
+ 
+      const incluirAnexoModal = new bootstrap.Modal(document.getElementById("incluirAnexoModal"));
+      incluirAnexoModal.show();
+      this.files = []
+
+    },
+    handleFilesAnxAdicional() {
+      //armazena os arquivos recebidos no vetor
+      let uploadedFiles = this.$refs.filesAnexar.files;
+
+      for (var i = 0; i < uploadedFiles.length; i++) {
+        this.filesAnexar.push(uploadedFiles[i]);
+      }
+      this.getImagePreviewsAnxAdicional();
+    },
+    getImagePreviewsAnxAdicional() {
+      //exibe os arquivos armazenadas dentro do vetor
+      for (let i = 0; i < this.filesAnexar.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.filesAnexar[i].name)) {
+          let reader = new FileReader();
+          reader.addEventListener(
+            "load",
+            function () {
+              this.$refs["preview" + parseInt(i)][0].src = reader.result;
+            }.bind(this),
+            false
+          );
+          reader.readAsDataURL(this.filesAnexar[i]);
+        } else {
+          this.$nextTick(function () {
+            this.$refs["preview" + parseInt(i)][0].src =
+              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
+          });
+        }
+      }
+    },
+    removeFileAnxAdicional(key) {
+      //exibe os arquivos armazenadas dentro do vetor
+      this.filesAnexar.splice(key, 1);
+      this.getImagePreviews();
+    },
+    salvarAnxAdicional() {
       //envia para o backend os anexos e as info do formulario
       
-        for (let i = 0; i < this.files.length; i++) {
-          if (this.files[i].id) {
+        for (let i = 0; i < this.filesAnexar.length; i++) {
+          if (this.filesAnexar[i].id) {
             continue;
           }
 
         const formAnexar = document.getElementById("formAnexar");  
         const formData = new FormData(formAnexar);
-        formData.append("file", this.files[i]);
+        formData.append("file", this.filesAnexar[i]);
         const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
         this.callAxios(this.id, url, formData)   
 
@@ -305,7 +394,9 @@ const app = new Vue({
     },
   },
   mounted: function () {
+    
     this.getPagamentos();
     this.getAllMeds();
+
   },
 });
