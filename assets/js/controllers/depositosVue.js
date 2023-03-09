@@ -8,37 +8,41 @@ const app = new Vue({
       depositos: [],
       observacoes: [],
       meds: [],
-      actionObs:'addObservacao',
-      actionCriar: 'addDeposito',
-      observacao: '',
+      actionObs: "addObservacao",
+      actionCriar: "addDeposito",
+      observacao: "",
       criarDebito: 0,
       criarCheque: 0,
-      criarDinheiro:0,
+      criarDinheiro: 0,
       criarData: this.dataAtual(),
-      criarConta:'',
-      criarContaCh:'',
-      id: '',
-      id_med: '',
-      dataDep: '',
-      datahoraReg: '',
-      dinheiro: '',
-      cheque: '',
-      debito: '',
-      nomecompleto: '',
-      conta_dep:'',
-      status: '',
-      title:'',
+      criarConta: "",
+      criarContaCh: "",
+      id: "",
+      id_med: "",
+      dataDep: "",
+      datahoraReg: "",
+      dinheiro: "",
+      cheque: "",
+      debito: "",
+      nomecompleto: "",
+      conta_dep: "",
+      status: "",
+      title: "",
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
       totalResults: 0,
-      message: '',
+      message: "",
       iconSave:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
       iconObs:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
+      iconCreate:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
+      iconLimpar:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
     };
   },
   filters: {
@@ -49,14 +53,20 @@ const app = new Vue({
       return value.split("-").reverse().join("/");
     },
     diaSemana: function (value) {
-
       const dataAtual = new Date(value);
       const diaSemana = dataAtual.getDay();
-      const diasSemana = ['Domingo', 'Segunda', 'Terca', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
+      const diasSemana = [
+        "Domingo",
+        "Segunda",
+        "Terca",
+        "Quarta",
+        "Quinta",
+        "Sexta",
+        "Sábado",
+      ];
       const nomeDiaSemana = diasSemana[diaSemana];
 
-      return nomeDiaSemana
-
+      return nomeDiaSemana;
     },
     duasCasasDecimais: function (value) {
       return Number(value).toFixed(2);
@@ -64,14 +74,12 @@ const app = new Vue({
   },
   methods: {
     limparFiltros() {
-
       document.getElementById("idMed").value = "0";
       document.getElementById("contaDeposito").value = "CONTA";
       document.getElementById("data1").value = "";
       document.getElementById("data1").value = "";
       this.getDepositos("filtrar");
       this.message = "Limpado!";
-
     },
     dataAtual() {
       const data = new Date();
@@ -82,14 +90,10 @@ const app = new Vue({
       return dataAtual;
     },
     fecharModal() {
-
       this.getDepositos();
-
     },
-    voltarVisualizar(id){
-
-      this.modalVisualizar(id)
-
+    voltarVisualizar(id) {
+      this.modalVisualizar(id);
     },
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
@@ -111,8 +115,9 @@ const app = new Vue({
         });
     },
     getDepositos(action) {
-
-      const formularioDepositos = document.getElementById("formularioDepositos");
+      const formularioDepositos = document.getElementById(
+        "formularioDepositos"
+      );
       const formdata = new FormData(formularioDepositos);
 
       axios
@@ -131,34 +136,33 @@ const app = new Vue({
           console.log(err);
         });
     },
-    modalCriarDeposito(){
-
-      const criarDeposito = new bootstrap.Modal(document.getElementById("criarDeposito"));
+    modalCriarDeposito() {
+      const criarDeposito = new bootstrap.Modal(
+        document.getElementById("criarDeposito")
+      );
       criarDeposito.show();
     },
-    salvarDeposito(){
+    salvarDeposito() {
+      const formCriarDeposito = document.getElementById("formCriarDeposito");
 
-      const formCriarDeposito = document.getElementById("formCriarDeposito")
+      const url =
+        "https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php";
+      const formData = new FormData(formCriarDeposito);
+      this.callAxios("insert", url, formData);
 
-      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php"
-      const formData = new FormData(formCriarDeposito)
-      this.callAxios('insert', url, formData)
-
-      this.criarDebito = 0
-      this.criarCheque = 0
-      this.criarDinheiro = 0
-      this.criarData = this.dataAtual(),
-      this.criarConta = ''
-      this.criarContaCh = ''
-
+      this.criarDebito = 0;
+      this.criarCheque = 0;
+      this.criarDinheiro = 0;
+      (this.criarData = this.dataAtual()), (this.criarConta = "");
+      this.criarContaCh = "";
     },
     modalVisualizar(id) {
-
-      const visualizarDepositos = new bootstrap.Modal(document.getElementById("visualizarDepositos"));
+      const visualizarDepositos = new bootstrap.Modal(
+        document.getElementById("visualizarDepositos")
+      );
       visualizarDepositos.show();
 
-      this.buscarSolicitacao(id)
-
+      this.buscarSolicitacao(id);
     },
     buscarSolicitacao(id) {
       axios
@@ -166,26 +170,25 @@ const app = new Vue({
           `https://www.rdppetroleo.com.br/medwebnovo/controller/depositos.php?action=findById&id=${id}`
         )
         .then((res) => {
-        
-          this.id = res.data.rows[0]["id"]
-          this.id_med = res.data.rows[0]["id_med"]
-          this.dataDep = res.data.rows[0]["data"]
-          this.datahoraReg = res.data.rows[0]["datahoraReg"]
-          this.dinheiro = res.data.rows[0]["dinheiro"]
-          this.cheque = res.data.rows[0]["cheque"]
-          this.debito = res.data.rows[0]["debito"]
-          this.nomecompleto = res.data.rows[0]["nomecompleto"]
-          this.conta_dep = res.data.rows[0]["conta_dep"]
-          this.observacoes = res.data.rowsObs
-
+          this.id = res.data.rows[0]["id"];
+          this.id_med = res.data.rows[0]["id_med"];
+          this.dataDep = res.data.rows[0]["data"];
+          this.datahoraReg = res.data.rows[0]["datahoraReg"];
+          this.dinheiro = res.data.rows[0]["dinheiro"];
+          this.cheque = res.data.rows[0]["cheque"];
+          this.debito = res.data.rows[0]["debito"];
+          this.nomecompleto = res.data.rows[0]["nomecompleto"];
+          this.conta_dep = res.data.rows[0]["conta_dep"];
+          this.observacoes = res.data.rowsObs;
         })
         .catch((err) => {
           console.log(err);
         });
     },
     modalObservacao() {
-      
-      const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"));
+      const incluirObservacaoModal = new bootstrap.Modal(
+        document.getElementById("incluirObservacaoModal")
+      );
       incluirObservacaoModal.show();
     },
     salvarObservacao(id) {
@@ -204,31 +207,21 @@ const app = new Vue({
         .then((res) => {
           console.log(res.data.res);
           if (res.data.res == "success") {
-         
-            if(id != 'insert'){
-
+            if (id != "insert") {
               this.message = res.data.msg;
-              this.modalVisualizarSolicitacao(id)
-
-            }else{
-              
+              this.modalVisualizarSolicitacao(id);
+            } else {
               this.message = res.data.msg;
-              this.getDepositos()
+              this.getDepositos();
             }
-
           } else {
-
-            if(id != 'insert'){
-              this.message = res.data.msg
-              this.modalVisualizarSolicitacao(id)
-              
-            }else{
-          
-              this.message = res.data.msg
-              this.getDepositos()
-              
+            if (id != "insert") {
+              this.message = res.data.msg;
+              this.modalVisualizarSolicitacao(id);
+            } else {
+              this.message = res.data.msg;
+              this.getDepositos();
             }
-
           }
         })
         .catch((err) => {

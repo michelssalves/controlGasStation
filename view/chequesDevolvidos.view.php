@@ -5,7 +5,7 @@ include('controller/chequesDevolvidos.php');
 <div id="app">
     <div class="tableArea">
         <form method='POST' id='formChequesDevolvidos'>
-            <div class="container text-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-1 p-1">
                         <div class="dropdown">
@@ -45,13 +45,12 @@ include('controller/chequesDevolvidos.php');
                     <div class="col-md-2 p-1">
                         <input class='form-control' type='date' name='data2' id='data2' v-model="data2">
                     </div>
-                    <div class="col-md-2 p-1 mt-1">
-                        <button type="button" class='btn btn-primary btn-sm'>Incluir</button>
-                        <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm'><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>
-
             <div class="container">
                 <div class="fundo-header-tabelas d-flex justify-content-center">
                     <div v-show="message.length > 0" class="text-dark fs-6 ">

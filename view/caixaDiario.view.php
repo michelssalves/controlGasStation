@@ -7,7 +7,7 @@ include('controller/caixaDiario.php');
     <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroCaixaDiario'>
-            <div class="container text-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-2 p-1">
                         <input @keyup="getCaixas('filtrar')" class='form-control' type='date' id='data1' name="data1" v-model="filtroData1">
@@ -48,9 +48,9 @@ include('controller/caixaDiario.php');
                             <option value='NAO'>Não</option>
                         </select>
                     </div>
-                    <div class="col-md-2 p-1 mt-1">
-                        <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                        <button type="button" class='btn btn-primary btn-sm' @click="modalCriarCaixa()">Incluir</button>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm' @click="modalCriarCaixa()"><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>

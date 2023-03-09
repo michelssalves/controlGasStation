@@ -7,7 +7,7 @@ include('controller/serasa.php');
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroSerasa'>
-            <div class="container text-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-2 p-1">
                         <div class="dropdown">
@@ -45,13 +45,12 @@ include('controller/serasa.php');
                     <div class="col-md-2 p-1">
                         <input @keyup="getPendencias('filtrar')" type="text" class='form-control' id="nomeClienteFiltro" name="nomeCliente" placeholder="Nome do Cliente">
                     </div>
-                    <div class="col-md-2 mt-2">
-                        <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                        <button type="button" class='btn btn-secondary btn-sm'>PFIN</button>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm' @click="modalCriarDeposito()"><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>
-
             <div class="container">
                 <div class="fundo-header-tabelas d-flex justify-content-center">
                     <div v-show="message.length > 0" class="text-dark fs-6 ">

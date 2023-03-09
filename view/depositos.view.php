@@ -6,7 +6,7 @@ include('controller/depositos.php');
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <div class="tableArea">
         <form method='POST' id='formularioDepositos'>
-            <div class="container text-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-2 p-1">
                         <select @change="getDepositos('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
@@ -31,9 +31,9 @@ include('controller/depositos.php');
                     <div class="col-md-2 p-1">
                         <input @keyup="getDepositos('filtrar')" @mouseleave="getDepositos('filtrar')" type='date' class='form-control' name='data2' id='data2'>
                     </div>
-                    <div class="col-md-2 p-1 mt-1">
-                        <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                        <button type="button" class='btn btn-primary btn-sm' @click="modalCriarDeposito()">Incluir</button>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm' @click="modalCriarDeposito()"><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>

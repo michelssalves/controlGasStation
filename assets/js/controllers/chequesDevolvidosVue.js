@@ -59,6 +59,10 @@ const app = new Vue({
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/excluir.gif",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
+      iconCreate:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
+      iconLimpar:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
 
     }
 	},

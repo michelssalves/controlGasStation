@@ -221,11 +221,11 @@ const app = new Vue({
       const formData = new FormData(incluirObservacaoForm);
       this.callAxios(this.id, url, formData);
     },
-    modalSolPgtos(){
-      const criarSolPgtos = new bootstrap.Modal(
-        document.getElementById("criarSolPgtos")
+    modalCadastrarPosto(){
+      const cadastrarPosto = new bootstrap.Modal(
+        document.getElementById("cadastrarPosto")
       );
-      criarSolPgtos.show();
+      cadastrarPosto.show();
     
     },
     salvarSolPgtos() {

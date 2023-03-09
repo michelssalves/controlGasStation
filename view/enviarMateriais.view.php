@@ -7,7 +7,7 @@ include('controller/enviarMateriais.php');
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <div class="tableArea">
         <form method='POST' id='formFiltroSolicitacoes'>
-            <div class="container text-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-3 p-1">
                         <div class="dropdown">
@@ -31,9 +31,9 @@ include('controller/enviarMateriais.php');
                     <div class="col-md-3 p-1">
                         <input @keyup="getSolicitacoes('filtrar')" type="text" class='form-control' id="produto" name="produto" placeholder="Produto">
                     </div>
-                    <div class="col-md-2 mt-2">
-                        <button type="button" class='btn btn-danger btn-sm' @click="limparFiltros()">Limpar</button>
-                        <button type="button" class='btn btn-primary btn-sm' @click="modalCriarSolicitacao()">Incluir</button>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm' @click="modalCriarSolicitacao()"><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>
