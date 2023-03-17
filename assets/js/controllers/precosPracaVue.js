@@ -3,63 +3,38 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: 'Pagamentos',
-      meds: [],
-      pagamentos: [],
-      anexos: [],
-      observacoes: [],
-      files: [],
-      filesAnexar: [],
-      fornecedores: [],
-      actionQuitar: 'quitarCheque',
-      actionObs: 'addObservacao',
-      actionStatus: 'mudarStatus',
-      actionAnexar: 'gravarAnexo',
-      anexoAdicional: 'gravarAnexoAdicional',
-      actionCriar: 'addPagamento',
-      criarFornecedor: '',
-      criarFinalidade: '',
-      criarData: '',
-      criarObs: '',
-      criarValor: '',
-      criarObs: '',
-      observacao:'',
+      menu:'Preço Concorrentes',
+      concorrentes: [],
+      idConcorrente:'',
+      razaoSocial:'',
+      bandeira:'',
+      distancia: '',
+      cep: '',
+      endereco: '',
+      bairro: '',
+      cidade: '',
+      uf: '',
+      gasolinaC:'',
+      gasolinaAd:'',
+      dieselC:'',
+      dieselAd:'',
+      etanol:'',
+      gnv:'',
+      actionCadastrar:'criarConcorrente',
+      actionAlterar: 'alterarConcorrente',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
       totalResults: 0,
-      readonly: true,
-      disabled: true,
-      title: true,
-      aplicarIcon: true,
       message:'',
-      id: '',
-      med: '',
-      apelido: '',
-      fornecedor: '',
-      descricao: '',
-      vencimento: '',
-      valor: '',
-      obs: '',
-      status: '',
-      iconFinalizar:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/finish.gif",
-      iconAguarde:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/ampulheta.gif",
       iconSave:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
-      iconObs:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
-      iconAnx:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anexo.png",
-      iconCancelar:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/cancelar.gif",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
       iconCreate:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
-      iconLimpar:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
+      iconAlterar:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/alterar.gif",
     };
   },
   filters: {
@@ -72,23 +47,11 @@ const app = new Vue({
     duasCasasDecimais: function (value) {
       return Number(value).toFixed(2);
     },
+    quatroCasasDecimais: function (value) {
+      return Number(value).toFixed(4);
+    },
   },
   methods: {
-    limparFiltros(){
-
-      document.getElementById("data1").value = ''
-      document.getElementById("data2").value = ''
-      document.getElementById("idMed").value = '0'
-      document.getElementById("fornecedor").value = ''
-      document.getElementById("statusNovo").checked =  false
-      document.getElementById("statusPendente").checked =  false
-      document.getElementById("statusAguardando").checked =  false
-      document.getElementById("statusFinalizado").checked =  false
-      document.getElementById("statusCancelado").checked =  false
-      this.getPagamentos('filtrar')
-      this.message = 'Limpado!'
-   
-    },
     dataAtual(){
 
       const data = new Date()
@@ -98,52 +61,30 @@ const app = new Vue({
       const dataAtual = `${ano}-${mes}-${dia}`
       return dataAtual
     },
-    bloquearCampos(){
-      this.aplicarIcon = true;
-      this.title = true;
-      this.disabled = true;
-      this.readonly = true;
+    onlyNumberCep($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 45) { // 46 é ponto e 44 é virgula 45 é hifen
+         $event.preventDefault();
+      }
+    },
+    onlyNumber($event) {
+      let keyCode = ($event.keyCode ? $event.keyCode : $event.which);
+      if ((keyCode < 48 || keyCode > 57)) { 
+         $event.preventDefault();
+      }
     },
     fecharModal(){
 
-        this.getPagamentos()
+        this.getConcorrentes()
     },
-    voltarVisualizar(id){
-
-      this.bloquearCampos()
-      this.modalVisualizar(id)
-
-    },
-    newTab(id, ext) {
-
-      window.open(
-        `https://www.rdppetroleo.com.br/medwebnovo/view/verDocumento.view.php?id=${id}&ext=${ext}&p=solicitacaoPgtos`,
-        "",
-        "width=820, height=820"
-      );
-    },
-    getAllMeds() {
-      axios
-        .post(
-        "https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findAllMeds",
-   
-      )
-        .then((res) => {
-          this.meds = res.data.rows;
-
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    getPagamentos(action) {
+    getConcorrentes(action) {
     
       const formFiltroPagamentos = document.getElementById("formFiltroPagamentos");
       const formData = new FormData(formFiltroPagamentos);
 
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findAll&paginaAtual=${this.paginaAtual}`,
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php?action=findAll&paginaAtual=${this.paginaAtual}`,
           formData
         )
         .then((res) => {
@@ -153,8 +94,8 @@ const app = new Vue({
             this.paginaAtual = 1
 
           }  
-        
-          this.pagamentos = res.data.rows;
+          console.log(res.data.rows)
+          this.concorrentes = res.data.rows;
           this.totalResults = res.data.results
 
    
@@ -163,232 +104,139 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-    },    
-    modalVisualizar(id) {
+    }, 
+    limparCampos(){
 
-      const visualizarPagamentos = new bootstrap.Modal(document.getElementById("visualizarPagamentos"))
-      visualizarPagamentos.show()
-      this.buscarSolicitacao(id)
+      this.idConcorrente = ''
+      this.razaoSocial = ''
+      this.bandeira = ''
+      this.distancia = ''
+      this.cep = ''
+      this.endereco = ''
+      this.bairro = ''
+      this.cidade = ''
+      this.uf = ''
 
     },
-    buscarSolicitacao(id){
+    modalCadastrarConcorrente(){
+
+      const cadastrarConcorrente = new bootstrap.Modal(document.getElementById("cadastrarConcorrente"))
+      cadastrarConcorrente.show()
+      this.limparCampos()
+    },
+    salvarConcorrente() {
+      const formCadastrarConcorrente = document.getElementById("formCadastrarConcorrente");
+      const formData = new FormData(formCadastrarConcorrente);
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php",
+          formData
+        )
+        .then((res) => {
+          if (res.data.res == "success") {
+
+            this.limparCampos()
+            this.message = res.data.msg
+            
+           
+          } else {
+            this.message = res.data.msg
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 
+    modalVisualizar(id) {
+
+      const visualizarConcorrente = new bootstrap.Modal(document.getElementById("visualizarConcorrente"))
+      visualizarConcorrente.show()
+      this.limparCampos()
+      this.buscarConcorrente(id)
+
+    },
+    salvarAlteracao(id){
+     
+      const formvisualizarConcorrente = document.getElementById("formvisualizarConcorrente");
+      const formData = new FormData(formvisualizarConcorrente);
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php",
+          formData
+        )
+        .then((res) => {
+          if (res.data.res == "success") {
+
+            this.modalVisualizar(id)
+            this.message = res.data.msg
+            
+           
+          } else {
+
+            this.modalVisualizar(id)
+            this.message = res.data.msg
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+    },
+    buscarConcorrente(id){
 
       axios
       .post(
-        `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findById&id=${id}`
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php?action=findById&id=${id}`
       )
       .then((res) => {
-   
-        this.id = res.data.rows[0]['idReq']
-        this.med = res.data.rows[0]['med']
-        this.apelido = res.data.rows[0]['apelido']
-        this.fornecedor = res.data.rows[0]['fornecedor']
-        this.descricao = res.data.rows[0]['descricao']
-        this.vencimento = res.data.rows[0]['vencimento']
-        this.valor = res.data.rows[0]['valor']
-        this.obs = res.data.rows[0]['obs']
-        this.status = res.data.rows[0]['status']
-        console.log(res.data.anexos)
-        console.log(res.data.observacoes)
-        this.anexos = res.data.anexos
-        this.observacoes = res.data.observacoes
-
+        console.log(res.data.rows)
+        this.idConcorrente = res.data.rows[0]['cid']
+        this.razaoSocial = res.data.rows[0]['nome']
+        this.bandeira = res.data.rows[0]['bandeira']
+        this.distancia = res.data.rows[0]['distancia']
+        this.endereco = res.data.rows[0]['endereco']
+        this.bairro = res.data.rows[0]['bairro']
+        this.cidade = res.data.rows[0]['cidade']
+        this.uf = res.data.rows[0]['uf']
+        this.cep = res.data.rows[0]['cep']
+        this.gasolinaC = Number(res.data.rows[0]['preco_GasC']).toFixed(4)
+        this.gasolinaAd = Number(res.data.rows[0]['preco_GasCAdit']).toFixed(4)
+        this.dieselC = Number(res.data.rows[0]['preco_Diesel']).toFixed(4)
+        this.dieselAd = Number(res.data.rows[0]['preco_DieselAdit']).toFixed(4)
+        this.etanol = Number(res.data.rows[0]['preco_etanol']).toFixed(4)
+        this.gnv = Number(res.data.rows[0]['preco_GNV']).toFixed(4)
 
       })
       .catch((err) => {
         console.log(err);
       });
     }, 
-    alterarStatus(status){
- 
-      const formData = new FormData();
-      formData.append("status", status);
-      formData.append("id", this.id);
-      formData.append("action",'alterarStatus');
-      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
-      this.callAxios(this.id, url, formData)   
-
-    }, 
-    modalObservacao() {
-      
-      const incluirObservacaoModal = new bootstrap.Modal(document.getElementById("incluirObservacaoModal"));
-      incluirObservacaoModal.show();
-    },
-    salvarObservacao() {
-
-      const incluirObservacaoForm = document.getElementById("incluirObservacaoForm");
-      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php";
-      const formData = new FormData(incluirObservacaoForm);
-      this.callAxios(this.id, url, formData);
-    },
-    modalCadastrarPosto(){
-      const cadastrarPosto = new bootstrap.Modal(
-        document.getElementById("cadastrarPosto")
-      );
-      cadastrarPosto.show();
-    
-    },
-    salvarSolPgtos() {
-
-      const formSolPgtos = document.getElementById("formSolPgtos");
-      const formData = new FormData(formSolPgtos);
-      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`;
-
+    buscarCep() {
+      const url = `https://viacep.com.br/ws/${this.cep}/json/`;
       axios
-        .post(url, formData)
+        .get(url)
         .then((res) => {
-          if (res.data.res == "success") {
+            console.log(res.data)
+            this.endereco = res.data.logradouro
+            this.bairro = res.data.bairro
+            this.cidade = res.data.localidade
+            this.uf = res.data.uf
 
-            this.salvarAnexos();
-          }
         })
         .catch((err) => {
+
           console.log(err);
-        });
-    },
-    handleFiles() {
-      //armazena os arquivos recebidos no vetor
-      let uploadedFiles = this.$refs.files.files;
+          this.message = 'CEP INVALIDO'
 
-      for (var i = 0; i < uploadedFiles.length; i++) {
-        this.files.push(uploadedFiles[i]);
-      }
-      this.getImagePreviews();
-    },
-    getImagePreviews() {
-      //exibe os arquivos armazenadas dentro do vetor
-      for (let i = 0; i < this.files.length; i++) {
-        if (/\.(jpe?g|png|gif)$/i.test(this.files[i].name)) {
-          let reader = new FileReader();
-          reader.addEventListener(
-            "load",
-            function () {
-              this.$refs["preview" + parseInt(i)][0].src = reader.result;
-            }.bind(this),
-            false
-          );
-          reader.readAsDataURL(this.files[i]);
-        } else {
-          this.$nextTick(function () {
-            this.$refs["preview" + parseInt(i)][0].src =
-              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
-          });
-        }
-      }
-    },
-    removeFile(key) {
-      //exibe os arquivos armazenadas dentro do vetor
-      this.files.splice(key, 1);
-      this.getImagePreviews();
-    },
-    salvarAnexos() {
-      for (let i = 0; i < this.files.length; i++) {
-        if (this.files[i].id) {
-          continue;
-        }
-        const formData = new FormData();
-        formData.append("file", this.files[i]);
-        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=addDocumentos`;
-        axios
-          .post(url, formData)
-          .then((res) => {
-            this.message = res.data.msg;
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-
-      this.fecharModal()
-    }, 
-    modalAnexar() {
- 
-      const incluirAnexoModal = new bootstrap.Modal(document.getElementById("incluirAnexoModal"));
-      incluirAnexoModal.show();
-      this.files = []
-
-    },
-    handleFilesAnxAdicional() {
-      //armazena os arquivos recebidos no vetor
-      let uploadedFiles = this.$refs.filesAnexar.files;
-
-      for (var i = 0; i < uploadedFiles.length; i++) {
-        this.filesAnexar.push(uploadedFiles[i]);
-      }
-      this.getImagePreviewsAnxAdicional();
-    },
-    getImagePreviewsAnxAdicional() {
-      //exibe os arquivos armazenadas dentro do vetor
-      for (let i = 0; i < this.filesAnexar.length; i++) {
-        if (/\.(jpe?g|png|gif)$/i.test(this.filesAnexar[i].name)) {
-          let reader = new FileReader();
-          reader.addEventListener(
-            "load",
-            function () {
-              this.$refs["preview" + parseInt(i)][0].src = reader.result;
-            }.bind(this),
-            false
-          );
-          reader.readAsDataURL(this.filesAnexar[i]);
-        } else {
-          this.$nextTick(function () {
-            this.$refs["preview" + parseInt(i)][0].src =
-              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
-          });
-        }
-      }
-    },
-    removeFileAnxAdicional(key) {
-      //exibe os arquivos armazenadas dentro do vetor
-      this.filesAnexar.splice(key, 1);
-      this.getImagePreviews();
-    },
-    salvarAnxAdicional() {
-      //envia para o backend os anexos e as info do formulario
-      
-        for (let i = 0; i < this.filesAnexar.length; i++) {
-          if (this.filesAnexar[i].id) {
-            continue;
-          }
-
-        const formAnexar = document.getElementById("formAnexar");  
-        const formData = new FormData(formAnexar);
-        formData.append("file", this.filesAnexar[i]);
-        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
-        this.callAxios(this.id, url, formData)   
-
-      }
-    },
-    callAxios(id, url, formData) {
-      axios
-        .post(
-          url, 
-          formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-        .then((res) => {
-
-          if (res.data.res == "success") {
-              this.message = res.data.msg;
-              this.modalVisualizar(id);
-          } else {
-              this.message = res.data.msg;
-              this.modalVisualizar(id);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
         });
     },    
   },
   watch: {
     paginaAtual() {
 
-      this.getPagamentos()
+      this.getConcorrentes()
 
     },
     message() {
@@ -399,8 +247,7 @@ const app = new Vue({
   },
   mounted: function () {
     
-    this.getPagamentos();
-    this.getAllMeds();
-
+    this.getConcorrentes();
+   
   },
 });
