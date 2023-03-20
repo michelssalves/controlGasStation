@@ -80,7 +80,7 @@ include('controller/caixaDiario.php');
                         </tr>
                     </thead>
                     <tbody>
-                        <tr @click="modalVisualizar(caixa.id_requisicao)" style="cursor:pointer" v-for="(caixa, i) in caixas">
+                        <tr @click="modalVisualizar(caixa.id_requisicao)" style="cursor:pointer" v-for="(caixa, i, x) in caixas">
                             <td>{{caixa.id_requisicao}}</td>
                             <td>{{caixa.status}}</td>
                             <td>{{caixa.loginName}}</td>
