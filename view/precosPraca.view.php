@@ -1,24 +1,7 @@
 <?php
 include('model/PrecosPraca.php');
 include('controller/precosPraca.php');
-?>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preços</title>
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/custom.css">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/w3.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/fontawesome.all.min.6.2.1.css">
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/fontawesome.all.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/bootstrap.bundle.min.v5.2.3.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/jquery-3.6.1.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/controllersAux/main.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/axios.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vue.global.js"></script>
-    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/precosPracaVue.js"></script>
- 
-</head> 
+?> 
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
@@ -117,7 +100,7 @@ include('controller/precosPraca.php');
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
-                            <input id="action" name="action" v-model='actionCadastrar' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="action" name="action" v-model='actionCadastrar' type="hidden" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Nome:</span>
                                 <input id="razaoSocial" name="razaoSocial" v-model='razaoSocial' type="text" class="form-control input-uppercase" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
@@ -192,8 +175,8 @@ include('controller/precosPraca.php');
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
-                        <input id="action" name="action" v-model='actionAlterar' type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                        <input id="idConcorrente" name="idConcorrente" v-model='idConcorrente' type="text" class="form-control input-uppercase" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="action" name="action" v-model='actionAlterar' type="hidden" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="idConcorrente" name="idConcorrente" v-model='idConcorrente' type="hidden" class="form-control input-uppercase" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Nome:</span>
                                 <input disabled id="razaoSocial" name="razaoSocial" v-model='razaoSocial' type="text" class="form-control input-uppercase" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>

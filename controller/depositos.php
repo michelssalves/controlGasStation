@@ -10,9 +10,9 @@ $action = $_REQUEST['action'];
 if($action == 'findAllMeds') {
 
 
-    $model = new Model();
+    $deposito = new Deposito();
   
-    $rows = $model->findAllMeds();
+    $rows = $deposito->findAllMeds();
   
     $data = array('rows' => utf8ize($rows));
   
@@ -40,9 +40,9 @@ if($action == 'findAll') {
 
     	$FtipoData = " AND c.data BETWEEN '$data1' AND '$data2' ";
 	}
-    $model = new Model();
+    $deposito = new Deposito();
 
-    $rows = $model->findAll($FtipoData, $Fmed, $Fconta, $start, $resultadoPorPagina);
+    $rows = $deposito->findAll($FtipoData, $Fmed, $Fconta, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
@@ -52,11 +52,11 @@ if($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $deposito = new Deposito();
 
-    $rows = $model->findById($id);
+    $rows = $deposito->findById($id);
 
-    $rowObs = $model->selectObservacoes($id);
+    $rowObs = $deposito->selectObservacoes($id);
 
     $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
 
@@ -71,11 +71,11 @@ if($action == 'addDeposito'){
     $conta = $_REQUEST['conta'];
     $contaCh = $_REQUEST['contaCh'];
  
-    $model = new Model();
+    $deposito = new Deposito();
   
     if($dataDeposito && $dinheiro && $conta){
 
-        if($model->insertDeposito($idUsuario, $dataDeposito, $dinheiro, $cheque, $debito, $conta, $contaCh)){
+        if($deposito->insertDeposito($idUsuario, $dataDeposito, $dinheiro, $cheque, $debito, $conta, $contaCh)){
 
         $data = array('res' =>  'success', 'msg' => 'Registrado com sucesso!');
 
@@ -94,9 +94,9 @@ if($action == 'addObservacao') {
     $id = $_REQUEST['id'];
     $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
-    $model = new Model();
+    $deposito = new Deposito();
 
-    if($model->insertObservacao($id, $idUsuario, $observacao)){
+    if($deposito->insertObservacao($id, $idUsuario, $observacao)){
 
         $data = array('res' =>  'success', 'msg' => 'Registrado com sucesso!');
    

@@ -8,9 +8,9 @@ $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    $rows = $model->findAllMeds();
+    $rows = $caixaDiario->findAllMeds();
 
     $data = array('rows' => utf8ize($rows));
 
@@ -49,9 +49,9 @@ if ($action == 'findAll') {
         $filtroConciliacao = "AND conc = '$concBancaria'";
     }
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    $rows = $model->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
+    $rows = $caixaDiario->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
@@ -61,9 +61,9 @@ if ($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    $rows = $model->findById($id);
+    $rows = $caixaDiario->findById($id);
 
     $data = array('rows' => utf8ize($rows));
 
@@ -78,9 +78,9 @@ if ($action == 'addAnexo') {
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        $model = new Model();
+        $caixaDiario = new CaixaDiario();
 
-        if ($model->insertAnexo($id, $descricao, $extensao)) {
+        if ($caixaDiario->insertAnexo($id, $descricao, $extensao)) {
 
             $temp = $_FILES['file']['tmp_name'];
             $localDeArmazenagem = "../assets/docs/fechamentoCaixa/";
@@ -105,9 +105,9 @@ if ($action == 'gravarObs') {
     $id = $_REQUEST['id'];
     $obs = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    if ($model->insertObservacoes($id, $usuarioLogado, $obs)) {
+    if ($caixaDiario->insertObservacoes($id, $usuarioLogado, $obs)) {
 
         $data = array('res' => 'success');
     } else {
@@ -130,9 +130,9 @@ if ($action == 'alterarCaixa') {
     $conciliacao = $_REQUEST['conciliacao'];
     $fechamento = $_REQUEST['fechamento'];
     $observacao = $_REQUEST['observacao'];
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    if ($model->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)) {
+    if ($caixaDiario->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)) {
 
         $data = array('res' => 'success');
     } else {
@@ -149,11 +149,11 @@ if ($action == 'cancelarCaixa') {
     $observacao = 'ALTEROU O STATUS PARA CANCELADO';
     $status = 'CANCELADO';
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    if ($model->updateCancelarCaixa($id, $status, $observacao)) {
+    if ($caixaDiario->updateCancelarCaixa($id, $status, $observacao)) {
 
-        $model->insertObservacoes($id, $usuarioLogado, $motivoCancelamento);
+        $caixaDiario->insertObservacoes($id, $usuarioLogado, $motivoCancelamento);
 
         $data = array('res' => 'success');
     } else {
@@ -169,11 +169,11 @@ if ($action == 'abrirCaixa') {
     $status = 'ABERTO';
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    if ($model->updateCancelarCaixa($id, $status, $observacao)) {
+    if ($caixaDiario->updateCancelarCaixa($id, $status, $observacao)) {
 
-        $model->insertObservacoes($id, $usuarioLogado, $observacao);
+        $caixaDiario->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
     } else {
@@ -191,12 +191,12 @@ if ($action == 'fecharCaixa') {
     $conc = $_REQUEST['conc'];
     $caixa = $_REQUEST['caixa'];
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
     if ($conc == 'SIM' && $caixa == 'SIM') {
 
-        $model->updateCancelarCaixa($id, $status, $observacao);
-        $model->insertObservacoes($id, $usuarioLogado, $observacao);
+        $caixaDiario->updateCancelarCaixa($id, $status, $observacao);
+        $caixaDiario->insertObservacoes($id, $usuarioLogado, $observacao);
 
         $data = array('res' => 'success');
     } else {
@@ -210,9 +210,9 @@ if ($action == 'findAnexosById') {
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    $rows = $model->selectAnexos($id);
+    $rows = $caixaDiario->selectAnexos($id);
 
     if (!empty($rows)) {
 
@@ -228,9 +228,9 @@ if ($action == 'findEventosById') {
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    $rows = $model->selectEventos($id);
+    $rows = $caixaDiario->selectEventos($id);
 
     if (!empty($rows)) {
 
@@ -253,9 +253,9 @@ if ($action == 'criarFechamento') {
     $obs = limpaObservacao(utf8_decode($_REQUEST['criarObs']));
 
     if(isset($turnos_definitivo)){
-    $model = new Model();
+    $caixaDiario = new CaixaDiario();
 
-    if ($model->insertFechamento($dinheiro, $cheque, $brinks, $pix, $dataCaixa, $turnos_definitivo, $obs, $idUsuario)) {
+    if ($caixaDiario->insertFechamento($dinheiro, $cheque, $brinks, $pix, $dataCaixa, $turnos_definitivo, $obs, $idUsuario)) {
 
         $data = array('res' =>  'success', 'id' => $id);
 
@@ -272,11 +272,11 @@ if ($action == 'addDocumentos') {
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
         $descricao = explode('.', $_FILES['file']['name']);
-        $model = new Model();
-        $id = $model->findLastId();
+        $caixaDiario = new CaixaDiario();
+        $id = $caixaDiario->findLastId();
         
-        $model->insertAnexo($id, $descricao[0], $extensao);
-        $idAnexo = $model->findLastIdAnexo();
+        $caixaDiario->insertAnexo($id, $descricao[0], $extensao);
+        $idAnexo = $caixaDiario->findLastIdAnexo();
         
         if($idAnexo){
 

@@ -8,9 +8,9 @@ $action = $_REQUEST['action'];
 
 if($action == 'findAllMeds') {
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
   
-    $rows = $model->findAllMeds();
+    $rows = $chequeDevolvido->findAllMeds();
   
     $data = array('rows' => utf8ize($rows));
   
@@ -62,9 +62,9 @@ if($action == 'findAll') {
 
     $FtipoData = " AND $tipoData BETWEEN '" . $data1 . "' AND '" . $data2 . "' ";
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
 
-    $rows = $model->findAll($FtipoData, $Fmed, $Fstatus, $start, $resultadoPorPagina);
+    $rows = $chequeDevolvido->findAll($FtipoData, $Fmed, $Fstatus, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
@@ -74,12 +74,12 @@ if($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
 
-    $rows = $model->findById($id);
-    $rowObs = $model->selectObservacaoes($id);
-    $rowAnx = $model->selectAnexos($id);
-    $rowEve = $model->selectEventos($id);
+    $rows = $chequeDevolvido->findById($id);
+    $rowObs = $chequeDevolvido->selectObservacaoes($id);
+    $rowAnx = $chequeDevolvido->selectAnexos($id);
+    $rowEve = $chequeDevolvido->selectEventos($id);
 
     $data = array('rows' => utf8ize($rows),  'obs' => utf8ize($rowObs),  'anexos' => utf8ize($rowAnx),  'eventos' => utf8ize($rowEve));
 
@@ -102,14 +102,14 @@ if($action == 'gravarAnexo') {
         $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
         $tabela = "ccp_chequeDevAnexo";
 
-        $model = new Model();
+        $chequeDevolvido = new ChequeDevolvido();
 
         
-        if($model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
+        if($chequeDevolvido->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-            $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
-            $model->updateUltimaAlteracao($id);
+            $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
+            $chequeDevolvido->updateUltimaAlteracao($id);
 
             $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
        
@@ -130,11 +130,11 @@ if($action == 'addObservacao') {
     $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
     $evento = 'Incluiu Observação';
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
 
     if(
-    $model->insertObservacao($id, $idUsuario, $usuarioLogado, $observacao) == TRUE &&
-    $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado )  == TRUE
+    $chequeDevolvido->insertObservacao($id, $idUsuario, $usuarioLogado, $observacao) == TRUE &&
+    $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado )  == TRUE
     ){
 
         $data = array('res' =>  'success', 'msg' => 'Registrado com sucesso!');
@@ -161,13 +161,13 @@ if($action == 'quitarCheque') {
         $localDeArmazenagem = "../assets/docs/chequesDevolvidos/";
         $tabela = "ccp_chequeDevAnexo";
 
-        $model = new Model();
+        $chequeDevolvido = new ChequeDevolvido();
 
-       if($model->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
+       if($chequeDevolvido->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
         uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
-        $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
-        $model->updateDataQuitacao($id, $status);
+        $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
+        $chequeDevolvido->updateDataQuitacao($id, $status);
      
         $data = array('res' =>  'success', 'msg' => 'Quitado com sucesso!');
    
@@ -189,12 +189,12 @@ if($action == 'mudarStatus') {
     $status = $_REQUEST['status'];
     $evento = 'Alterarou Status';
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
 
-    if($model->updateStatus($id, $status)){
+    if($chequeDevolvido->updateStatus($id, $status)){
    
 
-        $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
+        $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
         $data = array('res' =>  'success', 'msg' => 'Alterado com sucesso!');
    
     }else {
@@ -211,11 +211,11 @@ if($action == 'considerarPfin') {
     $status = $_REQUEST['status'];
     $evento = 'Alterarou Status';
 
-    $model = new Model();
+    $chequeDevolvido = new ChequeDevolvido();
 
-    if($model->updateStatus($id, $status)){
+    if($chequeDevolvido->updateStatus($id, $status)){
 
-        $model->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
+        $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
         $data = array('res' =>  'success', 'msg' => 'Alterado P/ PFIN com sucesso!');
    
     }else {

@@ -77,6 +77,7 @@ const app = new Vue({
       this.getConcorrentes(id);
     },
     getConcorrentes(action) {
+
       const formFiltroPagamentos = document.getElementById(
         "formFiltroPagamentos"
       );
@@ -91,7 +92,7 @@ const app = new Vue({
           if (action == "filtrar") {
             this.paginaAtual = 1;
           }
-          console.log(res.data.rows);
+
           this.concorrentes = res.data.rows;
           this.totalResults = res.data.results;
         })
@@ -178,7 +179,7 @@ const app = new Vue({
           `https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php?action=findById&id=${id}`
         )
         .then((res) => {
-          console.log(res.data.rows);
+        
           this.idConcorrente = res.data.rows[0]["cid"];
           this.razaoSocial = res.data.rows[0]["nome"];
           this.bandeira = res.data.rows[0]["bandeira"];
@@ -208,7 +209,7 @@ const app = new Vue({
       axios
         .get(url)
         .then((res) => {
-          console.log(res.data);
+     
           this.endereco = res.data.logradouro;
           this.bairro = res.data.bairro;
           this.cidade = res.data.localidade;

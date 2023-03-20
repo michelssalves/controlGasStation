@@ -8,9 +8,9 @@ $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->selectAllMeds();
+  $rows = $enviarMaterial->selectAllMeds();
 
   $data = array('rows' => utf8ize($rows));
 
@@ -18,9 +18,9 @@ if ($action == 'findAllMeds') {
 }
 if ($action == 'findAllClasses') {
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->selectAllClasses();
+  $rows = $enviarMaterial->selectAllClasses();
 
   $data = array('rows' => utf8ize($rows));
 
@@ -30,9 +30,9 @@ if ($action == 'findProdutos') {
 
   $classe = $_REQUEST['classe'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->selectProdutos($classe);
+  $rows = $enviarMaterial->selectProdutos($classe);
 
   $data = array('rows' => utf8ize($rows));
 
@@ -63,9 +63,9 @@ if ($action == 'findAll') {
     $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "')";
   }
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->findAll($Fstatus, $Fmed, $Fproduto, $start, $resultadoPorPagina);
+  $rows = $enviarMaterial->findAll($Fstatus, $Fmed, $Fproduto, $start, $resultadoPorPagina);
 
   $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
@@ -75,11 +75,11 @@ if ($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->findById($id);
+  $rows = $enviarMaterial->findById($id);
 
-  $rowObs = $model->selectObservacao($id);
+  $rowObs = $enviarMaterial->selectObservacao($id);
 
   $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
 
@@ -89,9 +89,9 @@ if ($action == 'findByIdItem') {
 
   $id = $_REQUEST['id'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  $rows = $model->findByIdItem($id);
+  $rows = $enviarMaterial->findByIdItem($id);
 
   $data = array('rows' => utf8ize($rows));
 
@@ -101,9 +101,9 @@ if ($action == 'cancelarPedido') {
 
   $id = $_REQUEST['idPedido'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  if ($model->updateCancelarPedido($id)) {
+  if ($enviarMaterial->updateCancelarPedido($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Pedido Cancelado');
   } else {
@@ -116,9 +116,9 @@ if ($action == 'cancelarItem') {
 
   $id = $_REQUEST['idItem'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  if ($model->updateCancelarItem($id)) {
+  if ($enviarMaterial->updateCancelarItem($id)) {
 
     $data = array('res' => 'success', 'msg' => 'Item Cancelado');
   } else {
@@ -132,9 +132,9 @@ if ($action == 'alterarItem') {
   $id = $_REQUEST['idItem'];
   $quantidade = $_REQUEST['quantidade'];
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  if ($model->updateQtdeItem($id, $quantidade)) {
+  if ($enviarMaterial->updateQtdeItem($id, $quantidade)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
   } else {
@@ -149,9 +149,9 @@ if ($action == 'addObservacao') {
   $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  if ($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+  if ($enviarMaterial->insertObservacao($id, $usuarioLogado, $observacao)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
   } else {
@@ -171,9 +171,9 @@ if ($action == 'alterarStatus') {
     $status = 'FINALIZADO';
   }
 
-  $model = new Model();
+  $enviarMaterial = new EnviarMaterial();
 
-  if ($model->updateStatus($id, $status)) {
+  if ($enviarMaterial->updateStatus($id, $status)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
   } else {
@@ -195,11 +195,11 @@ if ($action == 'solicitacaoMateriais') {
     $descricao[$x] = $listaItems[$x]['produto'];
   }
 
-  $model = new Model();
-  $model->insertPedido($idUsuario);
-  $idPedido = selectUltimoId('REQ_Pedido');
-
-  if ($model->insertItens($idPedido, $idProduto, $qtde, $descricao, $tam)) {
+  $enviarMaterial = new EnviarMaterial();
+  $enviarMaterial->insertPedido($idUsuario);
+  $idPedido = $enviarMaterial->findLastId();
+ 
+  if ($enviarMaterial->insertItens($idPedido, $idProduto, $qtde, $descricao, $tam)) {
 
     $data = array('res' => 'success', 'msg' => 'Registrado Com Sucesso');
   } else {

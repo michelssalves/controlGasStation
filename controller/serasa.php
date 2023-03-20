@@ -8,9 +8,9 @@ $action = $_REQUEST['action'];
 
 if($action == 'findAllMeds'){
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->selectAllMeds();
+    $rows = $serasa->selectAllMeds();
 
     $data = array('rows' => utf8ize($rows));
 
@@ -51,9 +51,9 @@ if($action == 'findAll'){
         $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "')";
     }
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->findAll($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $start, $resultadoPorPagina);
+    $rows = $serasa->findAll($Fstatus, $Fmatriz, $Fmed, $Ftipo, $Fcliente, $start, $resultadoPorPagina);
 
     $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
@@ -63,9 +63,9 @@ if($action == 'findById'){
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->findById($id);
+    $rows = $serasa->findById($id);
 
     $data = array('rows' => utf8ize($rows));
 
@@ -83,13 +83,13 @@ if($action == 'gravarAnexo'){
 
     if ($_FILES['file']['name'] <> ''){
 
-        $model = new Model();
+        $serasa = new Serasa();
 
-        $model->insertEventos($id, $evento, $usuarioLogado);
+        $serasa->insertEventos($id, $evento, $usuarioLogado);
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        if($model->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+        if($serasa->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
 
         uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
@@ -113,9 +113,9 @@ if($action == 'gravarObs'){
     $id = $_REQUEST['id'];
     $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    if($model->insertObservacao($id, $usuarioLogado, $observacao)){
+    if($serasa->insertObservacao($id, $usuarioLogado, $observacao)){
 
         $data = array('res' => 'success');
 
@@ -130,9 +130,9 @@ if($action == 'findAnexosById'){
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->selectAnexos($id);
+    $rows = $serasa->selectAnexos($id);
 
     if(!empty($rows)){
 
@@ -150,9 +150,9 @@ if($action == 'findEventosById'){
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->selectEventos($id);
+    $rows = $serasa->selectEventos($id);
     
     if(!empty($rows)){
 
@@ -170,9 +170,9 @@ if($action == 'findObservacoesById'){
 
     $id = $_REQUEST['id'];
 
-    $model = new Model();
+    $serasa = new Serasa();
 
-    $rows = $model->selectObservacoes($id);
+    $rows = $serasa->selectObservacoes($id);
     
     if(!empty($rows)){
 
@@ -194,12 +194,12 @@ if($action == 'alterarStatus'){
     $evento = $_REQUEST['evento']; 
     
     
-    $model = new Model();
+    $serasa = new Serasa();
 
-    if($model->updateStatus($id, $status)){
+    if($serasa->updateStatus($id, $status)){
 
-        $model->insertEventos($id, $evento, $usuarioLogado);
-        $model->insertObservacao($id, $usuarioLogado, $observacaoStatus);
+        $serasa->insertEventos($id, $evento, $usuarioLogado);
+        $serasa->insertObservacao($id, $usuarioLogado, $observacaoStatus);
 
         $data = array('res' => 'success');
 
@@ -226,15 +226,15 @@ if($action == 'baixarSerasa'){
 
     if ($_FILES['file']['name'] <> ''){
 
-        $model = new Model();
+        $serasa = new Serasa();
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
 
-        if($model->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
+        if($serasa->insertAnexo($id, $descricaoAnexo, $descricao, $extensao)){
 
-            $model->updateStatus($id, $status);
-            $model->insertEventos($id, $evento, $usuarioLogado);
-            $model->insertObservacao($id, $usuarioLogado, $observacaoStatus);
+            $serasa->updateStatus($id, $status);
+            $serasa->insertEventos($id, $evento, $usuarioLogado);
+            $serasa->insertObservacao($id, $usuarioLogado, $observacaoStatus);
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
             $data = array('res' => 'success');
@@ -263,11 +263,11 @@ if($action == 'alterarSerasa'){
     $valorJuros = $_REQUEST['valorJuros']; 
     $evento = "ALTEROU O REGISTRO";
 
-        $model = new Model();
+        $serasa = new Serasa();
 
-        if($model->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
+        if($serasa->updateSerasa($id, $dtNascimento, $dtEmissao ,$dtVencimento, $tipo, $valorInicial, $valorJuros)){
 
-            $model->insertEventos($id, $evento, $usuarioLogado);
+            $serasa->insertEventos($id, $evento, $usuarioLogado);
             $data = array('res' =>  'success');
        
         }else {

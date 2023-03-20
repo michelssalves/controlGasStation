@@ -8,9 +8,9 @@ $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
-  $rows = $model->selectAllMeds();
+  $rows = $solicitacaoDePagamento->selectAllMeds();
 
   $data = array('rows' => utf8ize($rows));
 
@@ -18,9 +18,9 @@ if ($action == 'findAllMeds') {
 }
 if ($action == 'findAllFornecedores') {
 
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
-  $rows = $model->selectAllFornecedores($idXpert); 
+  $rows = $solicitacaoDePagamento->selectAllFornecedores($idXpert); 
   
   $data = array('rows' => utf8ize($rows));
 
@@ -62,10 +62,10 @@ if($action == 'findAll') {
     $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "','" . $status5 . "')";
   }
 
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
 
-  $rows = $model->findAll($Fstatus, $Fmed, $Ffornecedor, $Fdata, $start, $resultadoPorPagina);
+  $rows = $solicitacaoDePagamento->findAll($Fstatus, $Fmed, $Ffornecedor, $Fdata, $start, $resultadoPorPagina);
 
 
   $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]), 'teste' => $teste);
@@ -76,11 +76,11 @@ if($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
-  $rows = $model->findById($id);
-  $rowAnx = $model->selectAnexos($id);
-  $rowObs = $model->selectObservacao($id);
+  $rows = $solicitacaoDePagamento->findById($id);
+  $rowAnx = $solicitacaoDePagamento->selectAnexos($id);
+  $rowObs = $solicitacaoDePagamento->selectObservacao($id);
 
   $data = array('rows' => utf8ize($rows),  'observacoes' => utf8ize($rowObs),  'anexos' => utf8ize($rowAnx));
   
@@ -92,9 +92,9 @@ if($action == 'addObservacao') {
 
   $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
  
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
-  if($model->insertObservacao($id, $usuarioLogado, $observacao)) {
+  if($solicitacaoDePagamento->insertObservacao($id, $usuarioLogado, $observacao)) {
 
       $data = array('res' => 'success', 'msg' => 'Registrada Com Sucesso');
     } else {
@@ -109,9 +109,9 @@ if($action == 'alterarStatus') {
   $id = $_REQUEST['id'];
   $status = $_REQUEST['status'];
 
-  $model = new Model();
+  $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
-  if($model->updateStatus($id, $status)) {
+  if($solicitacaoDePagamento->updateStatus($id, $status)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
 
@@ -140,10 +140,10 @@ if($action == 'gravarAnexoAdicional') {
         $tabela = "ccp_reqCompras_anexos";
         $campo = "id_ccp_reqCompras_anexos";
 
-        $model = new Model();
+        $solicitacaoDePagamento = new SolicitacaoDePagamento();
 
         
-        if($model->insertAnexo($descricao, $extensao, $id, $usuarioLogado)){
+        if($solicitacaoDePagamento->insertAnexo($descricao, $extensao, $id, $usuarioLogado)){
 
             uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem, $campo);
   
@@ -167,12 +167,12 @@ if ($action == 'addDocumentos') {
 
       $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
       $descricao = explode('.', $_FILES['file']['name']);
-      $model = new Model();
-      $id = $model->findLastId();
+      $solicitacaoDePagamento = new SolicitacaoDePagamento();
+      $id = $solicitacaoDePagamento->findLastId();
       
-      $model->insertAnexo($descricao[0], $extensao, $id, $usuarioLogado);
+      $solicitacaoDePagamento->insertAnexo($descricao[0], $extensao, $id, $usuarioLogado);
 
-      $idAnexo = $model->findLastIdAnexo();
+      $idAnexo = $solicitacaoDePagamento->findLastIdAnexo();
       
       if($idAnexo){
 
