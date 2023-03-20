@@ -12,19 +12,20 @@ if ($action == 'findAll') {
   $resultadoPorPagina = 12;
   $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
-  $model = new Model();
+  $model = new PrecosPraca();
 
   $rows = $model->findAll($idUsuario, $start, $resultadoPorPagina);
 
   $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
 
   echo json_encode($data);
+  
 }
 if ($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
-  $model = new Model();
+  $model = new PrecosPraca();
 
   $rows = $model->findById($id);
 
@@ -42,12 +43,11 @@ if ($action == 'alterarConcorrente') {
   $gnv = $_REQUEST['gnv'];
   $idConc = $_REQUEST['idConcorrente'];
 
-  $model = new Model();
+  $model = new PrecosPraca();
 
   if ($model->updateConcorrente($gasC, $gasAd, $etanol, $diesel, $dieselAd, $gnv, $idConc)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
-    
   } else {
 
     $data = array('res' => 'error', 'msg' => 'Erro para alterar');
@@ -66,13 +66,13 @@ if ($action == 'criarConcorrente') {
   $cidade = limpaObservacao(utf8_decode($_REQUEST['cidade']));
   $uf = limpaObservacao(utf8_decode($_REQUEST['uf']));
 
-  $model = new Model();
+  $model = new PrecosPraca();
 
   if ($model->insertConcorrente($nome, $bandeira, $idUsuario, $distancia, $endereco, $bairro, $cep, $cidade, $uf, $idXpert)) {
 
-     $idPosto = $model->findLastId();
+    $idPosto = $model->findLastId();
 
-     if ($model->insertConcorrenteTabelaPrecos($idPosto)) {
+    if ($model->insertConcorrenteTabelaPrecos($idPosto)) {
 
       $data = array('res' => 'success', 'msg' => 'Criado Com Sucesso');
     }

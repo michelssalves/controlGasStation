@@ -2,23 +2,6 @@
 include('model/PrecosPraca.php');
 include('controller/precosPraca.php');
 ?>
-<head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Preços</title>
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/custom.css">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/w3.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://www.rdppetroleo.com.br/medwebnovo/assets/css/fontawesome.all.min.6.2.1.css">
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/fontawesome.all.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/bootstrap.bundle.min.v5.2.3.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/jquery-3.6.1.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/controllersAux/main.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/axios.min.js"></script>
-    <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vue.global.js"></script>
-    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/precosPracaVue.js"></script>
- 
-</head> 
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
@@ -107,7 +90,7 @@ include('controller/precosPraca.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1"><button type="button" title="Salvar" @click="salvarConcorrente()" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave" /></button></div>
-                            <div class="p-1"><button type="button" title="Fechar" @click="fecharModal(id)" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
+                            <div class="p-1"><button type="button" title="Fechar" @click="fecharModal()" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center mt-1">

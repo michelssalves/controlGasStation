@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<html lang="en">
+<!DOCTYPE html>
 <html lang="pt">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +16,10 @@
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/controllersAux/main.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/axios.min.js"></script>
     <script src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vue.global.js"></script>
-    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/precosPracaVue.js"></script>
+    <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/app.js"></script>
  
 </head> 
+<body>
+        <p>Amor</p>
+</body>
+</html>
