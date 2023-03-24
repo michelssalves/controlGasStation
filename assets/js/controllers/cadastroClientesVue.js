@@ -101,7 +101,30 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-    },        
+    },
+    abrirModal(modal){
+
+      const modalSolicitado = new bootstrap.Modal(
+        document.getElementById(modal)
+      );
+      modalSolicitado.show();
+    },
+    salvar(form){
+
+      const formulario = new FormData(document.getElementById(form));
+
+      axios
+        .post(
+          "https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=addCliente",
+          formulario
+        )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }        
   },
   watch: {
     paginaAtual() {
@@ -117,7 +140,7 @@ const app = new Vue({
   },
   mounted: function () {
     
-    this.getClientes();
+    //this.getClientes();
 
   },
 });
