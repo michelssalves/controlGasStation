@@ -277,7 +277,16 @@ a.submit-button{
   height:32px;
 
 }
+@media (max-width: 450px){
 
+  .iconeSize{
+
+    width:24px;
+    height:32px;
+  
+  }
+
+}
 @media (max-width: 1000px) {
 
   .fundo-rodape {

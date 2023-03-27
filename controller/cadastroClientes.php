@@ -8,6 +8,66 @@ $cadastroCliente = new CadastroCliente();
 
 $action = $_REQUEST['action'];
 
+if ($action == 'dadosCadastrais') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosCadastrais($id);
+
+    $data = array('cadastro' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'dadosFinanceiros') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosFinanceiros($id);
+
+    $data = array('financeiro' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'dadosVeiculos') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosVeiculos($id);
+
+    $data = array('veiculos' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'dadosDocumentos') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosDocumentos($id);
+
+    $data = array('anexos' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'dadosObservacao') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosObservacao($id);
+
+    $data = array('observacoes' => utf8ize($rows));
+
+    echo json_encode($data);
+}
+if ($action == 'dadosEventos') {
+
+    $id = $_REQUEST['id'];
+
+    $rows = $cadastroCliente->dadosEventos($id);
+
+    $data = array('eventos' => utf8ize($rows));
+
+    echo json_encode($data);
+}
 if ($action == 'findAll') {
 
     $status1 = $_REQUEST['statusNovo'];
@@ -24,7 +84,7 @@ if ($action == 'findAll') {
     $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
 
     if ($status1 == '' && $status2 == '' && $status3 == '' && $status4 == '' ){
-        $FStatus = "AND status IN ('CADASTRADO', 'NOVO', 'CANCELADO', 'CONFERIDO SERASA')";
+        $FStatus = "AND status IN ('NOVO', '', '', '')";
     } else {
         $FStatus = "AND status IN ('$status1', '$status2', '$status3', '$status4')";
     }

@@ -5,6 +5,14 @@ const app = new Vue({
     return {
       menu: 'Cadastro Clientes',
       clientes: [],
+      cadastro:[],
+      financeiro:[],
+      veiculos:[],
+      observacoes:[],
+      anexos:[],
+      eventos:[],
+      message:'',
+      idCliente:'',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
@@ -14,25 +22,28 @@ const app = new Vue({
       title: true,
       aplicarIcon: true,
       check: true,
-      message:'',
-      iconFinalizar:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/finish.gif",
-      iconAguarde:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/ampulheta.gif",
+  
+      iconCadastro:
+      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anotacao.png",
+      iconFinanceiro:
+      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/financeiro.png",
+      iconTruck:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/truck.png",
       iconSave:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/salvar.gif",
       iconObs:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/obs.png",
       iconAnx:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anexo.png",
-      iconCancelar:
-        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/cancelar.gif",
+      iconEventos:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/eventos.png",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
-      iconCreate:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
+        iconCreate:
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
       iconLimpar:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
+
     };
   },
   filters: {
@@ -104,9 +115,7 @@ const app = new Vue({
     },
     abrirModal(modal){
 
-      const modalSolicitado = new bootstrap.Modal(
-        document.getElementById(modal)
-      );
+      const modalSolicitado = new bootstrap.Modal(document.getElementById(modal));
       modalSolicitado.show();
     },
     salvar(form){
@@ -119,11 +128,62 @@ const app = new Vue({
           formulario
         )
         .then((res) => {
-          console.log(res);
+
+
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    visualizar(id, modal){
+
+      axios
+      .post(
+        `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=${modal}&id=${id}`,
+      )
+      .then((res) => {
+
+       if(modal === 'dadosCadastrais'){
+        
+        this.cadastro = res.data.cadastro[0]
+      
+      }
+      if(modal === 'dadosFinanceiros'){
+
+        this.financeiro = res.data.financeiro[0]
+
+      } 
+      if(modal === 'dadosVeiculos'){
+
+        this.veiculos = res.data.veiculos
+     
+      } 
+      if(modal === 'dadosDocumentos'){
+
+        this.anexos = res.data.anexos
+     
+      } 
+      if(modal === 'dadosObservacao'){
+        
+        this.observacoes = res.data.observacoes
+     
+      } 
+      if(modal === 'dadosEventos'){
+        
+        this.eventos = res.data.eventos
+     
+      } 
+       
+      })
+      .catch((err) => {
+
+        console.log(err);
+
+      });
+
+      this.idCliente = id
+      this.abrirModal(modal)
+      
     }        
   },
   watch: {
@@ -140,7 +200,7 @@ const app = new Vue({
   },
   mounted: function () {
     
-    //this.getClientes();
+    this.getClientes();
 
   },
 });
