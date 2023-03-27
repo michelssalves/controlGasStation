@@ -3,16 +3,19 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: 'Cadastro Clientes',
+      menu: "Cadastro Clientes",
       clientes: [],
-      cadastro:[],
-      financeiro:[],
-      veiculos:[],
-      observacoes:[],
-      anexos:[],
-      eventos:[],
-      message:'',
-      idCliente:'',
+      cadastro: [],
+      financeiro: [],
+      veiculos: [],
+      observacoes: [],
+      anexos: [],
+      eventos: [],
+      files: [],
+      descricaoAnexo:'',
+      observacao:'',
+      message: '',
+      idCliente: '',
       paginaAntAtual: 0,
       paginaAtual: 1,
       paginaDpsAtual: 0,
@@ -22,11 +25,11 @@ const app = new Vue({
       title: true,
       aplicarIcon: true,
       check: true,
-  
+
       iconCadastro:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anotacao.png",
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anotacao.png",
       iconFinanceiro:
-      "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/financeiro.png",
+        "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/financeiro.png",
       iconTruck:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/truck.png",
       iconSave:
@@ -39,11 +42,10 @@ const app = new Vue({
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/eventos.png",
       iconClose:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/fechar.png",
-        iconCreate:
+      iconCreate:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/create.png",
       iconLimpar:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/x-filter.png",
-
     };
   },
   filters: {
@@ -58,40 +60,36 @@ const app = new Vue({
     },
   },
   methods: {
-    limparFiltros(){
-
-      document.getElementById("data1").value = ''
-      document.getElementById("data2").value = ''
-      document.getElementById("statusNovo").checked = true
-      document.getElementById("statusCadastrado").checked =  true
-      document.getElementById("statusSerasa").checked =  true
-      document.getElementById("statusCancelado").checked =  true
-      this.getPagamentos('filtrar')
-      this.message = 'Limpado!'
-   
+    limparFiltros() {
+      document.getElementById("data1").value = "";
+      document.getElementById("data2").value = "";
+      document.getElementById("statusNovo").checked = true;
+      document.getElementById("statusCadastrado").checked = false;
+      document.getElementById("statusSerasa").checked = false;
+      document.getElementById("statusCancelado").checked = false;
+      this.getPagamentos("filtrar");
+      this.message = "Limpado!";
     },
-    dataAtual(){
-
-      const data = new Date()
-      const dia = String(data.getDate()).padStart(2, '0')
-      const mes = String(data.getMonth()+1).padStart(2, '0')
-      const ano = data.getFullYear()
-      const dataAtual = `${ano}-${mes}-${dia}`
-      return dataAtual
+    dataAtual() {
+      const data = new Date();
+      const dia = String(data.getDate()).padStart(2, "0");
+      const mes = String(data.getMonth() + 1).padStart(2, "0");
+      const ano = data.getFullYear();
+      const dataAtual = `${ano}-${mes}-${dia}`;
+      return dataAtual;
     },
-    bloquearCampos(){
-      this.aplicarIcon = true;
-      this.title = true;
-      this.disabled = true;
-      this.readonly = true;
+    fecharModal() {
+      this.getClientes();
     },
-    fecharModal(){
+    voltarModal(id, modal) {
 
-        this.getClientes()
+      this.visualizar(id, modal)
+
     },
     getClientes(action) {
-    
-      const formFiltroPagamentos = document.getElementById("formFiltroPagamentos");
+      const formFiltroPagamentos = document.getElementById(
+        "formFiltroPagamentos"
+      );
       const formData = new FormData(formFiltroPagamentos);
 
       axios
@@ -100,26 +98,23 @@ const app = new Vue({
           formData
         )
         .then((res) => {
-
           if (action == "filtrar") {
             this.paginaAtual = 1;
           }
           this.clientes = res.data.rows;
-          this.totalResults = res.data.results
-   
-
+          this.totalResults = res.data.results;
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    abrirModal(modal){
-
-      const modalSolicitado = new bootstrap.Modal(document.getElementById(modal));
+    abrirModal(modal) {
+      const modalSolicitado = new bootstrap.Modal(
+        document.getElementById(modal)
+      );
       modalSolicitado.show();
     },
-    salvar(form){
-
+    salvar(form) {
       const formulario = new FormData(document.getElementById(form));
 
       axios
@@ -127,70 +122,85 @@ const app = new Vue({
           "https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=addCliente",
           formulario
         )
-        .then((res) => {
-
-
-        })
+        .then((res) => {})
         .catch((err) => {
           console.log(err);
         });
     },
-    visualizar(id, modal){
-
+    visualizar(id, modal) {
       axios
-      .post(
-        `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=${modal}&id=${id}`,
-      )
-      .then((res) => {
+        .post(
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=${modal}&id=${id}`
+        )
+        .then((res) => {
+          if (modal === "dadosCadastrais") {
+            this.cadastro = res.data.cadastro[0];
+          }
+          if (modal === "dadosFinanceiros") {
+            this.financeiro = res.data.financeiro[0];
+          }
+          if (modal === "dadosVeiculos") {
+            this.veiculos = res.data.veiculos;
+          }
+          if (modal === "dadosDocumentos") {
+            this.anexos = res.data.anexos;
+          }
+          if (modal === "dadosObservacao") {
+            this.observacoes = res.data.observacoes;
+          }
+          if (modal === "dadosEventos") {
+            this.eventos = res.data.eventos;
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-       if(modal === 'dadosCadastrais'){
-        
-        this.cadastro = res.data.cadastro[0]
-      
+      this.idCliente = id;
+      this.abrirModal(modal);
+    },
+    handleFiles() {
+      //armazena os arquivos recebidos no vetor
+
+      let uploadedFiles = this.$refs.files.files;
+
+     /* for (var i = 0; i < uploadedFiles.length; i++) {
+        this.files.push(uploadedFiles[i]);
+      }*/
+
+      this.files.push(uploadedFiles[0])
+      this.getImagePreviews();
+    },
+    getImagePreviews() {
+      //exibe os arquivos armazenadas dentro do vetor
+      for (let i = 0; i < this.files.length; i++) {
+        if (/\.(jpe?g|png|gif)$/i.test(this.files[i].name)) {
+          let reader = new FileReader();
+          reader.addEventListener(
+            "load",
+            function () {
+              this.$refs["preview" + parseInt(i)][0].src = reader.result;
+            }.bind(this),
+            false
+          );
+          reader.readAsDataURL(this.files[i]);
+        } else {
+          this.$nextTick(function () {
+            this.$refs["preview" + parseInt(i)][0].src =
+              "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/pdf.png";
+          });
+        }
       }
-      if(modal === 'dadosFinanceiros'){
-
-        this.financeiro = res.data.financeiro[0]
-
-      } 
-      if(modal === 'dadosVeiculos'){
-
-        this.veiculos = res.data.veiculos
-     
-      } 
-      if(modal === 'dadosDocumentos'){
-
-        this.anexos = res.data.anexos
-     
-      } 
-      if(modal === 'dadosObservacao'){
-        
-        this.observacoes = res.data.observacoes
-     
-      } 
-      if(modal === 'dadosEventos'){
-        
-        this.eventos = res.data.eventos
-     
-      } 
-       
-      })
-      .catch((err) => {
-
-        console.log(err);
-
-      });
-
-      this.idCliente = id
-      this.abrirModal(modal)
-      
-    }        
+    },
+    removeFile(key) {
+      //exibe os arquivos armazenadas dentro do vetor
+      this.files.splice(key, 1);
+      this.getImagePreviews();
+    },
   },
   watch: {
     paginaAtual() {
-
-      this.getClientes()
-
+      this.getClientes();
     },
     message() {
       setTimeout(() => {
@@ -199,8 +209,6 @@ const app = new Vue({
     },
   },
   mounted: function () {
-    
     this.getClientes();
-
   },
 });

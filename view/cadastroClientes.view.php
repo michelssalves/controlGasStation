@@ -95,9 +95,9 @@ include('controller/cadastroClientes.php');
         </form>
     </div>
     <!--/AREA ONDE ESTÁ A TABELA E FILTROS-->
-    <!--MODAL CRIAR SOLICITAÇÃO DE PAGAMENTO-->
+    <!--MODAL CRIAR CLIENTE-->
     <div class="modal fade w3-animate-top" id="criarCliente" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarClienteModalLabel" aria-hidden="true">
-        <form id="formcriarCliente" method="POST">
+        <form id="formCriarCliente" method="POST">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header fundo-cabecalho">
@@ -107,7 +107,7 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formcriarCliente')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarCliente')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="fecharModal()" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -209,7 +209,146 @@ include('controller/cadastroClientes.php');
             </div>
         </form>
     </div>
-    <!--/MODAL CRIAR SOLICITAÇÃO DE PAGAMENTO-->
+    <!--/MODAL CRIAR CLIENTE-->
+    <!--MODAL CRIAR VEICULO-->
+    <div class="modal fade w3-animate-top" id="criarVeiculo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarVeiculoModalLabel" aria-hidden="true">
+        <form id="formCriarVeiculo" method="POST">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <div class="d-flex flex-row">
+                            <div class="d-none d-md-block">
+                                <h2 class="p-2 bg-dark rounded-circle text-light fs-4">Cadastrar</h2>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarVeiculo')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosVeiculos')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="input-group input-group-sm mb-3">
+                        <input id="id_cliente" name="id_cliente"  v-model="idCliente" type="text">
+                            <span class="input-group-text" id="inputGroup-sizing">Placa:</span>
+                            <input id="placa" name="placa" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Marca:</span>
+                            <input id="marca" name="marca" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing">Modelo:</span>
+                            <input id="modelo" name="modelo" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Ano:</span>
+                            <input id="ano" name="ano" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing">Cor:</span>
+                            <input id="cor" name="cor" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Km:</span>
+                            <input id="km" name="km" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        </div>
+                        <div class="input-group input-group-sm mb-3">
+                            <span class="input-group-text" id="inputGroup-sizing">Combustivel:</span>
+                            <input id="combustivel" name="combustivel" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Desconto:</span>
+                            <input id="desconto" name="desconto" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL CRIAR VEICULO-->
+    <!--MODAL CRIAR OBSERVAÇÃO-->
+    <div class="modal fade w3-animate-top" id="criarObservacao" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarObservacaoModalLabel" aria-hidden="true">
+        <form id="formCriarObservacao" method="POST">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <div class="d-flex flex-row">
+                            <div class="d-none d-md-block">
+                                <h2 class="p-2 mt-1 bg-dark rounded-circle text-light fs-4">Observação</h2>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarObservacao')" v-show="observacao.length > 10" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <input name="id_cliente" id="id_cliente" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="input-group input-group-sm mb-3 ">
+                            <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
+                            <textarea name="observacao" id="observacao" v-model="observacao" cols="80" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL CRIAR OBSERVAÇÃO-->
+        <!--MODAL CRIAR ANEXO OK-->
+        <div class="modal fade w3-animate-top" id="criarAnexo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarAnexoModalLabel" aria-hidden="true">
+        <form id="formCriarAnexo" method="POST" enctype="multipart/form-data">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header fundo-cabecalho">
+                        <div class="d-flex flex-row">
+                            <div class="d-none d-md-block">
+                                <h2 class="p-2 bg-dark rounded-circle text-light fs-4">Anexar</h2>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row">
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarAnexo')" v-show="(files.length > 0 && descricaoAnexo.length > 0)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <input id="id_cliente" name="id_cliente" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <div class="mb-3">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
+                                <select v-model="descricaoAnexo" id="descricaoAnexo" name="descricaoAnexo" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                                    <option>DOCUMENTOS PESSOAIS (RG, CPF)</option>
+                                    <option>COMPROVANTE DE RENDA (HOLERITE/IRPF/IRPJ)</option>              
+                                    <option>CARTÃO CNPJ</option>
+                                    <option>CONTRATO SOCIAL</option>
+                                    <option>COMPROVANTE DE ENDEREÇO</option>
+                                    <option>AUTORIZAÇÃO PARA ABASTECIMENTO</option>
+                                    <option>OUTRO</option>
+                                </select>
+                            </div>
+                            <div class="container">
+                                <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
+                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                    <p>
+                                        Arraste aqui <br>ou clique para procurar
+                                    </p>
+                                </div>
+                                <div v-for="(file, key) in files" class="file-listing">
+                                    <img class="preview" v-bind:ref="'preview'+parseInt(key)" />
+                                    {{ file.name }}
+                                    <div class="success-container" v-if="file.id > 0">
+
+                                    </div>
+                                    <div class="remove-container" v-else>
+                                        <a class="remove" v-on:click="removeFile(key)"><i class="fa-regular fa-trash-can"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--/MODAL CRIAR ANEXO-->
     <!--MODAL DADOS CADASTRAIS-->
     <div class="modal fade w3-animate-top" id="dadosCadastrais" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dadosCadastraisModalLabel" aria-hidden="true">
         <form id="formDadosCadastrais" method="POST">
@@ -222,6 +361,9 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
+                            <div class="p-1">
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconSave"></button>
+                            </div>
                             <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
                             </div>
@@ -400,7 +542,7 @@ include('controller/cadastroClientes.php');
                                 <option v-for="dia in 31" :key="dia" :value="dia">{{dia}}</option>
                             </select>
                             <span class="input-group-text" id="inputGroup-sizing">Prazo Abast:</span>
-                            <select id="prazoAbast" name="prazoAbast" v-model="financeiro.prazoAbast"class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <select id="prazoAbast" name="prazoAbast" v-model="financeiro.prazoAbast" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                                 <option>7</option>
                                 <option>10</option>
                                 <option>15</option>
@@ -435,8 +577,8 @@ include('controller/cadastroClientes.php');
     <!--MODAL VEICULOS-->
     <div class="modal fade w3-animate-top" id="dadosVeiculos" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="dadosDocumentosModalLabel" aria-hidden="true">
         <form id="formDadosVeiculos" method="POST">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
+            <div class="modal-dialog  modal-lg">
+                <div class="modal-content modal-dialog-scrollable">
                     <div class="modal-header fundo-cabecalho">
                         <div class="d-flex flex-row">
                             <div class="d-none d-md-block">
@@ -468,38 +610,51 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                            <div class="table-wrapper">
-                                <table class="table table-striped table-hover mt-2">
-                                    <thead class="header-tabela">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>MARCA</th>
-                                            <th>MODELO</th>
-                                            <th>ANO</th>
-                                            <th>COR</th>
-                                            <th>PLACA</th>
-                                            <th>KM</th>
-                                            <th>COMBUSTIVEL</th>
-                                            <th>DESCONTO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="cursor:pointer" v-for="(veiculo, i) in veiculos">
-                                            <td>{{veiculo.id}}</td>
-                                            <td>{{veiculo.marca}}</td>
-                                            <td>{{veiculo.modelo}}</td>
-                                            <td>{{veiculo.ano}}</td>
-                                            <td>{{veiculo.cor}}</td>
-                                            <td>{{veiculo.placa}}</td>
-                                            <td>{{veiculo.km}}</td>
-                                            <td>{{veiculo.combustivel}}</td>
-                                            <td>{{veiculo.desconto}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        <div class="container text-center">
+                            <div class="row">
+                                <div class="col">
+
+                                </div>
+                                <div class="col">
+                                    <button type="button" title="Veiculos Adc" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="abrirModal('criarVeiculo')"><img class="iconeSize" :src="iconCreate"></button>
+                                </div>
+                                <div class="col">
+
+                                </div>
                             </div>
                         </div>
-                    
+                        <div class="table-wrapper">
+                            <table class="table table-striped table-hover mt-2">
+                                <thead class="header-tabela">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>MARCA</th>
+                                        <th>MODELO</th>
+                                        <th>ANO</th>
+                                        <th>COR</th>
+                                        <th>PLACA</th>
+                                        <th>KM</th>
+                                        <th>COMBUSTIVEL</th>
+                                        <th>DESCONTO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor:pointer" v-for="(veiculo, i) in veiculos">
+                                        <td>{{veiculo.id}}</td>
+                                        <td>{{veiculo.marca}}</td>
+                                        <td>{{veiculo.modelo}}</td>
+                                        <td>{{veiculo.ano}}</td>
+                                        <td>{{veiculo.cor}}</td>
+                                        <td>{{veiculo.placa}}</td>
+                                        <td>{{veiculo.km}}</td>
+                                        <td>{{veiculo.combustivel}}</td>
+                                        <td>{{veiculo.desconto}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
                     </div>
                 </div>
@@ -543,27 +698,40 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                            <div class="table-wrapper">
-                                <table class="table table-striped table-hover mt-2">
-                                    <thead class="header-tabela">
-                                        <tr>
-                                            <th>ANEXO</th>
-                                            <th>DATA</th>
-                                            <th>USUARIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="cursor:pointer" v-for="anexo in anexos">
-                                            <td>{{anexo.descricao}}</td>
-                                            <td>{{anexo.datahora}}</td>
-                                            <td>{{anexo.usuario}}</td>
-                               
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="container text-center">
+                            <div class="row">
+                                <div class="col">
+
+                                </div>
+                                <div class="col">
+                                    <button type="button" title="Anexos Adc" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="abrirModal('criarAnexo')"><img class="iconeSize" :src="iconCreate"></button>
+                                </div>
+                                <div class="col">
+
+                                </div>
                             </div>
                         </div>
-                    
+                        <div class="table-wrapper">
+                            <table class="table table-striped table-hover mt-2">
+                                <thead class="header-tabela">
+                                    <tr>
+                                        <th>ANEXO</th>
+                                        <th>DATA</th>
+                                        <th>USUARIO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor:pointer" v-for="anexo in anexos">
+                                        <td>{{anexo.descricao}}</td>
+                                        <td>{{anexo.datahora}}</td>
+                                        <td>{{anexo.usuario}}</td>
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
                     </div>
                 </div>
@@ -607,26 +775,39 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                            <div class="table-wrapper">
-                                <table class="table table-striped table-hover mt-2">
-                                    <thead class="header-tabela">
-                                        <tr>
-                                            <th>OBSERVAÇÃO</th>
-                                            <th>DATA</th>
-                                            <th>USUÁRIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="cursor:pointer" v-for="obs in observacoes">
-                                            <td>{{obs.obs}}</td>
-                                            <td>{{obs.datahora}}</td>
-                                            <td>{{obs.usuario}}</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                    <div class="container text-center">
+                            <div class="row">
+                                <div class="col">
+
+                                </div>
+                                <div class="col">
+                                    <button type="button" title="Observação Adc" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="abrirModal('criarObservacao')"><img class="iconeSize" :src="iconCreate"></button>
+                                </div>
+                                <div class="col">
+
+                                </div>
                             </div>
                         </div>
-                    
+                        <div class="table-wrapper">
+                            <table class="table table-striped table-hover mt-2">
+                                <thead class="header-tabela">
+                                    <tr>
+                                        <th>OBSERVAÇÃO</th>
+                                        <th>DATA</th>
+                                        <th>USUÁRIO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor:pointer" v-for="obs in observacoes">
+                                        <td>{{obs.obs}}</td>
+                                        <td>{{obs.datahora}}</td>
+                                        <td>{{obs.usuario}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
                     </div>
                 </div>
@@ -670,27 +851,27 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                            <div class="table-wrapper">
-                                <table class="table table-striped table-hover mt-2">
-                                    <thead class="header-tabela">
-                                        <tr>
-                                            <th>EVENTO</th>
-                                            <th>DATA</th>
-                                            <th>USUÁRIO</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr style="cursor:pointer" v-for="evento in eventos">
-                                            <td>{{evento.obs}}</td>
-                                            <td>{{evento.datahora}}</td>
-                                            <td>{{evento.usuario}}</td>
+                        <div class="table-wrapper">
+                            <table class="table table-striped table-hover mt-2">
+                                <thead class="header-tabela">
+                                    <tr>
+                                        <th>EVENTO</th>
+                                        <th>DATA</th>
+                                        <th>USUÁRIO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="cursor:pointer" v-for="evento in eventos">
+                                        <td>{{evento.obs}}</td>
+                                        <td>{{evento.datahora}}</td>
+                                        <td>{{evento.usuario}}</td>
 
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    
+                    </div>
+
                     <div class="modal-footer">
                     </div>
                 </div>
