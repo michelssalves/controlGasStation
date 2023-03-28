@@ -362,7 +362,7 @@ include('controller/cadastroClientes.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1">
-                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconSave"></button>
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosCadastrais', 'action=updateCliente')"><img class="iconeSize" :src="iconSave"></button>
                             </div>
                             <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
@@ -389,6 +389,7 @@ include('controller/cadastroClientes.php');
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
+                            <input type="text" name="id" id="id" v-model="idCliente">
                             <span class="input-group-text" id="inputGroup-sizing">Rz Social:</span>
                             <input id="cliente" name="cliente" type="text" v-model="cadastro.RazaoSocial" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">CNPJ:</span>
@@ -558,12 +559,14 @@ include('controller/cadastroClientes.php');
                         </div>
                         <hr>
                         <div class="grid text-center">
-                            <input type="checkbox" class="w3-check" name="forma_pgto2" value="1"> Cheque Pré
-                            <input type="checkbox" class="w3-check" name="forma_pgto3" value="1"> Convênio/C.Crédito
-                            <input type="checkbox" class="w3-check" name="forma_pgto4" value="1"> Cartão de Débito
-                            <input type="checkbox" class="w3-check" name="forma_pgto5" value="1"> Carta Frete
-                            <input type="checkbox" class="w3-check" name="forma_pgto6" value="1"> Boleto Bancário
-                            <input type="checkbox" class="w3-check" name="forma_pgto7" value="1"> Cheque à Vista
+                            <input type="checkbox" :checked="fpg1" class="w3-check" name="forma_pgto0" value="1"> Cheque Pré
+                            <input type="checkbox" :checked="fpg2" class="w3-check" name="forma_pgto1" value="1"> Cheque Pré
+                            <input type="checkbox" :checked="fpg3" class="w3-check" name="forma_pgto2" value="1"> Cheque Pré
+                            <input type="checkbox" :checked="fpg4" class="w3-check" name="forma_pgto3" value="1"> Convênio/C.Crédito
+                            <input type="checkbox" :checked="fpg5" class="w3-check" name="forma_pgto4" value="1"> Cartão de Débito
+                            <input type="checkbox" :checked="fpg6" class="w3-check" name="forma_pgto5" value="1"> Carta Frete
+                            <input type="checkbox" :checked="fpg7" class="w3-check" name="forma_pgto6" value="1"> Boleto Bancário
+                            <input type="checkbox" :checked="fpg8" class="w3-check" name="forma_pgto7" value="1"> Cheque à Vista
                         </div>
                         <hr>
                     </div>

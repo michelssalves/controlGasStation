@@ -25,7 +25,15 @@ const app = new Vue({
       title: true,
       aplicarIcon: true,
       check: true,
-
+      fpg1: false,
+      fpg2: false,
+      fpg3: false,
+      fpg4: false,
+      fpg5: false,
+      fpg6: false,
+      fpg7: false,
+      fpg8: false,
+  
       iconCadastro:
         "https://www.rdppetroleo.com.br/medwebnovo/assets/img/icons/anotacao.png",
       iconFinanceiro:
@@ -146,6 +154,14 @@ const app = new Vue({
           }
           if (modal === "dadosFinanceiros") {
             this.financeiro = res.data.financeiro[0];
+            this.fpg1 = res.data.financeiro[0]['fpg1'] === '0' ? false : true;
+            this.fpg2 = res.data.financeiro[0]['fpg2'] === '0' ? false : true; 
+            this.fpg3 = res.data.financeiro[0]['fpg3'] === '0' ? false : true; 
+            this.fpg4 = res.data.financeiro[0]['fpg4'] === '0' ? false : true; 
+            this.fpg5 = res.data.financeiro[0]['fpg5'] === '0' ? false : true; 
+            this.fpg6 = res.data.financeiro[0]['fpg6'] === '0' ? false : true; 
+            this.fpg7 = res.data.financeiro[0]['fpg7'] === '0' ? false : true; 
+            this.fpg8 = res.data.financeiro[0]['fpg8'] === '0' ? false : true; 
           }
           if (modal === "dadosVeiculos") {
             this.veiculos = res.data.veiculos;

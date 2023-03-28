@@ -136,7 +136,7 @@ if ($action == 'addCliente'){
     $forma_pgto8 = ($_REQUEST['forma_pgto8'] ? $_REQUEST['forma_pgto8'] : '0');
     $forma_pgto9 = ($_REQUEST['forma_pgto9'] ? $_REQUEST['forma_pgto9'] : '0');
     $forma_pgtox = ($_REQUEST['forma_pgtox'] ? $_REQUEST['forma_pgtox'] : '0');
-    $evento = 'CRIADO';
+    $evento = 'CRIADO CLIENTE';
   
     if($cadastroCliente->insertCliente($razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
     $numEndereco,$complEndereco,$pessoa,$status,$data_cadastro,$formaPgtoPadrao,$prazoPgto,$prazoAbast,$forma_pgto0,
@@ -149,6 +149,42 @@ if ($action == 'addCliente'){
     } else {
 
         $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+if ($action == 'updateCliente'){
+
+    //$id = $_REQUEST['id'];
+    $id = 10;
+    $razaosocial = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cliente'])));
+    $emailCliente = limpaObservacao(utf8_decode($_REQUEST['email']));
+    $contato =  strtoupper(limpaObservacao(utf8_decode($_REQUEST['Contato'])));
+    $fone = $_REQUEST['fone'];
+    $cnpj = $_REQUEST['cnpj'];
+    $endereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['endereco'])));
+    $bairro = strtoupper(limpaObservacao(utf8_decode($_REQUEST['bairro'])));
+    $cidade = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cidade'])));
+    $uf = strtoupper(limpaObservacao(utf8_decode($_REQUEST['uf'])));
+    $ie = $_REQUEST['ie'];
+    $nomeUsual = strtoupper(limpaObservacao(utf8_decode($_REQUEST['nomeUsual'])));
+    $idXpert = $_REQUEST['idXpert'];
+    $cep = $_REQUEST['cep'];
+    $numEndereco = $_REQUEST['numEndereco'];
+    $complEndereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['complEndereco'])));
+    $pessoa = $_REQUEST['pessoa'];
+    $evento = 'ALTERADO CLIENTE';
+  
+    if($cadastroCliente->updateCliente($id, $razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
+    $numEndereco,$complEndereco,$pessoa)) {
+        
+       // $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+
+        $data = array('res' => 'success');
+
+    } else {
+
+        $data = array('res' => 'error');
     }
 
     echo json_encode($data);
