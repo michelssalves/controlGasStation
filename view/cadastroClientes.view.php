@@ -107,7 +107,7 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarCliente')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarCliente', 'action=addCliente')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="fecharModal()" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -222,7 +222,7 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarVeiculo')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarVeiculo', 'action=addVeiculo')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosVeiculos')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -272,12 +272,12 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarObservacao')" v-show="observacao.length > 10" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarObservacao', 'action=addObservacao')" v-show="observacao.length > 10" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <input name="id_cliente" id="id_cliente" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input name="id" id="id" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="input-group input-group-sm mb-3 ">
                             <span class="input-group-text" id="inputGroup-sizing">Observação:</span>
                             <textarea name="observacao" id="observacao" v-model="observacao" cols="80" rows="10" style="white-space: pre;" placeholder="No minímo 10 caracteres" required></textarea>
@@ -291,8 +291,8 @@ include('controller/cadastroClientes.php');
         </form>
     </div>
     <!--/MODAL CRIAR OBSERVAÇÃO-->
-        <!--MODAL CRIAR ANEXO OK-->
-        <div class="modal fade w3-animate-top" id="criarAnexo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarAnexoModalLabel" aria-hidden="true">
+    <!--MODAL CRIAR ANEXO OK-->
+    <div class="modal fade w3-animate-top" id="criarAnexo" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="criarAnexoModalLabel" aria-hidden="true">
         <form id="formCriarAnexo" method="POST" enctype="multipart/form-data">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -303,12 +303,12 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarAnexo')" v-show="(files.length > 0 && descricaoAnexo.length > 0)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarAnexo','action=addAnexo')" v-show="(files.length > 0 && descricaoAnexo.length > 0)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
                     <div class="modal-body">
-                        <input id="id_cliente" name="id_cliente" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                        <input id="id" name="id" type="text" v-model="idCliente" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         <div class="mb-3">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
@@ -324,7 +324,7 @@ include('controller/cadastroClientes.php');
                             </div>
                             <div class="container">
                                 <div v-if="files.length == 0" class="large-12 medium-12 small-12 filezone">
-                                    <input type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
+                                    <input name="file" type="file" id="files" ref="files" multiple v-on:change="handleFiles()" />
                                     <p>
                                         Arraste aqui <br>ou clique para procurar
                                     </p>

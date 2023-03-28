@@ -136,16 +136,73 @@ if ($action == 'addCliente'){
     $forma_pgto8 = ($_REQUEST['forma_pgto8'] ? $_REQUEST['forma_pgto8'] : '0');
     $forma_pgto9 = ($_REQUEST['forma_pgto9'] ? $_REQUEST['forma_pgto9'] : '0');
     $forma_pgtox = ($_REQUEST['forma_pgtox'] ? $_REQUEST['forma_pgtox'] : '0');
+    $evento = 'CRIADO';
   
     if($cadastroCliente->insertCliente($razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
     $numEndereco,$complEndereco,$pessoa,$status,$data_cadastro,$formaPgtoPadrao,$prazoPgto,$prazoAbast,$forma_pgto0,
     $forma_pgto1,$forma_pgto2,$forma_pgto3,$forma_pgto4,$forma_pgto5,$forma_pgto6,$forma_pgto7,$forma_pgto8,$forma_pgto9,$forma_pgtox)) {
-
+        
+        // FALTA BUSCAR O ULTIMO ID DA TABELA CLIENTES
+        $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
         $data = array('res' => 'success');
 
     } else {
 
         $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+if ($action == 'addObservacao'){
+
+    $obs = strtoupper(limpaObservacao(utf8_decode($_REQUEST['observacao'])));
+    $id = $_REQUEST['id'];
+    $evento = 'INSERIU OBSERVAÇÃO';
+  
+    if($cadastroCliente->insertObservacao($id, $idUsuario,$obs)) {
+
+        $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+        $data = array('res' => 'success');
+
+    } else {
+
+        $data = array('res' => 'errorObs');
+    }
+
+    echo json_encode($data);
+}
+if ($action == 'addAnexo') {
+
+    $id = $_REQUEST['id'];
+    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
+    $evento = 'INCLUSÃO DE ANEXO';
+
+    if ($_FILES['file']['name'] <> '') {
+
+        $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
+
+        if ($cadastroCliente->insertAnexo($descricao, $id, $extensao, $usuarioLogado)) {
+
+            $temp = $_FILES['file']['tmp_name'];
+            $localDeArmazenagem = "../assets/docs/docCliente/";
+            $tabela = "med_cliente_documento";
+
+            if(uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)){
+            
+                $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+
+                $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
+            } else {
+
+                $data = array('res' => 'error', 'msg' => 'upload');
+            }
+        } else {
+
+            $data = array('res' => 'error', 'msg' => 'insertAnexo');
+        }
+    } else {
+
+        $data = array('res' => 'error', 'msg' => 'file');
     }
 
     echo json_encode($data);

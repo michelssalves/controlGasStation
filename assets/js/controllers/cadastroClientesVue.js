@@ -70,6 +70,9 @@ const app = new Vue({
       this.getPagamentos("filtrar");
       this.message = "Limpado!";
     },
+    limparVariaveis(){
+      this.files = []
+    },
     dataAtual() {
       const data = new Date();
       const dia = String(data.getDate()).padStart(2, "0");
@@ -114,18 +117,23 @@ const app = new Vue({
       );
       modalSolicitado.show();
     },
-    salvar(form) {
+    salvar(form, action) {
       const formulario = new FormData(document.getElementById(form));
+      formulario.append("file", this.files[0]);
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=addCliente",
+          `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?${action}`,
           formulario
         )
-        .then((res) => {})
+        .then((res) => {
+          console.log(res)
+        })
         .catch((err) => {
-          console.log(err);
+          console.log(err)
         });
+
+        this.limparVariaveis()
     },
     visualizar(id, modal) {
       axios
