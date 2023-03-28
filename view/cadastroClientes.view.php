@@ -34,13 +34,6 @@ include('controller/cadastroClientes.php');
                     </div>
                 </div>
             </div>
-            <div class="container">
-                <div class="fundo-header-tabelas d-flex justify-content-center">
-                    <div v-show="message.length > 0" class="text-dark fs-6 ">
-                        <h4>{{message}}</h4>
-                    </div>
-                </div>
-            </div>
             <div class="table-wrapper">
                 <table class="table table-striped table-hover mt-1 ">
                     <thead class="header-tabela">
@@ -131,24 +124,24 @@ include('controller/cadastroClientes.php');
                                 <option value="2">FISICA</option>
                             </select>
                             <span class="input-group-text" id="inputGroup-sizing">CEP:</span>
-                            <input id="cep" name="cep" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-                            <span class="input-group-text" id="inputGroup-sizing"><i class="fa-solid fa-magnifying-glass"></i></span>
+                            <input id="cep" name="cep" v-model="cep" type="text" @keypress="onlyNumberCep($event)" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder="Só numeros" required>
+                            <span class="input-group-text" id="inputGroup-sizing" @click="buscarCep()"><i class="fa-solid fa-magnifying-glass"></i></span>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Endereco:</span>
-                            <input id="endereco" name="endereco" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="endereco" name="endereco" v-model="endereco" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Cidade:</span>
-                            <input id="cidade" name="cidade" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="cidade" name="cidade" v-model="cidade" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Bairro:</span>
-                            <input id="bairro" name="bairro" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="bairro" name="bairro" v-model="bairro" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Contato:</span>
                             <input id="contato" name="contato" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">UF:</span>
-                            <input id="uf" name="uf" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="uf" name="uf" v-model="uf" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Nº:</span>
                             <input id="numEndereco" name="numEndereco" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
@@ -194,11 +187,13 @@ include('controller/cadastroClientes.php');
                         </div>
                         <hr>
                         <div class="grid text-center">
+                            <input type="checkbox" class="w3-check" name="forma_pgto0" value="1"> Dinheiro
+                            <input type="checkbox" class="w3-check" name="forma_pgto1" value="1"> A Prazo
                             <input type="checkbox" class="w3-check" name="forma_pgto2" value="1"> Cheque Pré
                             <input type="checkbox" class="w3-check" name="forma_pgto3" value="1"> Convênio/C.Crédito
-                            <input type="checkbox" class="w3-check" name="forma_pgto4" value="1"> Cartão de Débito
+                            <input type="checkbox" class="w3-check" name="forma_pgto4" value="1"> Débito
                             <input type="checkbox" class="w3-check" name="forma_pgto5" value="1"> Carta Frete
-                            <input type="checkbox" class="w3-check" name="forma_pgto6" value="1"> Boleto Bancário
+                            <input type="checkbox" class="w3-check" name="forma_pgto6" value="1"> Boleto
                             <input type="checkbox" class="w3-check" name="forma_pgto7" value="1"> Cheque à Vista
                         </div>
                         <hr>
@@ -222,13 +217,13 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarVeiculo', 'action=addVeiculo')" class="btn btn-light btn-sm"><img class="iconeSize" :src="iconSave" /></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarVeiculo', 'action=addVeiculo','dadosVeiculos',idCliente)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave" /></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosVeiculos')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
-                        <input id="id" name="id"  v-model="idCliente" type="text">
+                            <input id="id" name="id" v-model="idCliente" type="text">
                             <span class="input-group-text" id="inputGroup-sizing">Placa:</span>
                             <input id="placa" name="placa" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Marca:</span>
@@ -272,7 +267,7 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarObservacao', 'action=addObservacao')" v-show="observacao.length > 10" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarObservacao', 'action=addObservacao', 'dadosObservacao' ,idCliente)" v-show="observacao.length > 10" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -303,7 +298,7 @@ include('controller/cadastroClientes.php');
                             </div>
                         </div>
                         <div class="d-flex flex-row">
-                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarAnexo','action=addAnexo')" v-show="(files.length > 0 && descricaoAnexo.length > 0)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
+                            <div class="p-1"><button type="button" title="Salvar" @click="salvar('formCriarAnexo','action=addAnexo','dadosDocumentos', idCliente)" v-show="(files.length > 0 && descricaoAnexo.length > 0)" class="btn btn-light btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconSave"></button></div>
                             <div class="p-1"><button type="button" title="Fechar" @click="voltarModal(idCliente, 'dadosObservacao')" id="botaoFechar" class="btn btn-sm" data-bs-dismiss="modal"><img class="iconeSize" :src="iconClose"></button></div>
                         </div>
                     </div>
@@ -314,7 +309,7 @@ include('controller/cadastroClientes.php');
                                 <span class="input-group-text" id="inputGroup-sizing">Descrição:</span>
                                 <select v-model="descricaoAnexo" id="descricaoAnexo" name="descricaoAnexo" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                                     <option>DOCUMENTOS PESSOAIS (RG, CPF)</option>
-                                    <option>COMPROVANTE DE RENDA (HOLERITE/IRPF/IRPJ)</option>              
+                                    <option>COMPROVANTE DE RENDA (HOLERITE/IRPF/IRPJ)</option>
                                     <option>CARTÃO CNPJ</option>
                                     <option>CONTRATO SOCIAL</option>
                                     <option>COMPROVANTE DE ENDEREÇO</option>
@@ -362,7 +357,7 @@ include('controller/cadastroClientes.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1">
-                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosCadastrais', 'action=updateClienteCadastrais')"><img class="iconeSize" :src="iconSave"></button>
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosCadastrais', 'action=updateClienteCadastrais', 'dadosCadastrais',idCliente)"><img class="iconeSize" :src="iconSave"></button>
                             </div>
                             <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
@@ -388,6 +383,13 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
+                        <div class="container">
+                            <div class="fundo-header-tabelas d-flex justify-content-center">
+                                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                                    <h4>{{message}}</h4>
+                                </div>
+                            </div>
+                        </div>
                         <div class="input-group input-group-sm mb-3">
                             <input type="text" name="id" id="id" v-model="idCliente">
                             <span class="input-group-text" id="inputGroup-sizing">Rz Social:</span>
@@ -463,7 +465,7 @@ include('controller/cadastroClientes.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1">
-                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosFinanceiros', 'action=updateClienteFinanceiro')"><img class="iconeSize" :src="iconSave"></button>
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosFinanceiros', 'action=updateClienteFinanceiro', 'dadosFinanceiros', idCliente)"><img class="iconeSize" :src="iconSave"></button>
                             </div>
                             <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
@@ -489,7 +491,15 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
+                        <div class="container">
+                            <div class="fundo-header-tabelas d-flex justify-content-center">
+                                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                                    <h4>{{message}}</h4>
+                                </div>
+                            </div>
+                        </div>
                         <div class="input-group input-group-sm mb-3">
+                            <input type="text" name="id" id="id" v-model="idCliente">
                             <span class="input-group-text" id="inputGroup-sizing">Melhor dia para pagamento:</span>
                             <input id="dia" name="dia" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Consulta Serasa:</span>
@@ -562,7 +572,7 @@ include('controller/cadastroClientes.php');
                         <hr>
                         <div class="grid text-center">
                             <input type="checkbox" :checked="fpg1" class="w3-check" name="forma_pgto0" value="1"> Dinheiro
-                            <input type="checkbox" :checked="fpg2" class="w3-check" name="forma_pgto1" value="1"> A Przo
+                            <input type="checkbox" :checked="fpg2" class="w3-check" name="forma_pgto1" value="1"> A Prazo
                             <input type="checkbox" :checked="fpg3" class="w3-check" name="forma_pgto2" value="1"> Cheque Pré
                             <input type="checkbox" :checked="fpg4" class="w3-check" name="forma_pgto3" value="1"> Convênio/C.Crédito
                             <input type="checkbox" :checked="fpg5" class="w3-check" name="forma_pgto4" value="1"> Débito
@@ -625,6 +635,13 @@ include('controller/cadastroClientes.php');
                                 </div>
                                 <div class="col">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="fundo-header-tabelas d-flex justify-content-center">
+                                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                                    <h4>{{message}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -703,7 +720,7 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                    <div class="container text-center">
+                        <div class="container text-center">
                             <div class="row">
                                 <div class="col">
 
@@ -713,6 +730,13 @@ include('controller/cadastroClientes.php');
                                 </div>
                                 <div class="col">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="fundo-header-tabelas d-flex justify-content-center">
+                                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                                    <h4>{{message}}</h4>
                                 </div>
                             </div>
                         </div>
@@ -780,7 +804,7 @@ include('controller/cadastroClientes.php');
                         </div>
                     </div>
                     <div class="modal-body">
-                    <div class="container text-center">
+                        <div class="container text-center">
                             <div class="row">
                                 <div class="col">
 
@@ -790,6 +814,13 @@ include('controller/cadastroClientes.php');
                                 </div>
                                 <div class="col">
 
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container">
+                            <div class="fundo-header-tabelas d-flex justify-content-center">
+                                <div v-show="message.length > 0" class="text-dark fs-6 ">
+                                    <h4>{{message}}</h4>
                                 </div>
                             </div>
                         </div>

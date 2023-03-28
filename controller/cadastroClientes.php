@@ -139,21 +139,25 @@ if ($action == 'addCliente'){
     $numEndereco,$complEndereco,$pessoa,$status,$data_cadastro,$formaPgtoPadrao,$prazoPgto,$prazoAbast,$forma_pgto0,
     $forma_pgto1,$forma_pgto2,$forma_pgto3,$forma_pgto4,$forma_pgto5,$forma_pgto6,$forma_pgto7)) {
         
-        // FALTA BUSCAR O ULTIMO ID DA TABELA CLIENTES
+        $id = $cadastroCliente->findLastId();
+
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
-        $data = array('res' => 'success');
+
+        $msg = "Cadastrado com Sucesso!";
+        $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
     } else {
 
-        $data = array('res' => 'errorObs');
+        $msg = "Erro no Cadastrado!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+  
     }
 
     echo json_encode($data);
 }
 if ($action == 'updateClienteCadastrais'){
 
-    //$id = $_REQUEST['id'];
-    $id = 10;
+    $id = $_REQUEST['id'];
     $razaosocial = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cliente'])));
     $emailCliente = limpaObservacao(utf8_decode($_REQUEST['email']));
     $contato =  strtoupper(limpaObservacao(utf8_decode($_REQUEST['Contato'])));
@@ -175,21 +179,22 @@ if ($action == 'updateClienteCadastrais'){
     if($cadastroCliente->updateClienteCadastral($id, $razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
     $numEndereco,$complEndereco,$pessoa)) {
         
-       // $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+        $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
-        $data = array('res' => 'success');
+        $msg = "Atualizado com Sucesso!";
+        $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
     } else {
 
-        $data = array('res' => 'error');
+        $msg = "Erro na atualização!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
     }
 
     echo json_encode($data);
 }
 if ($action == 'updateClienteFinanceiro'){
 
-    //$id = $_REQUEST['id'];
-    $id = 10;
+    $id = $_REQUEST['id'];
     $formaPgtoPadrao = strtoupper(limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
     $prazoPgto = strtoupper($_REQUEST['prazoPgto']);
     $prazoAbast = strtoupper($_REQUEST['prazoAbast']);
@@ -218,13 +223,15 @@ if ($action == 'updateClienteFinanceiro'){
     $desc_gasolina, $desc_dieselS500, $desc_dieselS10,$desc_gnv,$acr_alcool,$acr_gasolina,$acr_dieselS500, 
     $acr_dieselS10, $acr_gnv )) {
         
-       // $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+        $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
-        $data = array('res' => 'success');
+        $msg = "Atualizado com Sucesso!";
+        $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
     } else {
 
-        $data = array('res' => 'error');
+        $msg = "Erro na atualização!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
     }
 
     echo json_encode($data);
@@ -238,11 +245,14 @@ if ($action == 'addObservacao'){
     if($cadastroCliente->insertObservacao($id, $idUsuario,$obs)) {
 
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
-        $data = array('res' => 'success');
+
+        $msg = "Adiconado Observação!";
+        $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
     } else {
 
-        $data = array('res' => 'errorObs');
+        $msg = "Erro na observação!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
     }
 
     echo json_encode($data);
@@ -267,18 +277,23 @@ if ($action == 'addAnexo') {
             
                 $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
-                $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
-            } else {
+                $msg = "Anexado Com sucesso!";
+                $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
-                $data = array('res' => 'error', 'msg' => 'upload');
+            } else {
+                
+                $msg = "Erro no upload do arquivo!";
+                $data = array('res' => 'error', 'msg' => utf8ize($msg));
             }
         } else {
 
-            $data = array('res' => 'error', 'msg' => 'insertAnexo');
+            $msg = "Erro ao registrar anexo na tabela!";
+            $data = array('res' => 'error', 'msg' => utf8ize($msg));
         }
     } else {
 
-        $data = array('res' => 'error', 'msg' => 'file');
+        $msg = "Não foi adicionado anexo!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
     }
 
     echo json_encode($data);
@@ -297,11 +312,13 @@ if ($action == 'addVeiculo'){
 
     if($cadastroCliente->insertVeiculo($placa, $marca, $modelo, $ano, $km, $combustivel, $desconto, $cor, $id)) {
 
-        $data = array('res' => 'success');
+        $msg = "Cadastrado com sucesso!";
+        $data = array('res' => 'success', 'msg' => utf8ize($msg));
 
     } else {
 
-        $data = array('res' => 'error');
+        $msg = "Erro ao adicionar o veiculo!";
+        $data = array('res' => 'error', 'msg' => utf8ize($msg));
     }
 
     echo json_encode($data);

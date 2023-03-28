@@ -12,6 +12,11 @@ const app = new Vue({
       anexos: [],
       eventos: [],
       files: [],
+      cep:'',
+      endereco:'',
+      bairro :'',
+      cidade:'',
+      uf:'',
       descricaoAnexo:'',
       observacao:'',
       message: '',
@@ -80,6 +85,37 @@ const app = new Vue({
     },
     limparVariaveis(){
       this.files = []
+      this.descricaoAnexo = ''
+      this.observacao = ''
+    },
+    buscarCep() {
+      const url = `https://viacep.com.br/ws/${this.cep}/json/`;
+      axios
+        .get(url)
+        .then((res) => {
+     
+          this.endereco = res.data.logradouro;
+          this.bairro = res.data.bairro;
+          this.cidade = res.data.localidade;
+          this.uf = res.data.uf;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.message = "CEP INVALIDO";
+        });
+    },
+    onlyNumberCep($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 45) {
+        // 46 é ponto e 44 é virgula 45 é hifen
+        $event.preventDefault();
+      }
+    },
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
     },
     dataAtual() {
       const data = new Date();
@@ -125,30 +161,35 @@ const app = new Vue({
       );
       modalSolicitado.show();
     },
-    salvar(form, action) {
-      const formulario = new FormData(document.getElementById(form));
-      formulario.append("file", this.files[0]);
+    salvar(form, action, modal, id) {
 
+      const formulario = new FormData(document.getElementById(form));
+      if(form === 'formCriarAnexo'){
+      formulario.append("file", this.files[0]);
+      }
       axios
         .post(
           `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?${action}`,
           formulario
         )
         .then((res) => {
-          console.log(res)
+          console.log(res.data.msg)
+          this.message = res.data.msg
+          this.visualizar(id, modal)
         })
         .catch((err) => {
           console.log(err)
         });
-
-        this.limparVariaveis()
+        
     },
-    visualizar(id, modal) {
+
+   visualizar(id, modal) {
       axios
         .post(
           `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=${modal}&id=${id}`
         )
         .then((res) => {
+
           if (modal === "dadosCadastrais") {
             this.cadastro = res.data.cadastro[0];
           }
@@ -168,13 +209,17 @@ const app = new Vue({
           }
           if (modal === "dadosDocumentos") {
             this.anexos = res.data.anexos;
+            this.limparVariaveis()
           }
           if (modal === "dadosObservacao") {
             this.observacoes = res.data.observacoes;
+            this.limparVariaveis()
           }
           if (modal === "dadosEventos") {
             this.eventos = res.data.eventos;
           }
+
+          
         })
         .catch((err) => {
           console.log(err);
@@ -229,7 +274,7 @@ const app = new Vue({
     message() {
       setTimeout(() => {
         this.message = "";
-      }, 1500);
+      }, 2000);
     },
   },
   mounted: function () {
