@@ -362,7 +362,7 @@ include('controller/cadastroClientes.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1">
-                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosCadastrais', 'action=updateCliente')"><img class="iconeSize" :src="iconSave"></button>
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosCadastrais', 'action=updateClienteCadastrais')"><img class="iconeSize" :src="iconSave"></button>
                             </div>
                             <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
@@ -463,6 +463,9 @@ include('controller/cadastroClientes.php');
                         </div>
                         <div class="d-flex flex-row">
                             <div class="p-1">
+                                <button type="button" title="Salvar" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="salvar('formDadosFinanceiros', 'action=updateClienteFinanceiro')"><img class="iconeSize" :src="iconSave"></button>
+                            </div>
+                            <div class="p-1">
                                 <button type="button" title="Dados Cadastrais" class="btn btn-light btn-sm" data-bs-dismiss="modal" @click="visualizar(idCliente, 'dadosCadastrais')"><img class="iconeSize" :src="iconCadastro"></button>
                             </div>
                             <div class="p-1">
@@ -488,53 +491,52 @@ include('controller/cadastroClientes.php');
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Melhor dia para pagamento:</span>
-                            <input id="cliente" name="cliente" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="dia" name="dia" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Consulta Serasa:</span>
-                            <input id="cnpj" name="cnpj" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="serasa" name="serasa" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Limite:</span>
-                            <input id="cep" name="cep" type="text" v-model="financeiro.limite" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="limite" name="limite" type="text" v-model="financeiro.limite" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Carência:</span>
-                            <input id="endereco" name="endereco" type="text" v-model="financeiro.carencia" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="carencia" name="carencia" type="text" v-model="financeiro.carencia" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Desconto Alcool (%):</span>
-                            <input id="cidade" name="cidade" type="text" v-model="financeiro.desc_alcool" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="desc_alcool" name="desc_alcool" type="text" v-model="financeiro.desc_alcool" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Acréscimo Alcool (%):</span>
-                            <input id="complemento" name="complemento" v-model="financeiro.acr_alcool" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
-
+                            <input id="acr_alcool" name="acr_alcool" v-model="financeiro.acr_alcool" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Desconto Gasolina (%):</span>
-                            <input id="bairro" name="bairro" type="text" v-model="financeiro.desc_gasolina" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="desc_gasolina" name="desc_gasolina" type="text" v-model="financeiro.desc_gasolina" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Acréscimo Gasolina (%):</span>
-                            <input id="idXpert" name="idXpert" type="text" v-model="financeiro.acr_gasolina" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="acr_gasolina" name="acr_gasolina" type="text" v-model="financeiro.acr_gasolina" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                         </div>
                         <div class="input-group input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Desconto Diesel S500 (%):</span>
-                            <input id="uf" name="uf" type="text" v-model="financeiro.desc_dieselS500" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="desc_dieselS500" name="desc_dieselS500" type="text" v-model="financeiro.desc_dieselS500" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                             <span class="input-group-text" id="inputGroup-sizing">Acréscimo Diesel S500 (%):</span>
-                            <input id="nomeUsual" name="nomeUsual" type="text" v-model="financeiro.acr_dieselS500" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="acr_dieselS500" name="acr_dieselS500" type="text" v-model="financeiro.acr_dieselS500" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                         </div>
                         <div class="input-group input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Desconto Diesel S10 (%):</span>
-                            <input id="contato" name="contato" type="text" v-model="financeiro.desc_dieselS10" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="desc_dieselS10" name="desc_dieselS10" type="text" v-model="financeiro.desc_dieselS10" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                             <span class="input-group-text" id="inputGroup-sizing">Acréscimo Diesel S10 (%):</span>
-                            <input id="ie" name="ie" type="text" v-model="financeiro.acr_dieselS10" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="acr_dieselS10" name="acr_dieselS10" type="text" v-model="financeiro.acr_dieselS10" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Desconto GNV (%):</span>
-                            <input id="numero" name="numero" type="text" v-model="financeiro.desc_gnv" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="desc_gnv" name="desc_gnv" type="text" v-model="financeiro.desc_gnv" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
 
                             <span class="input-group-text" id="inputGroup-sizing">Acréscimo GNV (%):</span>
-                            <input id="email" name="email" type="email" v-model="financeiro.acr_gnv" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <input id="acr_gnv" name="acr_gnv" type="email" v-model="financeiro.acr_gnv" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                         </div>
                         <div class="input-group input-group-sm mb-3">
                             <span class="input-group-text" id="inputGroup-sizing">Prazo Pgto:</span>
@@ -550,7 +552,7 @@ include('controller/cadastroClientes.php');
                                 <option>30</option>
                             </select>
                             <span class="input-group-text" id="inputGroup-sizing">Pgto:</span>
-                            <select id="tipoPgto" name="tipoPgto" v-model="financeiro.formaPgtoPadrao" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <select id="formaPgtoPadrao" name="formaPgtoPadrao" v-model="financeiro.formaPgtoPadrao" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                                 <option class="versalete10">SELECIONE</option>
                                 <option class="versalete10">A VISTA</option>
                                 <option class="versalete10">A PRAZO</option>
@@ -559,13 +561,13 @@ include('controller/cadastroClientes.php');
                         </div>
                         <hr>
                         <div class="grid text-center">
-                            <input type="checkbox" :checked="fpg1" class="w3-check" name="forma_pgto0" value="1"> Cheque Pré
-                            <input type="checkbox" :checked="fpg2" class="w3-check" name="forma_pgto1" value="1"> Cheque Pré
+                            <input type="checkbox" :checked="fpg1" class="w3-check" name="forma_pgto0" value="1"> Dinheiro
+                            <input type="checkbox" :checked="fpg2" class="w3-check" name="forma_pgto1" value="1"> A Przo
                             <input type="checkbox" :checked="fpg3" class="w3-check" name="forma_pgto2" value="1"> Cheque Pré
                             <input type="checkbox" :checked="fpg4" class="w3-check" name="forma_pgto3" value="1"> Convênio/C.Crédito
-                            <input type="checkbox" :checked="fpg5" class="w3-check" name="forma_pgto4" value="1"> Cartão de Débito
+                            <input type="checkbox" :checked="fpg5" class="w3-check" name="forma_pgto4" value="1"> Débito
                             <input type="checkbox" :checked="fpg6" class="w3-check" name="forma_pgto5" value="1"> Carta Frete
-                            <input type="checkbox" :checked="fpg7" class="w3-check" name="forma_pgto6" value="1"> Boleto Bancário
+                            <input type="checkbox" :checked="fpg7" class="w3-check" name="forma_pgto6" value="1"> Boleto
                             <input type="checkbox" :checked="fpg8" class="w3-check" name="forma_pgto7" value="1"> Cheque à Vista
                         </div>
                         <hr>

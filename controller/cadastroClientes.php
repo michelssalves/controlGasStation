@@ -133,14 +133,11 @@ if ($action == 'addCliente'){
     $forma_pgto5 = ($_REQUEST['forma_pgto5'] ? $_REQUEST['forma_pgto5'] : '0');
     $forma_pgto6 = ($_REQUEST['forma_pgto6'] ? $_REQUEST['forma_pgto6'] : '0');
     $forma_pgto7 = ($_REQUEST['forma_pgto7'] ? $_REQUEST['forma_pgto7'] : '0');
-    $forma_pgto8 = ($_REQUEST['forma_pgto8'] ? $_REQUEST['forma_pgto8'] : '0');
-    $forma_pgto9 = ($_REQUEST['forma_pgto9'] ? $_REQUEST['forma_pgto9'] : '0');
-    $forma_pgtox = ($_REQUEST['forma_pgtox'] ? $_REQUEST['forma_pgtox'] : '0');
     $evento = 'CRIADO CLIENTE';
   
     if($cadastroCliente->insertCliente($razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
     $numEndereco,$complEndereco,$pessoa,$status,$data_cadastro,$formaPgtoPadrao,$prazoPgto,$prazoAbast,$forma_pgto0,
-    $forma_pgto1,$forma_pgto2,$forma_pgto3,$forma_pgto4,$forma_pgto5,$forma_pgto6,$forma_pgto7,$forma_pgto8,$forma_pgto9,$forma_pgtox)) {
+    $forma_pgto1,$forma_pgto2,$forma_pgto3,$forma_pgto4,$forma_pgto5,$forma_pgto6,$forma_pgto7)) {
         
         // FALTA BUSCAR O ULTIMO ID DA TABELA CLIENTES
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
@@ -153,7 +150,7 @@ if ($action == 'addCliente'){
 
     echo json_encode($data);
 }
-if ($action == 'updateCliente'){
+if ($action == 'updateClienteCadastrais'){
 
     //$id = $_REQUEST['id'];
     $id = 10;
@@ -175,8 +172,51 @@ if ($action == 'updateCliente'){
     $pessoa = $_REQUEST['pessoa'];
     $evento = 'ALTERADO CLIENTE';
   
-    if($cadastroCliente->updateCliente($id, $razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
+    if($cadastroCliente->updateClienteCadastral($id, $razaosocial,$emailCliente,$contato,$fone,$cnpj,$endereco,$bairro,$cidade,$uf,$ie,$nomeUsual,$idXpert, $cep,
     $numEndereco,$complEndereco,$pessoa)) {
+        
+       // $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
+
+        $data = array('res' => 'success');
+
+    } else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+}
+if ($action == 'updateClienteFinanceiro'){
+
+    //$id = $_REQUEST['id'];
+    $id = 10;
+    $formaPgtoPadrao = strtoupper(limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
+    $prazoPgto = strtoupper($_REQUEST['prazoPgto']);
+    $prazoAbast = strtoupper($_REQUEST['prazoAbast']);
+    $forma_pgto0 = ($_REQUEST['forma_pgto0'] ? $_REQUEST['forma_pgto0'] : '0');
+    $forma_pgto1 = ($_REQUEST['forma_pgto1'] ? $_REQUEST['forma_pgto1'] : '0');
+    $forma_pgto2 = ($_REQUEST['forma_pgto2'] ? $_REQUEST['forma_pgto2'] : '0');
+    $forma_pgto3 = ($_REQUEST['forma_pgto3'] ? $_REQUEST['forma_pgto3'] : '0');
+    $forma_pgto4 = ($_REQUEST['forma_pgto4'] ? $_REQUEST['forma_pgto4'] : '0');
+    $forma_pgto5 = ($_REQUEST['forma_pgto5'] ? $_REQUEST['forma_pgto5'] : '0');
+    $forma_pgto6 = ($_REQUEST['forma_pgto6'] ? $_REQUEST['forma_pgto6'] : '0');
+    $forma_pgto7 = ($_REQUEST['forma_pgto7'] ? $_REQUEST['forma_pgto7'] : '0');
+    $desc_alcool = $_REQUEST['desc_alcool'];
+    $desc_gasolina = $_REQUEST['desc_gasolina'];
+    $desc_dieselS500 = $_REQUEST['desc_dieselS500']; 
+    $desc_dieselS10 = $_REQUEST['desc_dieselS10'];
+    $desc_gnv = $_REQUEST['desc_gnv'];
+    $acr_alcool = $_REQUEST['acr_alcool'];
+    $acr_gasolina = $_REQUEST['acr_gasolina'];
+    $acr_dieselS500 = $_REQUEST['acr_dieselS500'];
+    $acr_dieselS10 = $_REQUEST['acr_dieselS10']; 
+    $acr_gnv = $_REQUEST['acr_gnv'];
+    $evento = 'ALTERADO FINANCEIRO';
+
+    if($cadastroCliente->updateClienteFinanceiro($id, $formaPgtoPadrao,$prazoPgto,$prazoAbast,$forma_pgto0,
+    $forma_pgto1,$forma_pgto2,$forma_pgto3,$forma_pgto4,$forma_pgto5,$forma_pgto6,$forma_pgto7, $desc_alcool, 
+    $desc_gasolina, $desc_dieselS500, $desc_dieselS10,$desc_gnv,$acr_alcool,$acr_gasolina,$acr_dieselS500, 
+    $acr_dieselS10, $acr_gnv )) {
         
        // $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
