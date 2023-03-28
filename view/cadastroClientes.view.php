@@ -228,7 +228,7 @@ include('controller/cadastroClientes.php');
                     </div>
                     <div class="modal-body">
                         <div class="input-group input-group-sm mb-3">
-                        <input id="id_cliente" name="id_cliente"  v-model="idCliente" type="text">
+                        <input id="id" name="id"  v-model="idCliente" type="text">
                             <span class="input-group-text" id="inputGroup-sizing">Placa:</span>
                             <input id="placa" name="placa" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
                             <span class="input-group-text" id="inputGroup-sizing">Marca:</span>

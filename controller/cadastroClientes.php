@@ -207,3 +207,26 @@ if ($action == 'addAnexo') {
 
     echo json_encode($data);
 }
+if ($action == 'addVeiculo'){
+
+    $marca = strtoupper(limpaObservacao(utf8_decode($_REQUEST['marca'])));
+    $modelo = strtoupper(limpaObservacao(utf8_decode($_REQUEST['modelo'])));
+    $ano = utf8_decode($_REQUEST['ano']);
+    $cor = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cor'])));
+    $placa = strtoupper(limpaObservacao(utf8_decode($_REQUEST['placa'])));
+    $km = utf8_decode($_REQUEST['km']);
+    $combustivel = utf8_decode($_REQUEST['combustivel']);
+    $desconto = utf8_decode($_REQUEST['desconto']);
+    $id = $_REQUEST['id'];
+
+    if($cadastroCliente->insertVeiculo($placa, $marca, $modelo, $ano, $km, $combustivel, $desconto, $cor, $id)) {
+
+        $data = array('res' => 'success');
+
+    } else {
+
+        $data = array('res' => 'error');
+    }
+
+    echo json_encode($data);
+}
