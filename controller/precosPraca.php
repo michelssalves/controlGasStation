@@ -4,6 +4,8 @@ include './controllerAux/validaLogin.php';
 include './controllerAux/functionsAuxiliar.php';
 include '../model/PrecosPraca.php';
 
+$precosPraca = new PrecosPraca();
+
 $action = $_REQUEST['action'];
 
 if ($action == 'findAll') {
@@ -11,8 +13,6 @@ if ($action == 'findAll') {
   $paginaAtual = ($_REQUEST['paginaAtual'] ? $_REQUEST['paginaAtual'] : '1');
   $resultadoPorPagina = 12;
   $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
-
-  $precosPraca = new PrecosPraca();
 
   $rows = $precosPraca->findAll($idUsuario, $start, $resultadoPorPagina);
 
@@ -24,8 +24,6 @@ if ($action == 'findAll') {
 if ($action == 'findById') {
 
   $id = $_REQUEST['id'];
-
-  $precosPraca = new PrecosPraca();
 
   $rows = $precosPraca->findById($id);
 
@@ -43,7 +41,6 @@ if ($action == 'alterarConcorrente') {
   $gnv = $_REQUEST['gnv'];
   $idConc = $_REQUEST['idConcorrente'];
 
-  $precosPraca = new PrecosPraca();
 
   if ($precosPraca->updateConcorrente($gasC, $gasAd, $etanol, $diesel, $dieselAd, $gnv, $idConc)) {
 
@@ -68,7 +65,6 @@ if ($action == 'criarConcorrente') {
   $cidade = limpaObservacao(utf8_decode($_REQUEST['cidade']));
   $uf = limpaObservacao(utf8_decode($_REQUEST['uf']));
   
-  $precosPraca = new PrecosPraca();
 
   if ($precosPraca->insertConcorrente($nome, $bandeira, $idUsuario, $distancia, $endereco, $bairro, $cep, $cidade, $uf, $idXpert)) {
 

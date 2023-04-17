@@ -1,7 +1,3 @@
-<?php
-include('model/Depositos.php');
-include('controller/depositos.php');
-?>
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <div class="tableArea">

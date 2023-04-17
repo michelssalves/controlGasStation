@@ -1,7 +1,3 @@
-<?php
-include('model/CaixaDiario.php');
-include('controller/caixaDiario.php');
-?>
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA E FILTROS-->

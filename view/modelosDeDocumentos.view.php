@@ -1,7 +1,3 @@
-<?php
-include('model/ModelosDeDocumentos.php');
-include('controller/modelosDeDocumentos.php');
-?>
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <div class="table-wrapper">

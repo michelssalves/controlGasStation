@@ -3,10 +3,31 @@
     <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroConcorrentes'>
-            <div class="container d-flex justify-content-center">
+            <div class="container">
                 <div class="row">
                     <div class="col-md-2 p-1">
-                        <button type="button" class='btn btn-light btn-sm' @click="modalCadastrarConcorrente()"><img class="iconeSize" :src="iconCreate"></button>
+                        <select @change="getConcorrentes('filtrar')" id='bandeira' name='bandeira' class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <option selected value='0'>BANDEIRA</option>
+                            <option>RDP</option>
+                            <option>BRANCA</option>
+                            <option>PETROBRAS</option>
+                            <option>IPIRANGA</option>
+                            <option>SHELL</option>
+                            <option>POTENCIAL</option>
+                            <option>ALE</option>
+                            <option>ESSO</option>
+                            <option>TEXACO</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 p-1">
+                        <select @change="getConcorrentes('filtrar')" id="idMed" name="idMed" class='form-select' aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <option value="0">FILIAL</option>
+                            <option v-for="med in meds" :key="med.id" :value="med.id">{{ med.nomecompleto }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2 p-1">
+                        <button type="button" class='btn btn-light btn-sm' @click="limparFiltros()"><img class="iconeSize" :src="iconLimpar"></button>
+                        <button type="button" class='btn btn-light btn-sm'><img class="iconeSize" :src="iconCreate"></button>
                     </div>
                 </div>
             </div>
@@ -36,7 +57,7 @@
                     </thead>
                     <tbody>
                         <tr @click="modalVisualizar(concorrente.cid)" style="cursor:pointer" v-for="concorrente in concorrentes">
-                            <td>{{ concorrente.cid }}</td>
+                            <td>{{ concorrente.idConcorrente }}</td>
                             <td>{{ concorrente.nome }}</td>
                             <td>{{ concorrente.bandeira }}</td>
                             <td>{{ concorrente.distancia }}</td>

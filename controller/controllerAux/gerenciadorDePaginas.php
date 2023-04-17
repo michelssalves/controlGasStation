@@ -12,7 +12,10 @@ $pag[6] = 'view/enviarMateriais.view.php';
 $pag[7] = 'view/solicitacaoDePagamentos.view.php';
 $pag[8] = 'view/modelosDeDocumentos.view.php';
 $pag[9] = 'view/precosPraca.view.php';
-$pag[10] = 'view/cadastroClientes.view.php';
+$pag[10] = 'view/precosPracaAnalise.view.php';
+$pag[11] = 'view/cadastroClientes.view.php';
+$pag[12] = 'view/gpMetas.view.php';
+
 
 if (!$p){  $p = 1; }
 

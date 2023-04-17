@@ -1,7 +1,3 @@
-<?php
-include('model/Serasa.php');
-include('controller/serasa.php');
-?>
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS-->

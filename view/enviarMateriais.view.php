@@ -1,7 +1,3 @@
-<?php
-include('model/EnviarMateriais.php');
-include('controller/enviarMateriais.php');
-?>
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
     <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->

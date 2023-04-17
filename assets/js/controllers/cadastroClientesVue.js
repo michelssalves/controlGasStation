@@ -107,7 +107,7 @@ const app = new Vue({
     onlyNumberCep($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if ((keyCode < 48 || keyCode > 57) && keyCode !== 45) {
-        // 46 é ponto e 44 é virgula 45 é hifen
+        // 46 ï¿½ ponto e 44 ï¿½ virgula 45 ï¿½ hifen
         $event.preventDefault();
       }
     },

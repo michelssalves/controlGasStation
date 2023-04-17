@@ -1,7 +1,3 @@
-<?php
-include('model/ChequesDevolvidos.php');
-include('controller/chequesDevolvidos.php');
-?>
 <div id="app">
     <div class="tableArea">
         <form method='POST' id='formChequesDevolvidos'>
