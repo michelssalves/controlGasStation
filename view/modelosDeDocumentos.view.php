@@ -1,5 +1,6 @@
 <!--INICIO DIV APP VUE JS-->
 <div id="app">
+    <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="table-wrapper">
         <table class="table table-striped table-hover mt-1 ">
             <thead class="header-tabela">
@@ -14,6 +15,6 @@
             </tbody>
         </table>
     </div>
-    </form>
+    <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
 </div>
 <!--FIM DIV APP VUE JS-->

@@ -83,7 +83,7 @@
             </div>
         </form>
     </div>
-    <?php 
+    <?php
     include 'modal/clientes/cadastrarCliente.php';
     include 'modal/clientes/cadastrarVeiculo.php';
     include 'modal/clientes/cadastrarAnexo.php';

@@ -78,14 +78,12 @@ const app = new Vue({
     },
     getConcorrentes(action) {
 
-      const formFiltroPagamentos = document.getElementById(
-        "formFiltroPagamentos"
-      );
-      const formData = new FormData(formFiltroPagamentos);
+      const formFiltroConcorrentes = document.getElementById("formFiltroConcorrentes");
+      const formData = new FormData(formFiltroConcorrentes);
 
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php?action=findAll&paginaAtual=${this.paginaAtual}`,
+          `./controller/precosPraca.php?action=findAll&paginaAtual=${this.paginaAtual}`,
           formData
         )
         .then((res) => {
@@ -112,21 +110,17 @@ const app = new Vue({
       this.uf = "";
     },
     modalCadastrarConcorrente() {
-      const cadastrarConcorrente = new bootstrap.Modal(
-        document.getElementById("cadastrarConcorrente")
-      );
+      const cadastrarConcorrente = new bootstrap.Modal(document.getElementById("cadastrarConcorrente"));
       cadastrarConcorrente.show();
       this.limparCampos();
     },
     salvarConcorrente() {
-      const formCadastrarConcorrente = document.getElementById(
-        "formCadastrarConcorrente"
-      );
+      const formCadastrarConcorrente = document.getElementById("formCadastrarConcorrente");
       const formData = new FormData(formCadastrarConcorrente);
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php",
+          "./controller/precosPraca.php",
           formData
         )
         .then((res) => {
@@ -142,22 +136,18 @@ const app = new Vue({
         });
     },
     modalVisualizar(id) {
-      const visualizarConcorrente = new bootstrap.Modal(
-        document.getElementById("visualizarConcorrente")
-      );
+      const visualizarConcorrente = new bootstrap.Modal(document.getElementById("visualizarConcorrente"));
       visualizarConcorrente.show();
       this.limparCampos();
       this.buscarConcorrente(id);
     },
     salvarAlteracao(id) {
-      const formvisualizarConcorrente = document.getElementById(
-        "formvisualizarConcorrente"
-      );
+      const formvisualizarConcorrente = document.getElementById("formvisualizarConcorrente");
       const formData = new FormData(formvisualizarConcorrente);
 
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php",
+          "./controller/precosPraca.php",
           formData
         )
         .then((res) => {
@@ -176,7 +166,7 @@ const app = new Vue({
     buscarConcorrente(id) {
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/precosPraca.php?action=findById&id=${id}`
+          `./controller/precosPraca.php?action=findById&id=${id}`
         )
         .then((res) => {
         

@@ -64,7 +64,8 @@
             </div>
         </form>
     </div>
-    <?php 
+    <!--/AREA ONDE ESTÁ A TABELA E FILTROS-->
+    <?php
     ?>
 </div>
 <!--FIM DIV APP VUE JS-->
