@@ -1,6 +1,5 @@
-        </div>       
-    </main> 
-    </div>   
-
+                </div>
+            </main>
+        </div>
     </body>
 </html>

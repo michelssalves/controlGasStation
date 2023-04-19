@@ -1,8 +1,14 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/ChequesDevolvidos.php';
+$id = $_SESSION['id_u'];
+
+require_once '../model/ChequesDevolvidos.php';
+
+$chequeDevolvido = new ChequeDevolvido();
+
+$usuario = $chequeDevolvido->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
 
 $action = $_REQUEST['action'];
 
@@ -12,7 +18,7 @@ if($action == 'findAllMeds') {
   
     $rows = $chequeDevolvido->findAllMeds();
   
-    $data = array('rows' => utf8ize($rows));
+    $data = array('rows' => $chequeDevolvido->converterUtf8($rows));
   
     echo json_encode($data);
 }
@@ -66,7 +72,7 @@ if($action == 'findAll') {
 
     $rows = $chequeDevolvido->findAll($FtipoData, $Fmed, $Fstatus, $start, $resultadoPorPagina);
 
-    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+    $data = array('rows' => $chequeDevolvido->converterUtf8($rows[1]), 'results' => $chequeDevolvido->converterUtf8($rows[0]));
 
     echo json_encode($data);
 }
@@ -81,7 +87,7 @@ if($action == 'findById') {
     $rowAnx = $chequeDevolvido->selectAnexos($id);
     $rowEve = $chequeDevolvido->selectEventos($id);
 
-    $data = array('rows' => utf8ize($rows),  'obs' => utf8ize($rowObs),  'anexos' => utf8ize($rowAnx),  'eventos' => utf8ize($rowEve));
+    $data = array('rows' => $chequeDevolvido->converterUtf8($rows),  'obs' => $chequeDevolvido->converterUtf8($rowObs),  'anexos' => $chequeDevolvido->converterUtf8($rowAnx),  'eventos' => $chequeDevolvido->converterUtf8($rowEve));
 
     echo json_encode($data);
 }
@@ -107,7 +113,7 @@ if($action == 'gravarAnexo') {
         
         if($chequeDevolvido->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+            $chequeDevolvido->uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
             $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
             $chequeDevolvido->updateUltimaAlteracao($id);
 
@@ -127,7 +133,7 @@ if($action == 'gravarAnexo') {
 if($action == 'addObservacao') {
 
     $id = $_REQUEST['id'];
-    $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
+    $observacao = $chequeDevolvido->limpaObservacao(utf8_decode($_REQUEST['observacao']));
     $evento = 'Incluiu Observação';
 
     $chequeDevolvido = new ChequeDevolvido();
@@ -165,7 +171,7 @@ if($action == 'quitarCheque') {
 
        if($chequeDevolvido->insertAnexo($descricao, $extensao, $id, $idUsuario, $usuarioLogado)){
 
-        uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+        $chequeDevolvido->uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
         $chequeDevolvido->insertEvento($evento, $id, $idUsuario, $usuarioLogado);
         $chequeDevolvido->updateDataQuitacao($id, $status);
      
@@ -226,3 +232,8 @@ if($action == 'considerarPfin') {
 
     echo json_encode($data);
 }
+}else{
+
+    header("https://www.rdppetroleo.com.br/medwebnovo/?p=2");
+    
+  }

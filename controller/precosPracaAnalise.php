@@ -1,37 +1,49 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/PrecosPracaAnalise.php';
+$id = $_SESSION['id_u'];
+
+require_once '../model/PrecosPracaAnalise.php';
 
 $precosPracaAnalise = new PrecosPracaAnalise();
 
-$action = $_REQUEST['action'];
+$usuario = $precosPracaAnalise->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
 
-if ($action == 'findAll') {
+    $action = $_REQUEST['action'];
 
-$med = $_REQUEST['idMed'];
-$bandeira = $_REQUEST['bandeira'];
+    if ($action == 'findAll') {
 
-if($med <> "0"){ $filtroMed = "AND id_filial = $med "; }
-if($bandeira <> "0"){ $filtroBandeira = "AND c.bandeira = '$bandeira'"; }
+        $med = $_REQUEST['idMed'];
+        $bandeira = $_REQUEST['bandeira'];
 
-    $paginaAtual = ($_REQUEST['paginaAtual'] ? $_REQUEST['paginaAtual'] : '1');
-    $resultadoPorPagina = 12;
-    $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
-  
-    $rows = $precosPracaAnalise->findAll($filtroBandeira, $filtroMed, $start, $resultadoPorPagina);
-  
-    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
-  
-    echo json_encode($data);
-  
-}
-if($action == 'findAllMeds') {
+        if ($med <> "0") {
+            $filtroMed = "AND id_filial = $med ";
+        }
+        if ($bandeira <> "0") {
+            $filtroBandeira = "AND c.bandeira = '$bandeira'";
+        }
 
-    $rows = $precosPracaAnalise->findAllMeds();
-  
-    $data = array('rows' => utf8ize($rows));
-  
-    echo json_encode($data);
-}
+        $paginaAtual = ($_REQUEST['paginaAtual'] ? $_REQUEST['paginaAtual'] : '1');
+        $resultadoPorPagina = 12;
+        $start = ($paginaAtual * $resultadoPorPagina + 1) - $resultadoPorPagina;
+
+        $rows = $precosPracaAnalise->findAll($filtroBandeira, $filtroMed, $start, $resultadoPorPagina);
+
+        $data = array('rows' => $precosPracaAnalise->converterUtf8($rows[1]), 'results' => $precosPracaAnalise->converterUtf8($rows[0]));
+
+        echo json_encode($data);
+    }
+    if ($action == 'findAllMeds') {
+
+        $rows = $precosPracaAnalise->findAllMeds();
+
+        $data = array('rows' => $precosPracaAnalise->converterUtf8($rows));
+
+        echo json_encode($data);
+    }
+}else{
+
+    header("https://www.rdppetroleo.com.br/medwebnovo/?p=10");
+    
+  }

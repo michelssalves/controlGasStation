@@ -82,7 +82,7 @@ const app = new Vue({
     getAllMeds() {
       axios
         .post(
-        "./controller/chequesDevolvidos.php?action=findAllMeds",
+        "./controller/precosPracaAnalise.php?action=findAllMeds",
    
       )
         .then((res) => {

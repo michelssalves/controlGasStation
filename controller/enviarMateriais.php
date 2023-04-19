@@ -1,28 +1,30 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/EnviarMateriais.php';
+$id = $_SESSION['id_u'];
+
+require_once '../model/EnviarMateriais.php';
+
+$enviarMaterial = new EnviarMaterial();
+
+$usuario = $enviarMaterial->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
 
 $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-  $enviarMaterial = new EnviarMaterial();
+  $rows = $enviarMaterial->findAllMeds();
 
-  $rows = $enviarMaterial->selectAllMeds();
-
-  $data = array('rows' => utf8ize($rows));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows));
 
   echo json_encode($data);
 }
 if ($action == 'findAllClasses') {
 
-  $enviarMaterial = new EnviarMaterial();
-
   $rows = $enviarMaterial->selectAllClasses();
 
-  $data = array('rows' => utf8ize($rows));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows));
 
   echo json_encode($data);
 }
@@ -30,11 +32,9 @@ if ($action == 'findProdutos') {
 
   $classe = $_REQUEST['classe'];
 
-  $enviarMaterial = new EnviarMaterial();
-
   $rows = $enviarMaterial->selectProdutos($classe);
 
-  $data = array('rows' => utf8ize($rows));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows));
 
   echo json_encode($data);
 }
@@ -63,11 +63,9 @@ if ($action == 'findAll') {
     $Fstatus =  "AND status IN ('" . $status1 . "','" . $status2 . "','" . $status3 . "','" . $status4 . "')";
   }
 
-  $enviarMaterial = new EnviarMaterial();
-
   $rows = $enviarMaterial->findAll($Fstatus, $Fmed, $Fproduto, $start, $resultadoPorPagina);
 
-  $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows[1]), 'results' => $enviarMaterial->converterUtf8($rows[0]));
 
   echo json_encode($data);
 }
@@ -75,13 +73,11 @@ if ($action == 'findById') {
 
   $id = $_REQUEST['id'];
 
-  $enviarMaterial = new EnviarMaterial();
-
   $rows = $enviarMaterial->findById($id);
 
   $rowObs = $enviarMaterial->selectObservacao($id);
 
-  $data = array('rows' => utf8ize($rows),  'rowsObs' => utf8ize($rowObs));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows),  'rowsObs' => $enviarMaterial->converterUtf8($rowObs));
 
   echo json_encode($data);
 }
@@ -89,19 +85,15 @@ if ($action == 'findByIdItem') {
 
   $id = $_REQUEST['id'];
 
-  $enviarMaterial = new EnviarMaterial();
-
   $rows = $enviarMaterial->findByIdItem($id);
 
-  $data = array('rows' => utf8ize($rows));
+  $data = array('rows' => $enviarMaterial->converterUtf8($rows));
 
   echo json_encode($data);
 }
 if ($action == 'cancelarPedido') {
 
   $id = $_REQUEST['idPedido'];
-
-  $enviarMaterial = new EnviarMaterial();
 
   if ($enviarMaterial->updateCancelarPedido($id)) {
 
@@ -115,8 +107,6 @@ if ($action == 'cancelarPedido') {
 if ($action == 'cancelarItem') {
 
   $id = $_REQUEST['idItem'];
-
-  $enviarMaterial = new EnviarMaterial();
 
   if ($enviarMaterial->updateCancelarItem($id)) {
 
@@ -132,8 +122,6 @@ if ($action == 'alterarItem') {
   $id = $_REQUEST['idItem'];
   $quantidade = $_REQUEST['quantidade'];
 
-  $enviarMaterial = new EnviarMaterial();
-
   if ($enviarMaterial->updateQtdeItem($id, $quantidade)) {
 
     $data = array('res' => 'success', 'msg' => 'Alterado Com Sucesso');
@@ -146,10 +134,7 @@ if ($action == 'alterarItem') {
 if ($action == 'addObservacao') {
 
   $id = $_REQUEST['idPedido'];
-  $observacao = limpaObservacao(utf8_decode($_REQUEST['observacao']));
-
-
-  $enviarMaterial = new EnviarMaterial();
+  $observacao = $enviarMaterial->limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
   if ($enviarMaterial->insertObservacao($id, $usuarioLogado, $observacao)) {
 
@@ -170,8 +155,6 @@ if ($action == 'alterarStatus') {
   } elseif ($status == 'ENVIADO') {
     $status = 'FINALIZADO';
   }
-
-  $enviarMaterial = new EnviarMaterial();
 
   if ($enviarMaterial->updateStatus($id, $status)) {
 
@@ -194,8 +177,6 @@ if ($action == 'solicitacaoMateriais') {
     $idProduto[$x] = $listaItems[$x]['idProduto'];
     $descricao[$x] = $listaItems[$x]['produto'];
   }
-
-  $enviarMaterial = new EnviarMaterial();
   $enviarMaterial->insertPedido($idUsuario);
   $idPedido = $enviarMaterial->findLastId();
  
@@ -208,4 +189,9 @@ if ($action == 'solicitacaoMateriais') {
   }
 
   echo json_encode($data);
+}
+}else{
+
+  header("https://www.rdppetroleo.com.br/medwebnovo/?p=6");
+  
 }

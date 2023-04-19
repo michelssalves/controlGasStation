@@ -1,10 +1,14 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/CadastroClientes.php';
+$id = $_SESSION['id_u'];
+
+require_once '../model/CadastroClientes.php';
 
 $cadastroCliente = new CadastroCliente();
+
+$usuario = $cadastroCliente->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
 
 $action = $_REQUEST['action'];
 
@@ -14,7 +18,7 @@ if ($action == 'dadosCadastrais') {
 
     $rows = $cadastroCliente->dadosCadastrais($id);
 
-    $data = array('cadastro' => utf8ize($rows));
+    $data = array('cadastro' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -24,7 +28,7 @@ if ($action == 'dadosFinanceiros') {
 
     $rows = $cadastroCliente->dadosFinanceiros($id);
 
-    $data = array('financeiro' => utf8ize($rows));
+    $data = array('financeiro' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -34,7 +38,7 @@ if ($action == 'dadosVeiculos') {
 
     $rows = $cadastroCliente->dadosVeiculos($id);
 
-    $data = array('veiculos' => utf8ize($rows));
+    $data = array('veiculos' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -44,7 +48,7 @@ if ($action == 'dadosDocumentos') {
 
     $rows = $cadastroCliente->dadosDocumentos($id);
 
-    $data = array('anexos' => utf8ize($rows));
+    $data = array('anexos' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -54,7 +58,7 @@ if ($action == 'dadosObservacao') {
 
     $rows = $cadastroCliente->dadosObservacao($id);
 
-    $data = array('observacoes' => utf8ize($rows));
+    $data = array('observacoes' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -64,7 +68,7 @@ if ($action == 'dadosEventos') {
 
     $rows = $cadastroCliente->dadosEventos($id);
 
-    $data = array('eventos' => utf8ize($rows));
+    $data = array('eventos' => $cadastroCliente->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -97,32 +101,32 @@ if ($action == 'findAll') {
     
     $rows = $cadastroCliente->findAll($FStatus, $FFilial, $FData, $start, $resultadoPorPagina);
 
-    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+    $data = array('rows' => $cadastroCliente->converterUtf8($rows[1]), 'results' => $cadastroCliente->converterUtf8($rows[0]));
 
     echo json_encode($data);
 
 }
 if ($action == 'addCliente'){
 
-    $razaosocial = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cliente'])));
-    $emailCliente = limpaObservacao(utf8_decode($_REQUEST['email']));
-    $contato =  strtoupper(limpaObservacao(utf8_decode($_REQUEST['contato'])));
+    $razaosocial = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['cliente'])));
+    $emailCliente = $cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['email']));
+    $contato =  strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['contato'])));
     $fone = $_REQUEST['fone'];
     $cnpj = $_REQUEST['cnpj'];
-    $endereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['endereco'])));
-    $bairro = strtoupper(limpaObservacao(utf8_decode($_REQUEST['bairro'])));
-    $cidade = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cidade'])));
-    $uf = strtoupper(limpaObservacao(utf8_decode($_REQUEST['uf'])));
+    $endereco = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['endereco'])));
+    $bairro = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['bairro'])));
+    $cidade = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['cidade'])));
+    $uf = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['uf'])));
     $ie = $_REQUEST['ie'];
-    $nomeUsual = strtoupper(limpaObservacao(utf8_decode($_REQUEST['nomeUsual'])));
+    $nomeUsual = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['nomeUsual'])));
     $idXpert = $_REQUEST['idXpert'];
     $cep = $_REQUEST['cep'];
     $numEndereco = $_REQUEST['numEndereco'];
-    $complEndereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['complEndereco'])));
+    $complEndereco = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['complEndereco'])));
     $pessoa = $_REQUEST['pessoa'];
     $status = 'NOVO';
     $data_cadastro = date('Y-m-d');
-    $formaPgtoPadrao = strtoupper(limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
+    $formaPgtoPadrao = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
     $prazoPgto = strtoupper($_REQUEST['prazoPgto']);
     $prazoAbast = strtoupper($_REQUEST['prazoAbast']);
     $forma_pgto0 = ($_REQUEST['forma_pgto0'] ? $_REQUEST['forma_pgto0'] : '0');
@@ -144,12 +148,12 @@ if ($action == 'addCliente'){
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
         $msg = "Cadastrado com Sucesso!";
-        $data = array('res' => 'success', 'msg' => utf8ize($msg));
+        $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
     } else {
 
         $msg = "Erro no Cadastrado!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
   
     }
 
@@ -158,21 +162,21 @@ if ($action == 'addCliente'){
 if ($action == 'updateClienteCadastrais'){
 
     $id = $_REQUEST['id'];
-    $razaosocial = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cliente'])));
-    $emailCliente = limpaObservacao(utf8_decode($_REQUEST['email']));
-    $contato =  strtoupper(limpaObservacao(utf8_decode($_REQUEST['Contato'])));
+    $razaosocial = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['cliente'])));
+    $emailCliente = $cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['email']));
+    $contato =  strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['Contato'])));
     $fone = $_REQUEST['fone'];
     $cnpj = $_REQUEST['cnpj'];
-    $endereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['endereco'])));
-    $bairro = strtoupper(limpaObservacao(utf8_decode($_REQUEST['bairro'])));
-    $cidade = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cidade'])));
-    $uf = strtoupper(limpaObservacao(utf8_decode($_REQUEST['uf'])));
+    $endereco = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['endereco'])));
+    $bairro = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['bairro'])));
+    $cidade = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['cidade'])));
+    $uf = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['uf'])));
     $ie = $_REQUEST['ie'];
-    $nomeUsual = strtoupper(limpaObservacao(utf8_decode($_REQUEST['nomeUsual'])));
+    $nomeUsual = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['nomeUsual'])));
     $idXpert = $_REQUEST['idXpert'];
     $cep = $_REQUEST['cep'];
     $numEndereco = $_REQUEST['numEndereco'];
-    $complEndereco = strtoupper(limpaObservacao(utf8_decode($_REQUEST['complEndereco'])));
+    $complEndereco = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['complEndereco'])));
     $pessoa = $_REQUEST['pessoa'];
     $evento = 'ALTERADO CLIENTE';
   
@@ -182,12 +186,12 @@ if ($action == 'updateClienteCadastrais'){
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
         $msg = "Atualizado com Sucesso!";
-        $data = array('res' => 'success', 'msg' => utf8ize($msg));
+        $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
     } else {
 
         $msg = "Erro na atualização!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
     }
 
     echo json_encode($data);
@@ -195,7 +199,7 @@ if ($action == 'updateClienteCadastrais'){
 if ($action == 'updateClienteFinanceiro'){
 
     $id = $_REQUEST['id'];
-    $formaPgtoPadrao = strtoupper(limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
+    $formaPgtoPadrao = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['formaPgtoPadrao'])));
     $prazoPgto = strtoupper($_REQUEST['prazoPgto']);
     $prazoAbast = strtoupper($_REQUEST['prazoAbast']);
     $forma_pgto0 = ($_REQUEST['forma_pgto0'] ? $_REQUEST['forma_pgto0'] : '0');
@@ -226,19 +230,19 @@ if ($action == 'updateClienteFinanceiro'){
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
         $msg = "Atualizado com Sucesso!";
-        $data = array('res' => 'success', 'msg' => utf8ize($msg));
+        $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
     } else {
 
         $msg = "Erro na atualização!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
     }
 
     echo json_encode($data);
 }
 if ($action == 'addObservacao'){
 
-    $obs = strtoupper(limpaObservacao(utf8_decode($_REQUEST['observacao'])));
+    $obs = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['observacao'])));
     $id = $_REQUEST['id'];
     $evento = 'INSERIU OBSERVAÇÃO';
   
@@ -247,12 +251,12 @@ if ($action == 'addObservacao'){
         $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
         $msg = "Adiconado Observação!";
-        $data = array('res' => 'success', 'msg' => utf8ize($msg));
+        $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
     } else {
 
         $msg = "Erro na observação!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
     }
 
     echo json_encode($data);
@@ -260,7 +264,7 @@ if ($action == 'addObservacao'){
 if ($action == 'addAnexo') {
 
     $id = $_REQUEST['id'];
-    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
+    $descricao = $cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
     $evento = 'INCLUSÃO DE ANEXO';
 
     if ($_FILES['file']['name'] <> '') {
@@ -273,38 +277,38 @@ if ($action == 'addAnexo') {
             $localDeArmazenagem = "../assets/docs/docCliente/";
             $tabela = "med_cliente_documento";
 
-            if(uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)){
+            if($cadastroCliente->uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem)){
             
                 $cadastroCliente->insertEvento($id, $usuarioLogado, $evento);
 
                 $msg = "Anexado Com sucesso!";
-                $data = array('res' => 'success', 'msg' => utf8ize($msg));
+                $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
             } else {
                 
                 $msg = "Erro no upload do arquivo!";
-                $data = array('res' => 'error', 'msg' => utf8ize($msg));
+                $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
             }
         } else {
 
             $msg = "Erro ao registrar anexo na tabela!";
-            $data = array('res' => 'error', 'msg' => utf8ize($msg));
+            $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
         }
     } else {
 
         $msg = "Não foi adicionado anexo!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
     }
 
     echo json_encode($data);
 }
 if ($action == 'addVeiculo'){
 
-    $marca = strtoupper(limpaObservacao(utf8_decode($_REQUEST['marca'])));
-    $modelo = strtoupper(limpaObservacao(utf8_decode($_REQUEST['modelo'])));
+    $marca = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['marca'])));
+    $modelo = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['modelo'])));
     $ano = utf8_decode($_REQUEST['ano']);
-    $cor = strtoupper(limpaObservacao(utf8_decode($_REQUEST['cor'])));
-    $placa = strtoupper(limpaObservacao(utf8_decode($_REQUEST['placa'])));
+    $cor = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['cor'])));
+    $placa = strtoupper($cadastroCliente->limpaObservacao(utf8_decode($_REQUEST['placa'])));
     $km = utf8_decode($_REQUEST['km']);
     $combustivel = utf8_decode($_REQUEST['combustivel']);
     $desconto = utf8_decode($_REQUEST['desconto']);
@@ -313,13 +317,18 @@ if ($action == 'addVeiculo'){
     if($cadastroCliente->insertVeiculo($placa, $marca, $modelo, $ano, $km, $combustivel, $desconto, $cor, $id)) {
 
         $msg = "Cadastrado com sucesso!";
-        $data = array('res' => 'success', 'msg' => utf8ize($msg));
+        $data = array('res' => 'success', 'msg' => $cadastroCliente->converterUtf8($msg));
 
     } else {
 
         $msg = "Erro ao adicionar o veiculo!";
-        $data = array('res' => 'error', 'msg' => utf8ize($msg));
+        $data = array('res' => 'error', 'msg' => $cadastroCliente->converterUtf8($msg));
     }
 
     echo json_encode($data);
+}
+}else{
+
+    header("https://www.rdppetroleo.com.br/medwebnovo/?p=11");
+    
 }

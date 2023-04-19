@@ -1,22 +1,22 @@
-Projeto está estruturado em MVC com apoio no front do framework VUEJS fazendo requisições ao backend pelo AXIOS
-Para criar um novo Menu Primeiro voce irá na pasta VIEW->PARTIALS->HEAD
-Criar um arquivo head.php que esteja dentro dessa pasta e renomear para o novo menu que deseja criar
-Exemplo: novoMenu.head.php 
-Dentro desse arquivo gerado necessario alterar o nome do ultimo script de importação para o nome do menu novo que deseja criar
-Exemplo: <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/novoMenuVue.js"></script>
-Apos isso ir para a pasta ASSETS->JS->CONTROLLER e dentro dela criar o arquivo java script que sera o monitoramento do VUEJS ao seu front
-Você pode copiar um dos existentes e renomear, importante apagar os dados da estrutura para não gerar algum erro
-Exemplo: novoMenuVue.js
-Apos isso ir na pasta VIEW e criar nosso arquivo HTML que o VUEJS irá monitorar, você pode copiar um existente ou criar um novo
-O novo devera ter o nome conforme o exemplo abaixo
-Exemplo: novoMenu.view.php
-Dentro de arquivo crie um div com o id app e dentro dele você ira escrever todo o conteudo HTML
-Para que o VUE funcione no html todo conteudo precisa estar dentro da div app
-Exemplo: <div id="app"> CONTEUDO DA PAGINA </div>
-Apos isso va na pasta controller e crie um arquivo conforme o exemplo abaixo
-Exemplo: novoMenu.php
-Para esse arquivo será feito todas as requisições HTTP seja ela via AJAX, AXIOS OU OUTROS
-Nesse arquivo será tratado as REQUEST antes de realmente solicitar algo ao banco de Dados
-Apos isso va na pasta model e crie um arquivo conforme exemplo abaixo
-Exemplo: NovoMenu.php
-Nesse arquivo está contido todas as funçoões e busca ao bando de dados
+1 -> Projeto está estruturado em MVC com apoio no front do framework VUEJS fazendo requisições ao backend pelo AXIOS
+2 -> Para criar um novo Menu Primeiro voce irá na pasta VIEW->PARTIALS->HEAD
+3 -> Criar um arquivo head.php que esteja dentro dessa pasta e renomear para o novo menu que deseja criar
+4 -> Exemplo: novoMenu.head.php 
+5 -> Dentro desse arquivo gerado necessario alterar o nome do ultimo script de importação para o nome do menu novo que deseja criar
+6 -> Exemplo: <script type="module" src="https://www.rdppetroleo.com.br/medwebnovo/assets/js/controllers/novoMenuVue.js"></script>
+7 -> Apos isso ir para a pasta ASSETS->JS->CONTROLLER e dentro dela criar o arquivo java script que sera o monitoramento do VUEJS ao seu front
+8 -> Você pode copiar um dos existentes e renomear, importante apagar os dados da estrutura para não gerar algum erro
+9 -> Exemplo: novoMenuVue.js
+10 -> Apos isso ir na pasta VIEW e criar nosso arquivo HTML que o VUEJS irá monitorar, você pode copiar um existente ou criar um novo
+11 -> O novo devera ter o nome conforme o exemplo abaixo
+12 -> Exemplo: novoMenu.view.php
+13 -> Dentro de arquivo crie um div com o id app e dentro dele você ira escrever todo o conteudo HTML
+14 -> Para que o VUE funcione no html todo conteudo precisa estar dentro da div app
+15 -> Exemplo: <div id="app"> CONTEUDO DA PAGINA </div>
+16 -> Apos isso va na pasta controller e crie um arquivo conforme o exemplo abaixo
+17 -> Exemplo: novoMenu.php
+18 -> Para esse arquivo será feito todas as requisições HTTP seja ela via AJAX, AXIOS OU OUTROS
+19 -> Nesse arquivo será tratado as REQUEST antes de realmente solicitar algo ao banco de Dados
+20 -> Apos isso va na pasta model e crie um arquivo conforme exemplo abaixo
+21 -> Exemplo: NovoMenu.php
+22 -> Nesse arquivo está contido todas as funçoões e busca ao bando de dados

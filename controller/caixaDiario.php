@@ -1,18 +1,22 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/CaixaDiario.php';
+$id = $_SESSION['id_u'];
+
+require_once '../model/CaixaDiario.php';
+
+$caixaDiario = new CaixaDiario();
+
+$usuario = $caixaDiario->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
 
 $action = $_REQUEST['action'];
 
 if ($action == 'findAllMeds') {
 
-    $caixaDiario = new CaixaDiario();
-
     $rows = $caixaDiario->findAllMeds();
 
-    $data = array('rows' => utf8ize($rows));
+    $data = array('rows' => $caixaDiario->converterUtf8($rows));
 
     echo json_encode($data);
 }
@@ -49,11 +53,9 @@ if ($action == 'findAll') {
         $filtroConciliacao = "AND conc = '$concBancaria'";
     }
 
-    $caixaDiario = new CaixaDiario();
-
     $rows = $caixaDiario->findAll($filtroStatus, $filtroFilial, $filtroData, $filtroTurno, $filtroConciliacao, $start, $resultadoPorPagina);
 
-    $data = array('rows' => utf8ize($rows[1]), 'results' => utf8ize($rows[0]));
+    $data = array('rows' => $caixaDiario->converterUtf8($rows[1]), 'results' => $caixaDiario->converterUtf8($rows[0]));
 
     echo json_encode($data);
 }
@@ -61,24 +63,20 @@ if ($action == 'findById') {
 
     $id = $_REQUEST['id'];
 
-    $caixaDiario = new CaixaDiario();
-
     $rows = $caixaDiario->findById($id);
 
-    $data = array('rows' => utf8ize($rows));
+    $data = array('rows' => $caixaDiario->converterUtf8($rows));
 
     echo json_encode($data);
 }
 if ($action == 'addAnexo') {
 
     $id = $_REQUEST['id'];
-    $descricao = limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
+    $descricao = $caixaDiario->limpaObservacao(utf8_decode($_REQUEST['descricaoAnexo']));
 
     if ($_FILES['file']['name'] <> '') {
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
-
-        $caixaDiario = new CaixaDiario();
 
         if ($caixaDiario->insertAnexo($id, $descricao, $extensao)) {
 
@@ -86,7 +84,7 @@ if ($action == 'addAnexo') {
             $localDeArmazenagem = "../assets/docs/fechamentoCaixa/";
             $tabela = "ccp_fechamentoCaixa_anexo";
 
-            uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
+            $caixaDiario->uploadArquivo($temp, $extensao, $tabela, $localDeArmazenagem);
 
             $data = array('res' =>  'success', 'msg' => 'Anexado com sucesso!');
         } else {
@@ -103,9 +101,7 @@ if ($action == 'addAnexo') {
 if ($action == 'gravarObs') {
 
     $id = $_REQUEST['id'];
-    $obs = limpaObservacao(utf8_decode($_REQUEST['observacao']));
-
-    $caixaDiario = new CaixaDiario();
+    $obs = $caixaDiario->limpaObservacao(utf8_decode($_REQUEST['observacao']));
 
     if ($caixaDiario->insertObservacoes($id, $usuarioLogado, $obs)) {
 
@@ -130,7 +126,6 @@ if ($action == 'alterarCaixa') {
     $conciliacao = $_REQUEST['conciliacao'];
     $fechamento = $_REQUEST['fechamento'];
     $observacao = $_REQUEST['observacao'];
-    $caixaDiario = new CaixaDiario();
 
     if ($caixaDiario->updateCaixa($id, $dinheiro, $cheque, $brinks, $pix, $med, $data, $definitivo, $conciliacao, $fechamento, $observacao)) {
 
@@ -145,11 +140,9 @@ if ($action == 'alterarCaixa') {
 if ($action == 'cancelarCaixa') {
 
     $id = $_REQUEST['id_requisicao'];
-    $motivoCancelamento = limpaObservacao(utf8_decode($_REQUEST['motivoCancelamento']));
+    $motivoCancelamento = $caixaDiario->limpaObservacao(utf8_decode($_REQUEST['motivoCancelamento']));
     $observacao = 'ALTEROU O STATUS PARA CANCELADO';
     $status = 'CANCELADO';
-
-    $caixaDiario = new CaixaDiario();
 
     if ($caixaDiario->updateCancelarCaixa($id, $status, $observacao)) {
 
@@ -168,8 +161,6 @@ if ($action == 'abrirCaixa') {
     $id = $_REQUEST['id'];
     $status = 'ABERTO';
     $observacao = 'ALTEROU O STATUS PARA ABERTO';
-
-    $caixaDiario = new CaixaDiario();
 
     if ($caixaDiario->updateCancelarCaixa($id, $status, $observacao)) {
 
@@ -191,8 +182,6 @@ if ($action == 'fecharCaixa') {
     $conc = $_REQUEST['conc'];
     $caixa = $_REQUEST['caixa'];
 
-    $caixaDiario = new CaixaDiario();
-
     if ($conc == 'SIM' && $caixa == 'SIM') {
 
         $caixaDiario->updateCancelarCaixa($id, $status, $observacao);
@@ -210,13 +199,11 @@ if ($action == 'findAnexosById') {
 
     $id = $_REQUEST['id'];
 
-    $caixaDiario = new CaixaDiario();
-
     $rows = $caixaDiario->selectAnexos($id);
 
     if (!empty($rows)) {
 
-        $data = array('rows' => utf8ize($rows));
+        $data = array('rows' => $caixaDiario->converterUtf8($rows));
     } else {
 
         $data = array('res' => 'errorAnexos');
@@ -228,13 +215,11 @@ if ($action == 'findEventosById') {
 
     $id = $_REQUEST['id'];
 
-    $caixaDiario = new CaixaDiario();
-
     $rows = $caixaDiario->selectEventos($id);
 
     if (!empty($rows)) {
 
-        $data = array('rows' => utf8ize($rows));
+        $data = array('rows' => $caixaDiario->converterUtf8($rows));
     } else {
 
         $data = array('res' => 'errorAnexos');
@@ -250,10 +235,9 @@ if ($action == 'criarFechamento') {
     $pix = $_REQUEST['pix'];
     $dataCaixa = $_REQUEST['dataCaixa'];
     $turnos_definitivo = utf8_decode($_REQUEST['turnos_definitivo']);
-    $obs = limpaObservacao(utf8_decode($_REQUEST['criarObs']));
+    $obs = $caixaDiario->limpaObservacao(utf8_decode($_REQUEST['criarObs']));
 
     if(isset($turnos_definitivo)){
-    $caixaDiario = new CaixaDiario();
 
     if ($caixaDiario->insertFechamento($dinheiro, $cheque, $brinks, $pix, $dataCaixa, $turnos_definitivo, $obs, $idUsuario)) {
 
@@ -272,7 +256,6 @@ if ($action == 'addDocumentos') {
 
         $extensao = strtolower(end(explode('.', $_FILES['file']['name'])));
         $descricao = explode('.', $_FILES['file']['name']);
-        $caixaDiario = new CaixaDiario();
         $id = $caixaDiario->findLastId();
         
         $caixaDiario->insertAnexo($id, $descricao[0], $extensao);
@@ -286,7 +269,7 @@ if ($action == 'addDocumentos') {
             $token = md5(time() . rand(0, 9999) . time());
             $nomeDoArquivo = "$idAnexo.$extensao";
 
-            uploadArquivoCaixa($temp, $localDeArmazenagem, $nomeDoArquivo);
+            $caixaDiario->uploadArquivoCaixa($temp, $localDeArmazenagem, $nomeDoArquivo);
 
             $data = array('res' =>  'success', 'msg' => 'Salvo com sucesso!');
         }
@@ -297,3 +280,8 @@ if ($action == 'addDocumentos') {
 
     echo json_encode($data);
 }
+}else{
+
+    header("https://www.rdppetroleo.com.br/medwebnovo/?p=4");
+    
+  }

@@ -14,7 +14,7 @@
         <li><a class="app-menu__item <?= $active[7]; ?>" href="?p=7"><i class="app-menu__icon fa-solid fa-comments-dollar"></i><span class="app-menu__label">Sol Pagamentos</span></a></li>
         <li><a class="app-menu__item <?= $active[8]; ?>" href="?p=8"><i class="app-menu__icon fa-solid fa-file-pdf"></i><span class="app-menu__label">Documentos</span></a></li>
         <li><a class="app-menu__item <?= $active[9]; ?>" href="?p=9"><i class="app-menu__icon fa-solid fa-chart-line"></i><span class="app-menu__label">Preços Praça</span></a></li>
-        <li><a class="app-menu__item <?= $active[10]; ?>" href="?p=10"><i class="app-menu__icon fa-solid fa-flask-vial"></i><span class="app-menu__label">Anl Concorrencia</span></a></li>
+        <li><a class="app-menu__item <?= $active[10]; ?>" href="?p=10"><i class="app-menu__icon fa-solid fa-flask-vial"></i><span class="app-menu__label">Preços Praça Análise</span></a></li>
         <li><a class="app-menu__item <?= $active[11]; ?>" href="?p=11"><i class="app-menu__icon fa-solid fa-user-tie"></i><span class="app-menu__label">Clientes</span></a></li> 
         <li><a class="app-menu__item <?= $active[12]; ?>" href="?p=12"><i class="app-menu__icon fa-solid fa-calculator"></i><span class="app-menu__label">GP Metas</span></a></li>
         <!--<li><a class="app-menu__item <?= $active[13]; ?>" href="?p=13"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Ctrl Qualidade</span></a></li>-->
@@ -22,6 +22,6 @@
 </aside>
 <?php include 'header.php'; ?>
 <main class="app-content">
-    <div>
+   <div>
 
 <?php include 'preLoader.php'; ?>

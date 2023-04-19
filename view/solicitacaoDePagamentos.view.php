@@ -98,7 +98,7 @@
     include 'modal/solicitacaoDePagamentos/visualizarPagamento.php';
     include 'modal/solicitacaoDePagamentos/cadastrarAnexo.php';
     include 'modal/solicitacaoDePagamentos/cadastrarObservacao.php';
-    include 'modal/solicitacaoDePagamentos/cadastrarSolicitaoDePagamento.php';
+    include 'modal/solicitacaoDePagamentos/cadastrarSolicitacaoDePagamento.php';
     ?>
 </div>
 <!--FIM DIV APP VUE JS-->

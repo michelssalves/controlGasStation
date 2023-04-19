@@ -1,29 +1,40 @@
 <?php
 session_start();
-include './controllerAux/validaLogin.php';
-include './controllerAux/functionsAuxiliar.php';
-include '../model/ModelosDeDocumentos.php';
+$id = $_SESSION['id_u'];
 
-$action = $_REQUEST['action'];
+require_once '../model/ModelosDeDocumentos.php';
 
-if($action == 'findAll') {
+$modelosDeDocumento = new ModelosDeDocumento();
 
-  $fileList = glob('../assets/docs/modelosDeDocumentos/*.*');
-  $name = 'name';
-  $endereco= 'endereco';
-  $lk= 'link';
-  $x = 0;
+$usuario = $modelosDeDocumento->selectUserById($id);
+//var_dump($usuario);
+if ($usuario['nomeCompleto']) {
+  $action = $_REQUEST['action'];
 
-  foreach ($fileList as $filename) {
-   
-      $x++;
-      $link[$x][$endereco] =  $filename;
-      $link[$x][$name] =  str_replace('../assets/docs/modelosDeDocumentos/', '', $filename);
-      $nomeArquivo = str_replace('../assets/docs/modelosDeDocumentos/', '', $filename);
-      $link[$x][$lk] = "https://www.rdppetroleo.com.br/medwebnovo/assets/docs/modelosDeDocumentos/$nomeArquivo";
+  if($action == 'findAll') {
+
+    $fileList = glob('../assets/docs/modelosDeDocumentos/*.*');
+    $name = 'name';
+    $endereco= 'endereco';
+    $lk= 'link';
+    $x = 0;
+
+    foreach ($fileList as $filename) {
+    
+        $x++;
+        $link[$x][$endereco] =  $filename;
+        $link[$x][$name] =  str_replace('../assets/docs/modelosDeDocumentos/', '', $filename);
+        $nomeArquivo = str_replace('../assets/docs/modelosDeDocumentos/', '', $filename);
+        $link[$x][$lk] = "https://www.rdppetroleo.com.br/medwebnovo/assets/docs/modelosDeDocumentos/$nomeArquivo";
+    }
+
+    $data = array('rows' => $modelosDeDocumento->converterUtf8($link));
+
+    echo json_encode($data);
   }
+}else{
 
-  $data = array('rows' => utf8ize($link));
-
-  echo json_encode($data);
+  header("https://www.rdppetroleo.com.br/medwebnovo/?p=8");
+  
 }
+

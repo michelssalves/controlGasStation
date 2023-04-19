@@ -72,7 +72,7 @@ chavesBD.php
 conn.php
 functionsAuxiliar.php
 validaLogin.php
-model
+model/chaves
 node_modules/
 jspm_packages/
 

@@ -125,11 +125,25 @@ const app = new Vue({
     getAllMeds() {
       axios
         .post(
-        "https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findAllMeds",
+        "./controller/solicitacaoDePagamentos.php?action=findAllMeds",
    
       )
         .then((res) => {
           this.meds = res.data.rows;
+
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getAllFornecedores() {
+      axios
+        .post(
+        "./controller/solicitacaoDePagamentos.php?action=findAllFornecedores",
+   
+      )
+        .then((res) => {
+          this.fornecedores = res.data.rows;
 
         })
         .catch((err) => {
@@ -143,7 +157,7 @@ const app = new Vue({
 
       axios
         .post(
-          `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findAll&paginaAtual=${this.paginaAtual}`,
+          `./controller/solicitacaoDePagamentos.php?action=findAll&paginaAtual=${this.paginaAtual}`,
           formData
         )
         .then((res) => {
@@ -175,7 +189,7 @@ const app = new Vue({
 
       axios
       .post(
-        `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=findById&id=${id}`
+        `./controller/solicitacaoDePagamentos.php?action=findById&id=${id}`
       )
       .then((res) => {
    
@@ -205,7 +219,7 @@ const app = new Vue({
       formData.append("status", status);
       formData.append("id", this.id);
       formData.append("action",'alterarStatus');
-      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
+      const url = `./controller/solicitacaoDePagamentos.php`
       this.callAxios(this.id, url, formData)   
 
     }, 
@@ -217,11 +231,12 @@ const app = new Vue({
     salvarObservacao() {
 
       const incluirObservacaoForm = document.getElementById("incluirObservacaoForm");
-      const url ="https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php";
+      const url ="./controller/solicitacaoDePagamentos.php";
       const formData = new FormData(incluirObservacaoForm);
       this.callAxios(this.id, url, formData);
     },
     modalSolPgtos(){
+      this.getAllFornecedores()
       const criarSolPgtos = new bootstrap.Modal(
         document.getElementById("criarSolPgtos")
       );
@@ -232,7 +247,7 @@ const app = new Vue({
 
       const formSolPgtos = document.getElementById("formSolPgtos");
       const formData = new FormData(formSolPgtos);
-      const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`;
+      const url = `./controller/solicitacaoDePagamentos.php`;
 
       axios
         .post(url, formData)
@@ -288,7 +303,7 @@ const app = new Vue({
         }
         const formData = new FormData();
         formData.append("file", this.files[i]);
-        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php?action=addDocumentos`;
+        const url = `./controller/solicitacaoDePagamentos.php?action=addDocumentos`;
         axios
           .post(url, formData)
           .then((res) => {
@@ -354,7 +369,7 @@ const app = new Vue({
         const formAnexar = document.getElementById("formAnexar");  
         const formData = new FormData(formAnexar);
         formData.append("file", this.filesAnexar[i]);
-        const url = `https://www.rdppetroleo.com.br/medwebnovo/controller/solicitacaoDePagamentos.php`
+        const url = `./controller/solicitacaoDePagamentos.php`
         this.callAxios(this.id, url, formData)   
 
       }
@@ -398,7 +413,7 @@ const app = new Vue({
     },
   },
   mounted: function () {
-    
+
     this.getPagamentos();
     this.getAllMeds();
 

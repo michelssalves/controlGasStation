@@ -20,10 +20,12 @@
                         </div>
                     </div>
                     <div class="modal-body">
-                        <div class="input-group input-group-sm mb-3">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing">Fornecedor:</span>
-                                <input id="fornecedor" name="fornecedor" type="text" v-model="criarFornecedor" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" required>
+                            <span class="input-group-text" id="inputGroup-sizing">Fornecedor:</span>
+                            <select name='fornecedor' id='fornecedor' class='form-select' aria-label='Default select example'>
+                                <option value="">Escolha</option>
+                                <option v-for="fornecedor in fornecedores" value="fornecedor.id">{{fornecedor.nome}}</option>
+                            </select>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <textarea name="finalidade" id="finalidade" v-model="criarFinalidade" cols="80" rows="2" style="white-space: pre;" placeholder="Descreva aqui a finalidade desta requisição de pagamento" maxlength="500" required></textarea>
