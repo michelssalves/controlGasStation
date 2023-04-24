@@ -1,4 +1,4 @@
-import Vue from "https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vueJsFramework.js";
+import Vue from "../views/vueJsFramework.js";
 const app = new Vue({
   el: "#app",
   data() {

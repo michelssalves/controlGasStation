@@ -3,7 +3,7 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: "Cadastro Clientes",
+      menu: "Volume Mensal Projetado",
       metas: [],
       periodos:[],
       mesTexto1: '',

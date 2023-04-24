@@ -1,4 +1,4 @@
-import Vue from "https://www.rdppetroleo.com.br/medwebnovo/assets/js/views/vueJsFramework.js";
+import Vue from "../views/vueJsFramework.js";
 const app = new Vue({
   el: "#app",
   data() {
@@ -236,10 +236,10 @@ const app = new Vue({
           console.log(err);
         });
     },
-    getAllMeds() {
+   getAllMeds () {
       axios
         .post(
-          "https://www.rdppetroleo.com.br/medwebnovo/controller/caixaDiario.php?action=findAllMeds"
+          "./controller/caixaDiario.php?action=findAllMeds"
         )
         .then((res) => {
           this.meds = res.data.rows;

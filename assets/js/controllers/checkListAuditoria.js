@@ -3,7 +3,7 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: "Cadastro Clientes",
+      menu: "Check List Auditoria",
       metas: [],
       periodos:[],
       mesTexto1: '',

@@ -3,8 +3,9 @@ const app = new Vue({
   el: "#app",
   data() {
     return {
-      menu: "Cadastro Clientes",
-      metas: [],
+      menu: "Credito Ipiranga",
+      meds: [],
+      creditoIpiranga: [],
       periodos:[],
       mesTexto1: '',
       mes: this.mesAtual(),
@@ -56,19 +57,31 @@ const app = new Vue({
       const anoAtual = `${ano}`;
       return anoAtual;
     },
-    getMetas(form) {
+    getAllMeds () {
+      axios
+        .post(
+          "./controller/creditoIpiranga.php?action=findAllMeds"
+        )
+        .then((res) => {
+          this.meds = res.data.rows;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    getCreditoIpiranga(form) {
       
       const formFiltroPagamentos = document.getElementById(form);
       const formData = new FormData(formFiltroPagamentos);
 
       axios
         .post(
-          `./controller/gpMetas.php?action=findAll`,
+          `./controller/creditoIpiranga.php?action=findAll`,
           formData
         )
         .then((res) => {
           console.log(res.data.rows)
-          this.metas = res.data.rows
+          this.creditoIpiranga = res.data.rows
         })
         .catch((err) => {
           console.log(err);
@@ -77,11 +90,10 @@ const app = new Vue({
     getPeriodos() {
       axios
         .post(
-          `./controller/gpMetas.php?action=findPeriodo`,
+          `./controller/creditoIpiranga.php?action=findPeriodo`,
         
         )
         .then((res) => {
-         //console.log(res.data.rows)
           this.periodos = res.data.rows
         })
         .catch((err) => {
@@ -108,24 +120,28 @@ const app = new Vue({
       ];
       return months[this.mes - 1];
     },
-    pessoasFiltradas() {
+    creditoIpirangaFiltrado() {
 
-      console.log(this.metas)
-      return this.metas.map(meta => ({
-         
-        id_filial: meta.id_filial,
-        loginname: meta.loginname,
-        vendas: meta.vendas,
-        cigarro: meta.cigarro,
-        totalVendido: meta.totalVendido,
-        meta_mes: meta.meta_mes,
-        percentualMetaMes: meta.percentualMetaMes,
-       // comissao: meta.percentualMetaMes < 100 ? (parseFloat(meta.vendas) * this.percentual[meta.id_grupo]) / 100 : 0,
-       comissao: meta.percentualMetaMes > 100 ? (meta.vendas * this.percentual[meta.id_grupo]) / 100 : 0,
-       
-       meta_anual: meta.meta_anual,
-        projecao: meta.vendas * (this.ultimoDiaDoMes() / this.diaAtual()),
+      return this.creditoIpiranga.map(credito => ({
 
+        Posto: credito.Posto,
+        DataComprovante: credito.DataComprovante,
+        Cidade: credito.Cidade,
+        Bandeira: credito.Bandeira,
+        CidadeEntidade: credito.CidadeEntidade,
+        UfEntidade: credito.UfEntidade,
+        NrComprovante: credito.NrComprovante,
+        NomeProduto: credito.NomeProduto,
+        Qtde: credito.Qtde,
+        ValorUnitario: Number(credito.ValorUnitario).toFixed(2),
+        ValorTotal: Number(credito.ValorTotal).toFixed(2),
+        ValUnitNeg: Number(credito.ValUnitNeg).toFixed(2),
+        ValTotNeg: Number(credito.ValTotNeg).toFixed(2),
+        Diferenca: Number(credito.Diferenca).toFixed(2),
+        PrecoVenda: Number(credito.PrecoVenda).toFixed(2),
+        Rentabilidade: Number((credito.PrecoVenda / credito.ValUnitNeg - 1)* 100 ).toFixed(2)
+  
+          
       }))
     },
   },
@@ -141,8 +157,9 @@ const app = new Vue({
   },
   mounted: function () {
 
-    this.getMetas('formFiltroMetas');
-    this.getPeriodos();
+    this.getCreditoIpiranga('formFiltroCreditoIpiranga')
+    this.getAllMeds()
+    this.getPeriodos()
     
   },
 });

@@ -19,4 +19,4 @@
 19 -> Nesse arquivo será tratado as REQUEST antes de realmente solicitar algo ao banco de Dados
 20 -> Apos isso va na pasta model e crie um arquivo conforme exemplo abaixo
 21 -> Exemplo: NovoMenu.php
-22 -> Nesse arquivo está contido todas as funçoões e busca ao bando de dados
+22 -> Nesse arquivo está contido todas as funções e busca ao bando de dados
