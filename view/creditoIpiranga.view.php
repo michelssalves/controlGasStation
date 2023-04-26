@@ -39,6 +39,9 @@
                             <option v-for="periodo in periodos" :key="periodo.id" :value="`${periodo.ano}-${periodo.mes}-1`">{{ periodo.nomeMes }}-{{ periodo.ano }}</option>
                         </select>
                     </div>
+                    <div class="col-md-2">
+                        <button type="button" class='btn btn-light btn-sm'><a href="?p=14"><img class="iconeSize" :src="iconCredito"></a></button>
+                    </div>
                 </div>
             </div>
             <div class="table-wrapper">
@@ -80,13 +83,19 @@
                             <td>{{credito.PrecoVenda}}</td>
                             <td>{{credito.Rentabilidade}}</td>
                         </tr>
+                        <tr>
+                            <td colspan="7"></td>
+                            <td>{{somarQuantidade}}</td>
+                            <td></td>
+                            <td>{{somarTotalNf}}</td>
+                            <td colspan="4"></td>
+                            <td>{{somarRentabilidade}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </form>
     </div>
     <!--/AREA ONDE ESTÁ A TABELA E FILTROS-->
-    <?php
-    ?>
 </div>
 <!--FIM DIV APP VUE JS-->

@@ -16,8 +16,10 @@ $page[10] = 'view/precosPracaAnalise.view.php';
 $page[11] = 'view/cadastroClientes.view.php';
 $page[12] = 'view/gpMetas.view.php';
 $page[13] = 'view/creditoIpiranga.view.php';
-$page[14] = 'view/volumeMensalProjetado.view.php';
-$page[15] = 'view/checkListAuditoria.view.php';
+$page[14] = 'view/creditoIpirangaCorrigeCusto.view.php';
+$page[15] = 'view/volumeMensalProjetado.view.php';
+$page[16] = 'view/checkListAuditoria.view.php';
+
 
 if(!$index){ $index = 1; }
 

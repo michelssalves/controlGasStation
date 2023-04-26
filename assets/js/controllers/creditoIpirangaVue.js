@@ -12,6 +12,15 @@ const app = new Vue({
       ano: this.anoAtual(),
       hoje: new Date(),
       percentual:[0, 0, 3, 0, 0, 1],
+      iconSave:
+      "./assets/img/icons/salvar.gif",
+      iconCreate:
+        "./assets/img/icons/create.png",
+      iconLimpar:
+        "./assets/img/icons/x-filter.png",
+      iconCredito:
+        "./assets/img/icons/financeiro.png",
+
     };
   },
   filters: {
@@ -50,7 +59,6 @@ const app = new Vue({
       const mesAtual = `${mes}`;
       return mesAtual;
     },
-  
     anoAtual() {
       const data = new Date();
       const ano = data.getFullYear();
@@ -87,6 +95,27 @@ const app = new Vue({
           console.log(err);
         });
     },
+    updateFreteIpiranga(form) {
+      
+      const formFiltroPagamentos = document.getElementById(form);
+      const formData = new FormData(formFiltroPagamentos);
+
+      axios
+        .post(
+
+          `./controller/creditoIpiranga.php?action=updateFrete`,
+          
+          formData
+        )
+        .then((res) => {
+
+          console.log(res.data.rows)
+  
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     getPeriodos() {
       axios
         .post(
@@ -100,7 +129,6 @@ const app = new Vue({
           console.log(err);
         });
     },
-
   },
   computed: {
     mesAtualTexto() {
@@ -119,6 +147,35 @@ const app = new Vue({
         'DEZ'
       ];
       return months[this.mes - 1];
+    },
+    somarRentabilidade() {
+      let soma = 0;
+      for (let i = 0; i < this.creditoIpiranga.length; i++) {
+   
+          soma += Number(this.creditoIpiranga[i].Rentabilidade);
+        
+      }
+      const media = soma / this.creditoIpiranga.length;
+     
+      return Number(media).toFixed(2)
+     
+    },
+    somarQuantidade() {
+      let soma = 0;
+      for (let i = 0; i < this.creditoIpiranga.length; i++) {
+ 
+          soma += Number(this.creditoIpiranga[i].Qtde);
+      }
+      return Number(soma).toFixed(2)
+    },
+    somarTotalNf() {
+      let soma = 0;
+      for (let i = 0; i < this.creditoIpiranga.length; i++) {
+       
+          soma += Number(this.creditoIpiranga[i].ValorTotal);
+      
+      }
+      return Number(soma).toFixed(2);
     },
     creditoIpirangaFiltrado() {
 
@@ -139,8 +196,7 @@ const app = new Vue({
         ValTotNeg: Number(credito.ValTotNeg).toFixed(2),
         Diferenca: Number(credito.Diferenca).toFixed(2),
         PrecoVenda: Number(credito.PrecoVenda).toFixed(2),
-        Rentabilidade: Number((credito.PrecoVenda / credito.ValUnitNeg - 1)* 100 ).toFixed(2)
-  
+        Rentabilidade: Number(credito.Rentabilidade).toFixed(2),
           
       }))
     },

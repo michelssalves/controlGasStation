@@ -17,9 +17,9 @@
         <li><a class="app-menu__item <?= $active[10]; ?>" href="?p=10"><i class="app-menu__icon fa-solid fa-flask-vial"></i><span class="app-menu__label">Preços Praça Análise</span></a></li>
         <li><a class="app-menu__item <?= $active[11]; ?>" href="?p=11"><i class="app-menu__icon fa-solid fa-user-tie"></i><span class="app-menu__label">Clientes</span></a></li> 
         <li><a class="app-menu__item <?= $active[12]; ?>" href="?p=12"><i class="app-menu__icon fa-solid fa-calculator"></i><span class="app-menu__label">GP Metas</span></a></li>
-        <li><a class="app-menu__item <?= $active[13]; ?>" href="?p=13"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Credito Ipiranga</span></a></li>
-        <li><a class="app-menu__item <?= $active[14]; ?>" href="?p=14"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Check List Auditoria</span></a></li>
-        <li><a class="app-menu__item <?= $active[15]; ?>" href="?p=15"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Volume Mensal Projetado</span></a></li>
+        <li><a class="app-menu__item <?= $active[13]; ?>" href="?p=13"><i class="app-menu__icon fa-solid fa-circle-dollar-to-slot"></i><span class="app-menu__label">Credito Ipiranga</span></a></li>
+        <li><a class="app-menu__item <?= $active[15]; ?>" href="?p=14"><i class="app-menu__icon fa-solid fa-list-check"></i><span class="app-menu__label">Check List Auditoria</span></a></li>
+        <li><a class="app-menu__item <?= $active[16]; ?>" href="?p=15"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Volume Mensal Projetado</span></a></li>
     </ul>
 </aside>
 <?php include 'header.php'; ?>

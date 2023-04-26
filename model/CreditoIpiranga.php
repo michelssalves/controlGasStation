@@ -82,7 +82,8 @@ class CreditoIpiranga extends Handlers
         c.NomeEntidade,  c.NomeProduto, c.CidadeEntidade, UfEntidade, c.NrComprovante, c.Qtde, c.ValorUnitario, 
         c.Qtde * c.ValorUnitario AS ValorTotal,
         CASE WHEN c.NomeEntidade LIKE '%IPIRANGA%' THEN CF ELSE c.ValorUnitario END AS ValUnitNeg, 
-        c.Qtde * ValUnitNeg AS ValTotNeg, ValorTotal - ValTotNeg AS Diferenca
+        c.Qtde * ValUnitNeg AS ValTotNeg, ValorTotal - ValTotNeg AS Diferenca,
+        ((PrecoVenda / ValUnitNeg - 1) * 100) AS Rentabilidade
         
         FROM med_compras_xpertN AS c 
         LEFT JOIN med_concorrente AS mc on c.idfilial = mc.id_xpert AND mc.principal = 1
