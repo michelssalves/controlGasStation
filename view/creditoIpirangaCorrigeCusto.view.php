@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
+<!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroCreditoIpirangaCorrigeCusto'>
             <div class="container">
@@ -77,5 +75,3 @@
     include 'modal/creditoIpirangaCorrigeCusto/visualizarFrete.php';
     include 'modal/creditoIpirangaCorrigeCusto/cadastrarFrete.php';
     ?>
-</div>
-<!--FIM DIV APP VUE JS-->

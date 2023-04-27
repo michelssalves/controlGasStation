@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS LINHA -->
     <div class="tableArea">
         <form method='POST' id='formularioDepositos'>
             <div class="container">
@@ -101,5 +99,3 @@
     include 'modal/depositos/criarObservacao.php';
     include 'modal/depositos/criarDeposito.php';
     ?>
-</div>
-<!--/FIM DIV APP VUE JS-->

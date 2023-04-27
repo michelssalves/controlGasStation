@@ -56,7 +56,7 @@ const app = new Vue({
       const anoAtual = `${ano}`;
       return anoAtual;
     },
-    getMetas(form) {
+    /*getMetas(form) {
       
       const formFiltroPagamentos = document.getElementById(form);
       const formData = new FormData(formFiltroPagamentos);
@@ -73,11 +73,11 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-    },
+    },*/
     getPeriodos() {
       axios
         .post(
-          `./controller/gpMetas.php?action=findPeriodo`,
+          `./controller/volumeMensalProjetado.php?action=findPeriodo`,
         
         )
         .then((res) => {
@@ -121,9 +121,8 @@ const app = new Vue({
         meta_mes: meta.meta_mes,
         percentualMetaMes: meta.percentualMetaMes,
        // comissao: meta.percentualMetaMes < 100 ? (parseFloat(meta.vendas) * this.percentual[meta.id_grupo]) / 100 : 0,
-       comissao: meta.percentualMetaMes > 100 ? (meta.vendas * this.percentual[meta.id_grupo]) / 100 : 0,
-       
-       meta_anual: meta.meta_anual,
+        comissao: meta.percentualMetaMes > 100 ? (meta.vendas * this.percentual[meta.id_grupo]) / 100 : 0,
+        meta_anual: meta.meta_anual,
         projecao: meta.vendas * (this.ultimoDiaDoMes() / this.diaAtual()),
 
       }))
@@ -134,14 +133,12 @@ const app = new Vue({
       this.getClientes();
     },
     message() {
-      setTimeout(() => {
-        this.message = "";
-      }, 2000);
+      setTimeout(() => { this.message = ""; }, 2000);
     },
   },
   mounted: function () {
 
-    this.getMetas('formFiltroMetas');
+    this.getVolumeMensalProjetado('formFiltroVolumeMensalProjetado');
     this.getPeriodos();
     
   },

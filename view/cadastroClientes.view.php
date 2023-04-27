@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
+<!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroPagamentos'>
             <div class="container">
@@ -95,5 +93,3 @@
     include 'modal/clientes/visualizarObservacao.php';
     include 'modal/clientes/visualizarEventos.php';
     ?>
-</div>
-<!--FIM DIV APP VUE JS-->

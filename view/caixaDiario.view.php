@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA E FILTROS-->
+<!--AREA ONDE ESTÁ A TABELA E FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroCaixaDiario'>
             <div class="container">
@@ -121,5 +119,3 @@
     include 'modal/caixaDiario/criarFechamento.php';
     include 'modal/caixaDiario/cancelarFechamento.php';
     ?>
-</div>
-<!--FIM DIV APP VUE JS-->

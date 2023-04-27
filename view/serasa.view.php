@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA COM FILTROS-->
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroSerasa'>
             <div class="container">
@@ -113,5 +111,3 @@
     include 'modal/serasa/baixarSerasa.php';
     include 'modal/serasa/cancelarSerasa.php';
     ?>
-</div>
-<!--FIM DIV APP VUE JS-->

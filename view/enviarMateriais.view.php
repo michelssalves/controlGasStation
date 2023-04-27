@@ -1,6 +1,4 @@
-<!--INICIO DIV APP VUE JS-->
-<div id="app">
-    <!--AREA ONDE ESTÁ A TABELA COM FILTROS-->
+<!--AREA ONDE ESTÁ A TABELA COM FILTROS-->
     <div class="tableArea">
         <form method='POST' id='formFiltroSolicitacoes'>
             <div class="container">
@@ -95,5 +93,3 @@
     include 'modal/enviarMateriais/cancelarRequisicao.php';
     include 'modal/enviarMateriais/criarObservacao.php';
     ?>
-</div>
-<!--/FIM DIV APP VUE JS-->
