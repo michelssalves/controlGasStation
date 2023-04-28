@@ -378,8 +378,7 @@ const app = new Vue({
         setTimeout(() => {
           this.message = ""
         }, 1500);
-      },
-   
+    }, 
   },
   mounted: function () {
     
@@ -387,7 +386,4 @@ const app = new Vue({
   
     this.getAllMeds()
   },
-  computed:{    
-  },
-  
 });

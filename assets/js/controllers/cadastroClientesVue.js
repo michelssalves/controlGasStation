@@ -182,8 +182,7 @@ const app = new Vue({
         });
         
     },
-
-   visualizar(id, modal) {
+    visualizar(id, modal) {
       axios
         .post(
           `https://www.rdppetroleo.com.br/medwebnovo/controller/cadastroClientes.php?action=${modal}&id=${id}`

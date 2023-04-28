@@ -1,5 +1,4 @@
 import Vue from "../views/vueJsFramework.js";
-
 const app = new Vue({
   el: "#app",
   data() {
@@ -243,5 +242,4 @@ const app = new Vue({
     this.getDepositos();
     this.getAllMeds();
   },
-  computed: {},
 });

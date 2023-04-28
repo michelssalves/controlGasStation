@@ -4,8 +4,7 @@ const app = new Vue({
   data() {
     return {
       menu: 'Controle de Documentos',
-      documentos: [],
-      
+      documentos: [],  
     };
   },
   filters: {
@@ -36,7 +35,6 @@ const app = new Vue({
           console.log(err);
         });
     },
-
     modalAnexar() {
       const incluirAnexoModal = new bootstrap.Modal(
         document.getElementById("incluirAnexoModal")
@@ -112,14 +110,7 @@ const app = new Vue({
             console.log(err);
           });
       }
-    },
-    
-  },
-  computed: {
-
-  },
-  watch: {
-
+    },   
   },
   mounted: function () {
 

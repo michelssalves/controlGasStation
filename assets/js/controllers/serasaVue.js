@@ -75,8 +75,7 @@ const app = new Vue({
       return Number(value).toFixed(2);
     },
   },
-  methods: {
-    
+  methods: { 
     limparFiltros(){
 
       document.getElementById("matrizFiltro").value = '2'
@@ -550,9 +549,6 @@ const app = new Vue({
           });
       }
     }, 
-  },
-  computed:{
-
   },
   watch: {
     paginaAtual() {

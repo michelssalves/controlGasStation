@@ -1,5 +1,4 @@
 import Vue from "../views/vueJsFramework.js";
-
 const app = new Vue({
   el: "#app",
   data() {
@@ -134,7 +133,6 @@ const app = new Vue({
           
       }))
     },
- 
   },
   watch: {
     paginaAtual() {

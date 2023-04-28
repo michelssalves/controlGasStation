@@ -236,7 +236,7 @@ const app = new Vue({
           console.log(err);
         });
     },
-   getAllMeds () {
+    getAllMeds () {
       axios
         .post(
           "./controller/caixaDiario.php?action=findAllMeds"

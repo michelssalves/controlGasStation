@@ -49,7 +49,6 @@ const app = new Vue({
       const mesAtual = `${mes}`;
       return mesAtual;
     },
-  
     anoAtual() {
       const data = new Date();
       const ano = data.getFullYear();
@@ -88,7 +87,6 @@ const app = new Vue({
           console.log(err);
         });
     },
-
   },
   computed: {
     mesAtualTexto() {

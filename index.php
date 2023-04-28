@@ -17,13 +17,11 @@ $page[11] = 'view/cadastroClientes.view.php';
 $page[12] = 'view/gpMetas.view.php';
 $page[13] = 'view/creditoIpiranga.view.php';
 $page[14] = 'view/creditoIpirangaCorrigeCusto.view.php';
-$page[15] = 'view/volumeMensalProjetado.view.php';
-$page[16] = 'view/checkListAuditoria.view.php';
+$page[15] = 'view/checkListAuditoria.view.php';
+$page[16] = 'view/volumeMensalProjetado.view.php';
 $page[17] = 'view/analiseVendasCliente.view.php';
 
-if (!$index) {
-    $index = 1;
-}
+if (!$index) {$index = 1;}
 
 $active[$index] = 'active';
 
@@ -31,12 +29,10 @@ $regex = '/\/(.*?)\./';
 
 preg_match_all($regex, $page[$index], $resultado);
 
-foreach ($resultado[1] as $texto) {
-}
+foreach ($resultado[1] as $texto) {}
 
 include "view/head/$texto.head.php";
 ?>
-
 <body id="idBody" class="app sidebar-mini">
     <div id="app">
         <div class="app-sidebar__overlay" data-toggle="sidebar">
@@ -58,19 +54,11 @@ include "view/head/$texto.head.php";
                 <li><a class="app-menu__item <?= $active[15]; ?>" href="?p=15"><i class="app-menu__icon fa-solid fa-list-check"></i><span class="app-menu__label">Check List Auditoria</span></a></li>
                 <li><a class="app-menu__item <?= $active[16]; ?>" href="?p=16"><i class="app-menu__icon fa-solid fa-magnifying-glass-chart"></i><span class="app-menu__label">Volume Mensal Projetado</span></a></li>
                 <li><a class="app-menu__item <?= $active[17]; ?>" href="?p=17"><i class="app-menu__icon fa-solid fa-handshake"></i><span class="app-menu__label">Cadastrar Cliente</span></a></li>
+            </ul>
         </aside>
         <header class="app-header">
             <a class="app-header__logo" href="?p=1"><i class="fa-solid fa-gas-pump"></i>Controle Postos</a>
             <a onclick="esconderSideBar('idBody')" class="app-sidebar__toggle" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
-            <ul class="app-nav">
-                <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class=""></i></a>
-                    <ul class="dropdown-menu settings-menu dropdown-menu-right">
-                        <li><a class="dropdown-item" href="page-user.html"><i class="fa-solid fa-user"></i> Settings</a></li>
-                        <li><a class="dropdown-item" href="page-user.html"><i class="fa-solid fa-user"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="page-login.html"><i class="fa-solid fa-user"></i> Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
         </header>
         <main class="app-content">
             <div>
@@ -80,9 +68,7 @@ include "view/head/$texto.head.php";
                         <img src="assets/img/gifs/aguarde<?= $gif ?>.gif">
                     </div>
                 </div>
-                <?php
-                include "$page[$index]";
-                ?>
+                <?php include "$page[$index]"; ?>
             </div>
         </main>
     </div>

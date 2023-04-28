@@ -1,5 +1,4 @@
 import Vue from "../views/vueJsFramework.js";
-
 const app = new Vue({
   el: "#app",
 	data() {
@@ -386,8 +385,7 @@ const app = new Vue({
         .catch((err) => {
           console.log(err);
         });
-    },
-   
+    }, 
   },
   watch: {
     paginaAtual() {
@@ -399,12 +397,10 @@ const app = new Vue({
         setTimeout(() => {
           this.message = ""
         }, 1500);
-      },
-   
+    },
   },
   mounted: function () {
     this.getChequeDevolvidos()
     this.getAllMeds()
   },
- 
 });
